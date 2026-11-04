@@ -23,7 +23,7 @@ Se conservan los identificadores de los productos existentes. Se agregaron nuez 
 
 Mayorista: editar D (`cantidad_mayorista`) y J (`precio_presentacion`, TOTAL de la caja/bolsón/frasco/bidón). E (`precio_mayorista`) calcula J/D; F (`total_mayorista`) calcula D×E. No reemplazar fórmulas por importes de caja en la columna por kilo.
 
-Minorista: editar G (`cantidad_minorista`) y H (`precio_minorista`, por unidad). I calcula el total. Se conservaron los valores minoristas del CSV anterior: inicialmente cero, como se había solicitado. Un minorista vacío significa precio pendiente; cero explícito se cotiza como cero. Cargar valores de venta si se desea habilitar pedidos minoristas con precio real.
+Minorista: editar G (`cantidad_minorista`) y H (`precio_minorista`, por unidad). I calcula el total. Se conservaron los valores minoristas leídos de Google Sheets: nuez blanca $1.500 y miel de campo de 500 g $1.967; los demás continúan en cero. Un minorista vacío significa precio pendiente; cero explícito se cotiza como cero. Cargar valores de venta si se desea habilitar pedidos minoristas con precio real.
 
 La miel Churqui de 1 kg, ciruela con carozo, almendra Guara N° 5, nuez extra light partida a máquina y granola con coco tienen foto pero no precio confirmado para esa variante. No se les inventó precio. La miel Churqui se muestra en ambas modalidades con «Consultar precio» y enlace al WhatsApp correspondiente; no se puede agregar al carrito sin un importe confirmado. Las fotos de almendra N° 3 y 4 son alternativas del mismo producto N° 3/4, no nuevos productos. `data/catalogo-fotos.json` y `data/productos-pendientes.json` registran estas relaciones.
 
@@ -31,15 +31,15 @@ La miel Churqui de 1 kg, ciruela con carozo, almendra Guara N° 5, nuez extra li
 
 Se conserva el enlace de la hoja Precios configurada en `prices-config.js`: documento `1q7g0bp7SloTi9dzRyFVbf6n3usMoatDF0yrOQBfrzc8`, pestaña `507715810`.
 
-El Excel local y Google Sheets son archivos distintos. Esta entrega no modifica la hoja online. Para conectarla al catálogo nuevo, copiar las celdas de la pestaña **Precios** del Excel sobre la pestaña **Precios existente** del documento conectado, conservando sus IDs y acceso de lectura CSV sin sesión. No crear otro documento ni cambiar el identificador de pestaña.
+El Excel local y Google Sheets son archivos distintos. La hoja online original se pudo leer y comparar: todavía contiene 32 productos antiguos. Desde esta sesión figura «Solo ver», por lo que no se modificó directamente. Para conectarla al catálogo nuevo, abrir `EXCEL EDITABLE/Precios-para-Google-Sheets.tsv`, copiar la tabla completa y pegarla en **A1 de la pestaña Precios existente** del documento conectado. Incluye 42 productos: los 41 cotizados y la miel Churqui de 1 kg sin importe. Conservar los IDs y el acceso de lectura CSV sin sesión. No crear otro documento ni cambiar el identificador de pestaña.
 
-La web valida la lista completa antes de actualizar. Si la hoja online todavía tiene la lista anterior, usa `data/precios.csv` como respaldo inicial. Cuando la hoja tenga los 41 IDs válidos, retoma automáticamente la sincronización online. Consulta al cargar, cada 60 segundos mientras la página está visible y al volver a la pestaña. Una actualización inválida posterior conserva los últimos precios válidos y no vuelve a importes anteriores.
+La web valida la lista completa antes de actualizar. Si la hoja online todavía tiene la lista anterior, usa `data/precios.csv` como respaldo inicial. Cuando la hoja tenga los 41 IDs válidos, retoma automáticamente la sincronización online. Consulta al cargar, cada 60 segundos mientras la página está visible y al volver a la pestaña. Una actualización inválida posterior conserva los últimos precios válidos y no vuelve a importes anteriores. El estado ahora avisa cuando se está usando el respaldo y no se pudo sincronizar. La columna `precio_presentacion` es la fuente mayorista cuando existe: cambiar J actualiza el total y recalcula el precio por unidad, incluso si la fórmula de E todavía no se recalculó. La miel Churqui admite J/H vacíos y se habilita por modalidad solo cuando el cliente agrega un precio.
 
 ## Publicar
 
 Extraer `Frutas-LAM-Web-lista-para-publicar.zip` y subir **su contenido** al hosting estático: `index.html` debe quedar en la raíz. Incluye únicamente HTML, CSS, JavaScript, CSV y los assets necesarios; no requiere instalar dependencias ni compilar. El Excel se entrega aparte y no necesita publicarse en el hosting.
 
-No se realizó push ni despliegue. El acceso externo a la exportación de Google no pudo verificarse en esta sesión; se verificó con pruebas la migración de lista antigua a CSV local y el paso posterior a una hoja online completa.
+El sitio se publica desde main del repositorio FRUTAS-LAM mediante GitHub Pages. La exportación real de Google se leyó en esta sesión y permitió reproducir el rechazo de la hoja vieja; se conservaron sus minoristas en el respaldo y en la tabla de migración.
 
 ## Verificación
 
@@ -53,3 +53,9 @@ No se realizó push ni despliegue. El acceso externo a la exportación de Google
 `python scripts/preparar-publicacion.py` regenera el ZIP de la web con sus archivos y assets utilizados. También se verificó en Chromium la carga de las 41 fichas, imágenes sin errores, filtro de nueve mixes y total de Tropical Común de $34.500, a 500 y 1440 px de ancho.
 
 Se conservan los contactos y retiros: mayorista +54 9 263 476-1151 (Ingeniero Giagnoni, Junín), minorista +54 9 2634 33-9550 (9 de Julio 1189, Mendoza Ciudad), Instagram @lamfruts.
+
+## Reparación de sincronización (4 de noviembre de 2026)
+
+La exportación real tenía 32 filas: incluía nuez con cáscara, higo blanco y pistacho pelado, y no tenía los doce productos nuevos. La validación rechazaba toda la lectura. La tabla TSV nueva conserva las ediciones minoristas y los totales mayoristas confirmados. Pegarla completa en A1 de la hoja existente; luego usar Actualizar precios. Editar J para el TOTAL mayorista de la presentación y H para el precio minorista por unidad. No pegar el TSV en otra pestaña ni crear otra planilla. La miel Churqui debe mantener J/H vacíos hasta que el cliente los cargue.
+
+`node scripts/preparar-google-sheets.cjs` regenera la tabla TSV. `node scripts/test-google-sheets.cjs` verifica el caso real, los valores minoristas preservados, la prioridad del total editable y la activación/desactivación de la miel sin ventas gratuitas.

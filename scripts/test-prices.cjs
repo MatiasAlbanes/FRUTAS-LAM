@@ -1,8 +1,9 @@
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const vm = require('node:vm');
-const { readPrices } = require('../prices.js');
-const csv = fs.readFileSync('data/precios.csv', 'utf8');
+const { readPrices, parseCSV } = require('../prices.js');
+// Validar también compatibilidad con las nueve columnas anteriores.
+const csv = parseCSV(fs.readFileSync('data/precios.csv', 'utf8')).map(row => row.slice(0, 9).join(';')).join('\n');
 const context = vm.createContext({
   console: { warn() {} }, AbortController, setTimeout, clearTimeout,
   document: { addEventListener() {}, getElementById() { return null; } }, window: { PRICES_CONFIG: {} },

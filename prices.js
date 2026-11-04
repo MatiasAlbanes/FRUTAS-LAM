@@ -4,7 +4,7 @@
   function parseCSV(text) {
     text = text.replace(/^\uFEFF/, '');
     const firstLine = text.split(/\r?\n/, 1)[0];
-    const delimiter = firstLine.includes(';') ? ';' : ',';
+    const delimiter = firstLine.includes('\t') ? '\t' : firstLine.includes(';') ? ';' : ',';
     const rows = [];
     let row = [], field = '', quoted = false;
     for (let i = 0; i < text.length; i++) {
@@ -70,11 +70,12 @@
     const [headers, ...rows] = parseCSV(csv);
     const quantityColumn = headers?.includes('cantidad_mayorista') ? 'cantidad_mayorista' : 'cantidad';
     const priceColumn = headers?.includes('precio_mayorista') ? 'precio_mayorista' : 'precio_unitario';
-    const required = ['id', 'producto', 'unidad', quantityColumn, priceColumn];
+    const hasPresentationPrice = headers?.includes('precio_presentacion');
+    const required = ['id', 'producto', 'unidad', quantityColumn, hasPresentationPrice ? 'precio_presentacion' : priceColumn];
     if (!headers || required.some(key => headers.filter(h => h === key).length !== 1)) {
       throw new Error('Faltan columnas o hay encabezados repetidos');
     }
-    for (const key of ['precio_minorista', 'cantidad_minorista']) {
+    for (const key of ['precio_minorista', 'cantidad_minorista', priceColumn]) {
       if (headers.filter(h => h === key).length > 1) throw new Error('Columna repetida: ' + key);
     }
     const formats = Object.fromEntries(headers.map((key, index) => [key,
@@ -85,11 +86,19 @@
     const result = rows.map(row => {
       const cell = key => row[headers.indexOf(key)] || '';
       const id = cell('id'), product = catalog.get(id);
-      if (!product || seen.has(id)) throw new Error('Producto desconocido o repetido: ' + id);
+      if (!product) {
+        const error = new Error('La hoja contiene un producto fuera del catálogo: ' + id);
+        error.code = 'CATALOG_MISMATCH';
+        throw error;
+      }
+      if (seen.has(id)) throw new Error('Producto repetido: ' + id);
       seen.add(id);
       if (cell('unidad') !== product.unit) throw new Error('La unidad no coincide: ' + id);
       const quantity = positiveNumber(cell(quantityColumn), formats[quantityColumn]);
-      const price = positiveNumber(cell(priceColumn), formats[priceColumn]);
+      const rawPrice = cell(hasPresentationPrice ? 'precio_presentacion' : priceColumn);
+      const pending = product.optionalPriceRow && rawPrice === '';
+      const amount = pending ? null : positiveNumber(rawPrice, formats[hasPresentationPrice ? 'precio_presentacion' : priceColumn]);
+      const price = amount === null ? null : hasPresentationPrice ? amount / quantity : amount;
       if (['frasco', 'balde'].includes(product.unit) && !Number.isInteger(quantity)) {
         throw new Error('La cantidad de unidades debe ser entera');
       }
@@ -105,7 +114,7 @@
       }
       const retailTotal = retailPrice === null ? null : Math.round(retailPrice * retailQuantity * 100) / 100;
       if (retailTotal > 1e12) throw new Error('Total minorista fuera de rango');
-      const total = Math.round(price * quantity * 100) / 100;
+      const total = amount === null ? null : Math.round((hasPresentationPrice ? amount : price * quantity) * 100) / 100;
       if (total > 1e12) throw new Error('Total fuera de rango');
       let label = product.packageUnit;
       if (quantity !== product.packageKg) {
@@ -116,7 +125,11 @@
       return { id, pricePerKg: price, packageKg: quantity, packageTotalPrice: total, packageUnit: label,
         retailPrice, retailQuantity, retailTotal };
     });
-    if (seen.size !== products.length) throw new Error('La planilla debe contener todos los productos');
+    if (products.some(p => !p.optionalPriceRow && !seen.has(p.id))) {
+      const error = new Error('Faltan productos del catálogo actual en la hoja de precios');
+      error.code = 'CATALOG_MISMATCH';
+      throw error;
+    }
     return result;
   }
   root.PriceSheet = { parseCSV, readPrices };

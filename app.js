@@ -568,7 +568,15 @@ const CONSULTATION_PRODUCTS = [{
   category: 'Frutos secos varios',
   description: 'Miel de monte multifloral Churqui, frasco de 1 kg.',
   image: 'assets/productos/miel-churqui-1kg.webp',
+  unit: 'frasco',
+  packageKg: 1,
   packageUnit: 'Frasco x 1 kg',
+  pricePerKg: null,
+  packageTotalPrice: null,
+  retailPrice: null,
+  retailQuantity: 1,
+  retailTotal: null,
+  optionalPriceRow: true,
   consultationOnly: true
 }];
 
@@ -608,6 +616,7 @@ async function refreshPrices() {
   pricesLoading = true;
   updatePriceSyncStatus('Actualizando precios…');
   let syncError = false;
+  let usedFallback = false;
   const config = window.PRICES_CONFIG || {};
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), config.timeoutMs || 10000);
@@ -617,7 +626,7 @@ async function refreshPrices() {
         cache: 'no-store', signal: controller.signal, credentials: 'omit'
       });
       if (!response.ok) throw new Error(`Error HTTP ${response.status}`);
-      return PriceSheet.readPrices(await response.text(), PRODUCTS_DATA, { numberFormat });
+      return PriceSheet.readPrices(await response.text(), [...PRODUCTS_DATA, ...CONSULTATION_PRODUCTS], { numberFormat });
     };
     let updates;
     let source = config.csvUrl ? 'online' : 'local';
@@ -630,18 +639,19 @@ async function refreshPrices() {
       clearTimeout(timer);
       const fallbackResponse = await fetch(config.fallbackCsvUrl, { cache: 'no-store', credentials: 'omit', signal: AbortSignal.timeout(config.timeoutMs || 10000) });
       if (!fallbackResponse.ok) throw new Error(`Error HTTP ${fallbackResponse.status}`);
-      updates = PriceSheet.readPrices(await fallbackResponse.text(), PRODUCTS_DATA);
+      updates = PriceSheet.readPrices(await fallbackResponse.text(), [...PRODUCTS_DATA, ...CONSULTATION_PRODUCTS]);
       source = 'local';
+      usedFallback = true;
     }
     let changed = false;
     updates.forEach(update => {
-      const product = PRODUCTS_DATA.find(p => p.id === update.id);
+      const product = [...PRODUCTS_DATA, ...CONSULTATION_PRODUCTS].find(p => p.id === update.id);
       if (Object.keys(update).some(key => update[key] !== product[key])) changed = true;
       Object.assign(product, update);
     });
     if (changed) {
       state.cart.forEach(item => {
-        const product = PRODUCTS_DATA.find(p => p.id === item.productId);
+        const product = [...PRODUCTS_DATA, ...CONSULTATION_PRODUCTS].find(p => p.id === item.productId);
         Object.assign(item, getProductPricing(product, item.mode));
       });
       renderProducts();
@@ -659,12 +669,12 @@ async function refreshPrices() {
     clearTimeout(timer);
     pricesLoading = false;
     const time = lastPriceSync?.toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' });
-    const localMessage = `Lista de lanzamiento vigente · ${time}.`;
+    const localMessage = `Lista de lanzamiento vigente · No se pudo sincronizar la planilla. Última lectura local: ${time}.`;
     updatePriceSyncStatus(lastPriceSource === 'local' && config.csvUrl && config.fallbackCsvUrl
       ? localMessage
       : syncError
       ? (time ? `No pudimos actualizar. Última lectura: ${time}.` : 'No pudimos actualizar. Reintentá en unos instantes.')
-      : `Precios actualizados · ${time}`, syncError && !(lastPriceSource === 'local' && config.csvUrl && config.fallbackCsvUrl));
+      : `Precios actualizados · ${time}`, syncError || usedFallback);
   }
 }
 
@@ -782,8 +792,9 @@ function renderProducts() {
     let btnAddText = '';
 
     const unitLabel = product.unit || 'kg';
+    const consultationOnly = product.consultationOnly && getProductPricing(product, state.pricingMode).unitPrice == null;
 
-    if (product.consultationOnly) {
+    if (consultationOnly) {
       mainPriceHtml = '<span class="price-pending">Consultar precio</span>';
       subPriceInfo = `<div class="sub-pack-row">${product.packageUnit}</div>`;
     } else if (isMayorista) {
@@ -840,7 +851,7 @@ function renderProducts() {
           </div>
 
           <div class="product-actions-row">
-            ${product.consultationOnly ? `
+            ${consultationOnly ? `
               <a class="btn-add-cart" href="https://wa.me/${contactNumber(state.pricingMode)}?text=${encodeURIComponent(`Hola Frutas LAM! Quisiera consultar el precio de ${product.name}.`)}" target="_blank" rel="noopener noreferrer">Consultar por WhatsApp</a>
             ` : `
             <div class="qty-control" aria-label="Cantidad">
@@ -868,14 +879,14 @@ function renderProducts() {
 // GESTIÓN DEL CARRITO / COTIZADOR
 // =====================================================================
 function addToCart(productId, quantity) {
-  const product = PRODUCTS_DATA.find(p => p.id === productId);
+  const product = [...PRODUCTS_DATA, ...CONSULTATION_PRODUCTS].find(p => p.id === productId);
   if (!product) return;
 
   quantity = Math.max(1, Math.min(999, Math.trunc(Number(quantity)) || 1));
   const mode = state.pricingMode; // 'mayorista' | 'minorista'
   const pricing = getProductPricing(product, mode);
   if (pricing.unitPrice === null) {
-    showToast('Este producto todavía no tiene precio minorista cargado.');
+    showToast('Este producto todavía no tiene precio cargado para esta modalidad.');
     return;
   }
 

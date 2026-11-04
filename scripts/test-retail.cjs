@@ -25,10 +25,12 @@ vm.runInContext(fs.readFileSync('app.js', 'utf8'), context);
 vm.runInContext('showToast = () => {}', context);
 const run = code => vm.runInContext(code, context);
 const products = run('PRODUCTS_DATA');
-const original = fs.readFileSync('data/precios.csv', 'utf8');
-const [headers, ...rows] = parseCSV(original);
+const [headers, ...rows] = parseCSV(fs.readFileSync('data/precios.csv', 'utf8'));
 const field = key => headers.indexOf(key);
 const serialize = (h, r) => [h, ...r].map(row => row.join(';')).join('\n');
+// Fixture controlada para probar ceros; la lista real conserva los minoristas del cliente.
+for (const row of rows) { row[field('precio_minorista')] = '0'; row[field('total_minorista')] = '0'; }
+const original = serialize(headers, rows);
 assert.equal(rows.length, 41);
 for (const p of readPrices(original, products)) {
   assert.equal(p.retailPrice, 0);
