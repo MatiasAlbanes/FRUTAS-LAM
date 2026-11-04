@@ -561,6 +561,17 @@ const PRODUCTS_DATA = [
   }
 ];
 
+// Visible para consultar, separado de los artículos cotizados hasta confirmar su precio.
+const CONSULTATION_PRODUCTS = [{
+  id: 'miel-churqui-1kg',
+  name: 'Miel Churqui x 1 kg',
+  category: 'Frutos secos varios',
+  description: 'Miel de monte multifloral Churqui, frasco de 1 kg.',
+  image: 'assets/productos/miel-churqui-1kg.webp',
+  packageUnit: 'Frasco x 1 kg',
+  consultationOnly: true
+}];
+
 // Valores iniciales pedidos: lista minorista en cero hasta su carga en la planilla.
 PRODUCTS_DATA.forEach(product => Object.assign(product, {
   retailPrice: 0, retailQuantity: 1, retailTotal: 0
@@ -739,7 +750,7 @@ function renderProducts() {
   if (!grid) return;
 
   // Filtrado por categoría y búsqueda
-  const filtered = PRODUCTS_DATA.filter(product => {
+  const filtered = [...PRODUCTS_DATA, ...CONSULTATION_PRODUCTS].filter(product => {
     const matchCategory = state.activeCategory === 'all' || product.category === state.activeCategory;
     const q = normalizeSearch(state.searchQuery.trim());
     const matchSearch = !q ||
@@ -772,7 +783,10 @@ function renderProducts() {
 
     const unitLabel = product.unit || 'kg';
 
-    if (isMayorista) {
+    if (product.consultationOnly) {
+      mainPriceHtml = '<span class="price-pending">Consultar precio</span>';
+      subPriceInfo = `<div class="sub-pack-row">${product.packageUnit}</div>`;
+    } else if (isMayorista) {
       // MODO MAYORISTA (Precios del folleto por kilo llevando caja)
       mainPriceHtml = `
         <span class="primary-price">${formatARS(product.pricePerKg)}</span>
@@ -826,6 +840,9 @@ function renderProducts() {
           </div>
 
           <div class="product-actions-row">
+            ${product.consultationOnly ? `
+              <a class="btn-add-cart" href="https://wa.me/${contactNumber(state.pricingMode)}?text=${encodeURIComponent(`Hola Frutas LAM! Quisiera consultar el precio de ${product.name}.`)}" target="_blank" rel="noopener noreferrer">Consultar por WhatsApp</a>
+            ` : `
             <div class="qty-control" aria-label="Cantidad">
               <button type="button" class="qty-btn btn-minus" data-id="${product.id}" aria-label="Restar 1">-</button>
               <input type="text" class="qty-input" id="qty-${product.id}" value="1" readonly aria-label="Cantidad para ${product.name}">
@@ -839,6 +856,7 @@ function renderProducts() {
               </svg>
               <span>${btnAddText}</span>
             </button>
+            `}
           </div>
         </div>
       </article>

@@ -1,6 +1,6 @@
 # Catálogo de lanzamiento · Frutas LAM
 
-41 productos activos, seis categorías y fotos finales propias en `assets/productos/`. Las fichas, el encabezado y las categorías usan las imágenes finales. Las imágenes originales y los archivos de trabajo quedan fuera del paquete para publicar.
+42 productos visibles (41 cotizados y miel Churqui de 1 kg para consultar precio), seis categorías y fotos finales propias en `assets/productos/`. Las fichas, el encabezado y las categorías usan las imágenes finales. Las imágenes originales y los archivos de trabajo quedan fuera del paquete para publicar.
 
 ## Importes confirmados
 
@@ -25,7 +25,7 @@ Mayorista: editar D (`cantidad_mayorista`) y J (`precio_presentacion`, TOTAL de 
 
 Minorista: editar G (`cantidad_minorista`) y H (`precio_minorista`, por unidad). I calcula el total. Se conservaron los valores minoristas del CSV anterior: inicialmente cero, como se había solicitado. Un minorista vacío significa precio pendiente; cero explícito se cotiza como cero. Cargar valores de venta si se desea habilitar pedidos minoristas con precio real.
 
-La miel Churqui de 1 kg, ciruela con carozo, almendra Guara N° 5, nuez extra light partida a máquina y granola con coco tienen foto pero no precio confirmado para esa variante. No se les inventó precio. Las fotos de almendra N° 3 y 4 son alternativas del mismo producto N° 3/4, no nuevos productos. `data/catalogo-fotos.json` y `data/productos-pendientes.json` registran estas relaciones.
+La miel Churqui de 1 kg, ciruela con carozo, almendra Guara N° 5, nuez extra light partida a máquina y granola con coco tienen foto pero no precio confirmado para esa variante. No se les inventó precio. La miel Churqui se muestra en ambas modalidades con «Consultar precio» y enlace al WhatsApp correspondiente; no se puede agregar al carrito sin un importe confirmado. Las fotos de almendra N° 3 y 4 son alternativas del mismo producto N° 3/4, no nuevos productos. `data/catalogo-fotos.json` y `data/productos-pendientes.json` registran estas relaciones.
 
 ## Google Sheets y respaldo local
 

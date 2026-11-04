@@ -2206,6 +2206,8 @@ section[id] { scroll-margin-top: 100px; }
 .shipping-simple-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 .contact-mini-actions { flex-wrap: wrap; }
 .footer-simple-links { flex-wrap: wrap; }
+.footer-simple-links a[href*="wa.me"] { display: inline-flex; align-items: center; gap: 6px; }
+.contact-mini-actions svg, .footer-simple-links a[href*="wa.me"] svg { flex-shrink: 0; }
 @media (max-width: 767px) {
   .shipping-simple-grid { grid-template-columns: 1fr; }
 }

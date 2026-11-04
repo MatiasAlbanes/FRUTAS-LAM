@@ -206,8 +206,10 @@
   {
     "foto": "assets/productos/miel-churqui-1kg.webp",
     "original_final": "miel-churqui-1kg.png",
-    "productos": [],
-    "estado": "Pendiente de precio"
+    "productos": [
+      "miel-churqui-1kg"
+    ],
+    "estado": "Visible para consultar precio"
   },
   {
     "foto": "assets/productos/miel-pura-500gr.webp",

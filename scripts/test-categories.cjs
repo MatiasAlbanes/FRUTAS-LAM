@@ -25,7 +25,7 @@ const context = vm.createContext({
 });
 vm.runInContext(fs.readFileSync('app.js', 'utf8'), context);
 const run = code => vm.runInContext(code, context);
-const products = run('PRODUCTS_DATA');
+const products = run('[...PRODUCTS_DATA, ...CONSULTATION_PRODUCTS]');
 assert.deepEqual([...new Set(products.map(p => p.category))].sort(), [...names].sort());
 assert.equal(products.find(p => p.id === 'aceite-oliva-extra-virgen').category, 'Aceite y aceitunas');
 for (const id of ['pistacho-con-cascara','castana-caju-vietnam','mani-sin-sal']) {
@@ -44,7 +44,7 @@ for (const name of names) {
   run("state.pricingMode = 'minorista'; renderProducts()");
   assert.equal([...elements.get('productsGrid').innerHTML.matchAll(/data-product-id=/g)].length, expected.length);
 }
-assert.equal(total, 41);
+assert.equal(total, 42);
 run("setCategory('Nueces'); state.searchQuery = 'cuartos'; renderProducts()");
 assert.match(elements.get('productsGrid').innerHTML, /nuez-cuartos-blanca/);
 assert.equal([...elements.get('productsGrid').innerHTML.matchAll(/data-product-id=/g)].length, 1);
@@ -52,7 +52,7 @@ run("state.searchQuery = 'aceituna'; renderProducts()");
 assert.equal(elements.get('productsGrid').innerHTML, '');
 assert.equal(elements.get('emptyState').style.display, 'block');
 run("state.searchQuery = ''; setCategory('all')");
-assert.equal([...elements.get('productsGrid').innerHTML.matchAll(/data-product-id=/g)].length, 41);
+assert.equal([...elements.get('productsGrid').innerHTML.matchAll(/data-product-id=/g)].length, 42);
 assert.equal(buttons.filter(b => b['aria-pressed'] === 'true').length, 1);
 run("setCategory('inexistente')");
 assert.equal(run('state.activeCategory'), 'all');
@@ -78,5 +78,5 @@ assert.equal(run('state.activeCategory'), 'all');
   await run('refreshPrices()');
   assert.match(elements.get('priceSyncStatus').textContent, /No pudimos actualizar/);
   assert.equal(products[0].pricePerKg, oldPrice);
-  console.log('OK: seis categorías, 41 productos, filtros en ambas listas, búsqueda, accesibilidad y estado real de actualización.');
+  console.log('OK: seis categorías, 42 productos, filtros en ambas listas, búsqueda, accesibilidad y estado real de actualización.');
 })().catch(error => { console.error(error); process.exitCode = 1; });

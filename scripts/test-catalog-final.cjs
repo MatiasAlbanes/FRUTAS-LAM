@@ -3,14 +3,38 @@ const fs = require('node:fs');
 const vm = require('node:vm');
 const { readPrices } = require('../prices.js');
 const status = { textContent: '', classList: { toggle() {} } };
+const grid = { innerHTML: '' };
 const context = vm.createContext({
   console: { warn() {} }, AbortController, AbortSignal, setTimeout, clearTimeout,
-  document: { addEventListener() {}, getElementById: id => id === 'priceSyncStatus' ? status : null },
+  document: { addEventListener() {}, getElementById: id => id === 'priceSyncStatus' ? status : id === 'productsGrid' ? grid : null },
   window: { PRICES_CONFIG: {} }, PriceSheet: { readPrices }
 });
 vm.runInContext(fs.readFileSync('app.js', 'utf8'), context);
 const run = code => vm.runInContext(code, context);
 const products = run('PRODUCTS_DATA');
+const consultationProducts = run('CONSULTATION_PRODUCTS');
+const allProducts = [...products, ...consultationProducts];
+const honey = consultationProducts.find(p => p.id === 'miel-churqui-1kg');
+assert.ok(honey?.consultationOnly);
+assert.equal(honey.image, 'assets/productos/miel-churqui-1kg.webp');
+assert.ok(!products.some(p => p.id === honey.id), 'No inventar un precio para la miel Churqui');
+for (const [mode, number] of [['mayorista', '5492634761151'], ['minorista', '5492634339550']]) {
+  run(`state.pricingMode = '${mode}'; renderProducts()`);
+  const card = grid.innerHTML.match(/<article[^>]*data-product-id="miel-churqui-1kg"[\s\S]*?<\/article>/)[0];
+  assert.match(card, /Consultar precio/);
+  assert.ok(card.includes('https://wa.me/' + number));
+  assert.doesNotMatch(card, /primary-price">|btn-add-cart" data-id/);
+  run("addToCart('miel-churqui-1kg', 1)");
+  assert.equal(run('state.cart.length'), 0);
+}
+const html = fs.readFileSync('index.html', 'utf8');
+assert.match(html, /class="hero-photo" src="assets\/almendras.jpg"/);
+for (const number of ['5492634761151', '5492634339550']) {
+  const links = [...html.matchAll(/<a\b([^>]*)>([\s\S]*?)<\/a>/g)]
+    .filter(m => m[1].includes('wa.me/' + number) && /(?:Mayorista|Minorista):/.test(m[2]));
+  assert.equal(links.length, 2);
+  for (const link of links) assert.match(link[2], /<svg/);
+}
 const csv = fs.readFileSync('data/precios.csv', 'utf8');
 const updates = readPrices(csv, products);
 assert.equal(products.length, 41);
@@ -49,7 +73,7 @@ const register = JSON.parse(fs.readFileSync('data/catalogo-fotos.json'));
 assert.equal(register.length, 46);
 for (const p of register) {
   assert.ok(fs.existsSync(p.foto));
-  for (const id of p.productos) assert.ok(products.some(product => product.id === id));
+  for (const id of p.productos) assert.ok(allProducts.some(product => product.id === id));
 }
 const pending = JSON.parse(fs.readFileSync('data/productos-pendientes.json'));
 assert.equal(pending.filter(p => p.foto).length, 5);
