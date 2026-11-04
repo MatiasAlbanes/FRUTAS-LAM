@@ -27,7 +27,7 @@ No es necesario cambiar los encabezados mayoristas anteriores (`cantidad`, `prec
 
 Ejemplo minorista: cantidad 0,5 y precio 20000 por kg → presentación de medio kilo a $10.000. Los frascos y baldes requieren cantidades enteras. El balde de aceitunas de 5 kg se cotiza por balde, no por kilo.
 
-Cargar números sin símbolo $ ni separadores de miles. La exportación conectada usa formato en-US (12,800.00), interpretado con `numberFormat` en la configuración. Mantener la configuración regional de la hoja. El CSV local admite coma o punto decimal sin separadores de miles.
+Cargar números sin símbolo $ ni separadores de miles. La exportación conectada puede mezclar formatos entre celdas: 12,800.00, 12.800,00 y 1500,00. `numberFormat: auto` reconoce los separadores por celda y utiliza el formato predominante de cada columna para los casos ambiguos. No se necesitan cambios de formato en Google Sheets. El CSV local admite coma o punto decimal sin separadores de miles.
 
 Un minorista explícito en cero se muestra como $0 y se incluye así en el pedido. Una celda minorista vacía muestra Precio pendiente e impide agregar/enviar ese producto hasta su carga. Mientras la planilla anterior no tenga las columnas minoristas, se usan los ceros iniciales solicitados.
 
@@ -59,3 +59,7 @@ Pruebas:
 Cinco familias: Nueces; Almendras; Aceite y aceitunas; Frutos secos varios; Deshidratados. El aceite de oliva está junto a las cuatro presentaciones de aceitunas. Frutos secos varios incluye castañas, pistachos, maní, miel y granola. Se conservan los 32 productos.
 
 Las tarjetas superiores y los botones del catálogo usan el mismo filtro, indican la categoría activa y actualizan el título y cantidad de resultados. Funcionan con ambas listas de precios y la búsqueda. Todos permite volver al catálogo completo.
+
+## Corrección de formatos mixtos
+
+Se conservó una muestra real en `scripts/fixtures/mixed-price-formats.csv`: mayorista 12,800.00, cantidad minorista 1,00 y precio minorista 1500,00. Las pruebas verifican el catálogo a $1.500, dos presentaciones a $3.000 y el mismo importe en el mensaje de WhatsApp. Los totales recibidos de la planilla siguen siendo informativos: la página recalcula ambos.

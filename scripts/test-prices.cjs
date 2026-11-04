@@ -59,6 +59,26 @@ vm.runInContext(`
   for (const bad of ['12,80.00', '12.800,00', '1,2,800', '$12800', '-12800']) {
     assert.throws(() => readPrices(formatted.replace('12,800.00', bad), products, { numberFormat: 'en-US' }));
   }
+  const mixedFixture = fs.readFileSync('scripts/fixtures/mixed-price-formats.csv', 'utf8');
+  const mixed = readPrices(mixedFixture, products, { numberFormat: 'auto' });
+  assert.equal(mixed[0].pricePerKg, 12800);
+  assert.equal(mixed[0].packageTotalPrice, 128000);
+  assert.equal(mixed[0].retailPrice, 1500);
+  assert.equal(mixed[0].retailQuantity, 1);
+  assert.equal(mixed[0].retailTotal, 1500);
+  assert.equal(mixed[1].retailPrice, 0);
+  for (const [value, expected] of [['12.800,00', 12800], ['12,800.00', 12800], ['1500,50', 1500.5], ['1.234,56', 1234.56]]) {
+    assert.equal(readPrices(mixedFixture.replace('1500,00', value), products, { numberFormat: 'auto' })[0].retailPrice, expected);
+  }
+  for (const bad of ['-1500', '1,2,3', '12,80.00', '$1500', 'NaN']) {
+    assert.throws(() => readPrices(mixedFixture.replace('1500,00', bad), products, { numberFormat: 'auto' }));
+  }
+  // Los separadores ambiguos siguen el formato de la columna, no el del resto de la hoja.
+  const regionalQty = mixedFixture.replaceAll('"1,00"', '"1,000"');
+  const spanishQty = regionalQty.replace('"1,000"', '"1,00"');
+  const englishQty = regionalQty.replace('"1,000"', '"1.00"');
+  assert.equal(readPrices(spanishQty, products, { numberFormat: 'auto' })[1].retailQuantity, 1);
+  assert.equal(readPrices(englishQty, products, { numberFormat: 'auto' })[1].retailQuantity, 1000);
   if (process.argv[2]) {
     const publishedCSV = fs.readFileSync(process.argv[2], 'utf8');
     vm.runInContext(fs.readFileSync('prices-config.js', 'utf8'), context);
@@ -72,6 +92,8 @@ vm.runInContext(`
       const product = products.find(p => p.id === update.id);
       assert.equal(product.pricePerKg, update.pricePerKg);
       assert.equal(product.packageTotalPrice, update.packageTotalPrice);
+      assert.equal(product.retailPrice, update.retailPrice);
+      assert.equal(product.retailTotal, update.retailTotal);
     }
     assert.equal(vm.runInContext('state.cart[0].unitPrice', context), live[0].packageTotalPrice);
     console.log('OK: CSV publicado real, configuración online, catálogo y carrito.');

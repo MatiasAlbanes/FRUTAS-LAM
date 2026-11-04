@@ -27,14 +27,36 @@
     if (row.some(Boolean)) rows.push(row);
     return rows;
   }
+  const NUMBER_FORMATS = {
+    'en-US': /^(?:\d+|\d{1,3}(?:,\d{3})+)(?:\.\d{1,4})?$/,
+    'es-AR': /^(?:\d+|\d{1,3}(?:\.\d{3})+)(?:,\d{1,4})?$/
+  };
+  function columnFormat(rows, index) {
+    // Usar el formato de la columna para los casos ambiguos como 1,000.
+    // Los valores no ambiguos se interpretan individualmente, aunque se mezclen formatos.
+    let english = 0, spanish = 0;
+    for (const row of rows) {
+      const value = row[index] || '';
+      const en = NUMBER_FORMATS['en-US'].test(value);
+      const es = NUMBER_FORMATS['es-AR'].test(value);
+      if (en && !es) english++;
+      if (es && !en) spanish++;
+    }
+    return spanish > english ? 'auto-es-AR' : 'auto-en-US';
+  }
   function positiveNumber(value, numberFormat, allowZero = false) {
     let normalized;
-    if (numberFormat === 'en-US') {
-      // Google Sheets exporta los números con el formato visible de la hoja.
-      if (!/^(?:\d+|\d{1,3}(?:,\d{3})+)(?:\.\d{1,4})?$/.test(value)) {
-        throw new Error('Número inválido: ' + value);
-      }
-      normalized = value.replace(/,/g, '');
+    if (numberFormat?.startsWith('auto-')) {
+      const en = NUMBER_FORMATS['en-US'].test(value);
+      const es = NUMBER_FORMATS['es-AR'].test(value);
+      if (!en && !es) throw new Error('Número inválido: ' + value);
+      numberFormat = en && es ? numberFormat.slice(5) : en ? 'en-US' : 'es-AR';
+    }
+    if (NUMBER_FORMATS[numberFormat]) {
+      if (!NUMBER_FORMATS[numberFormat].test(value)) throw new Error('Número inválido: ' + value);
+      normalized = numberFormat === 'en-US'
+        ? value.replace(/,/g, '')
+        : value.replace(/\./g, '').replace(',', '.');
     } else {
       // CSV local: sin separadores de miles; admite coma o punto decimal.
       if (!/^\d+(?:[.,]\d{1,4})?$/.test(value)) throw new Error('Número inválido: ' + value);
@@ -55,6 +77,9 @@
     for (const key of ['precio_minorista', 'cantidad_minorista']) {
       if (headers.filter(h => h === key).length > 1) throw new Error('Columna repetida: ' + key);
     }
+    const formats = Object.fromEntries(headers.map((key, index) => [key,
+      options.numberFormat === 'auto' ? columnFormat(rows, index) : options.numberFormat
+    ]));
     const catalog = new Map(products.map(p => [p.id, p]));
     const seen = new Set();
     const result = rows.map(row => {
@@ -63,8 +88,8 @@
       if (!product || seen.has(id)) throw new Error('Producto desconocido o repetido: ' + id);
       seen.add(id);
       if (cell('unidad') !== product.unit) throw new Error('La unidad no coincide: ' + id);
-      const quantity = positiveNumber(cell(quantityColumn), options.numberFormat);
-      const price = positiveNumber(cell(priceColumn), options.numberFormat);
+      const quantity = positiveNumber(cell(quantityColumn), formats[quantityColumn]);
+      const price = positiveNumber(cell(priceColumn), formats[priceColumn]);
       if (['frasco', 'balde'].includes(product.unit) && !Number.isInteger(quantity)) {
         throw new Error('La cantidad de unidades debe ser entera');
       }
@@ -72,9 +97,9 @@
       // Un minorista vacío no se cotiza ni se reemplaza por el precio mayorista.
       const retailPrice = !headers.includes('precio_minorista') ? (product.retailPrice ?? 0)
         : cell('precio_minorista') === '' ? null
-        : positiveNumber(cell('precio_minorista'), options.numberFormat, true);
+        : positiveNumber(cell('precio_minorista'), formats.precio_minorista, true);
       const retailQuantity = cell('cantidad_minorista') === '' ? 1
-        : positiveNumber(cell('cantidad_minorista'), options.numberFormat);
+        : positiveNumber(cell('cantidad_minorista'), formats.cantidad_minorista);
       if (['frasco', 'balde'].includes(product.unit) && !Number.isInteger(retailQuantity)) {
         throw new Error('La cantidad minorista de unidades debe ser entera');
       }
