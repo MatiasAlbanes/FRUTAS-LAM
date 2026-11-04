@@ -3,7 +3,7 @@ const fs = require('node:fs');
 const vm = require('node:vm');
 const { readPrices } = require('../prices.js');
 const html = fs.readFileSync('index.html', 'utf8');
-const names = ['Nueces', 'Almendras', 'Aceite y aceitunas', 'Frutos secos varios', 'Deshidratados'];
+const names = ['Nueces', 'Almendras', 'Aceite y aceitunas', 'Frutos secos varios', 'Deshidratados', 'Mixes'];
 const elements = new Map();
 function element() {
   const classes = new Set();
@@ -16,8 +16,8 @@ function element() {
 for (const id of ['productsGrid', 'emptyState', 'catalogCategoryTitle', 'catalogResultCount', 'priceSyncStatus', 'refreshPricesBtn']) elements.set(id, element());
 const buttons = [...html.matchAll(/class="(filter-tab(?: active)?|category-card)" data-(filter|category)="([^"]+)"/g)]
   .map(match => ({ ...element(), dataset: { [match[2]]: match[3] } }));
-assert.equal(buttons.filter(b => b.dataset.category).length, 5);
-assert.equal(buttons.filter(b => b.dataset.filter).length, 6);
+assert.equal(buttons.filter(b => b.dataset.category).length, 6);
+assert.equal(buttons.filter(b => b.dataset.filter).length, 7);
 const context = vm.createContext({
   console: { warn() {} }, AbortController, setTimeout, clearTimeout,
   document: { addEventListener() {}, getElementById: id => elements.get(id) || null, querySelectorAll: () => buttons },
@@ -28,7 +28,7 @@ const run = code => vm.runInContext(code, context);
 const products = run('PRODUCTS_DATA');
 assert.deepEqual([...new Set(products.map(p => p.category))].sort(), [...names].sort());
 assert.equal(products.find(p => p.id === 'aceite-oliva-extra-virgen').category, 'Aceite y aceitunas');
-for (const id of ['pistacho-pelado','castana-caju-vietnam','mani-sin-sal']) {
+for (const id of ['pistacho-con-cascara','castana-caju-vietnam','mani-sin-sal']) {
   assert.equal(products.find(p => p.id === id).category, 'Frutos secos varios');
 }
 let total = 0;
@@ -44,7 +44,7 @@ for (const name of names) {
   run("state.pricingMode = 'minorista'; renderProducts()");
   assert.equal([...elements.get('productsGrid').innerHTML.matchAll(/data-product-id=/g)].length, expected.length);
 }
-assert.equal(total, 32);
+assert.equal(total, 41);
 run("setCategory('Nueces'); state.searchQuery = 'cuartos'; renderProducts()");
 assert.match(elements.get('productsGrid').innerHTML, /nuez-cuartos-blanca/);
 assert.equal([...elements.get('productsGrid').innerHTML.matchAll(/data-product-id=/g)].length, 1);
@@ -52,7 +52,7 @@ run("state.searchQuery = 'aceituna'; renderProducts()");
 assert.equal(elements.get('productsGrid').innerHTML, '');
 assert.equal(elements.get('emptyState').style.display, 'block');
 run("state.searchQuery = ''; setCategory('all')");
-assert.equal([...elements.get('productsGrid').innerHTML.matchAll(/data-product-id=/g)].length, 32);
+assert.equal([...elements.get('productsGrid').innerHTML.matchAll(/data-product-id=/g)].length, 41);
 assert.equal(buttons.filter(b => b['aria-pressed'] === 'true').length, 1);
 run("setCategory('inexistente')");
 assert.equal(run('state.activeCategory'), 'all');
@@ -74,9 +74,9 @@ assert.equal(run('state.activeCategory'), 'all');
   assert.equal(elements.get('priceSyncStatus').classList.contains('sync-error'), true);
   assert.equal(elements.get('refreshPricesBtn').disabled, false);
   assert.equal(products[0].pricePerKg, oldPrice);
-  context.fetch = async () => ({ ok: true, text: async () => csv.replace('12800.0', '-1') });
+  context.fetch = async () => ({ ok: true, text: async () => csv.replace('1350.0', '-1') });
   await run('refreshPrices()');
   assert.match(elements.get('priceSyncStatus').textContent, /No pudimos actualizar/);
   assert.equal(products[0].pricePerKg, oldPrice);
-  console.log('OK: cinco categorías, 32 productos, filtros en ambas listas, búsqueda, accesibilidad y estado real de actualización.');
+  console.log('OK: seis categorías, 41 productos, filtros en ambas listas, búsqueda, accesibilidad y estado real de actualización.');
 })().catch(error => { console.error(error); process.exitCode = 1; });

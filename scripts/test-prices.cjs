@@ -10,31 +10,31 @@ const context = vm.createContext({
 });
 vm.runInContext(fs.readFileSync('app.js', 'utf8'), context);
 const products = vm.runInContext('PRODUCTS_DATA', context);
-assert.equal(products.length, 32);
+assert.equal(products.length, 41);
 const parsed = readPrices(csv, products);
-assert.equal(parsed.length, 32);
+assert.equal(parsed.length, 41);
 for (const p of products) {
   const row = parsed.find(r => r.id === p.id);
   assert.equal(row.packageTotalPrice, p.packageTotalPrice);
   assert.equal(row.packageUnit, p.packageUnit);
 }
-const changed = csv.replace('10.0;12800.0', '7,5;15000');
+const changed = csv.replace('10.0;1350.0', '7,5;15000');
 const first = readPrices(changed, products)[0];
 assert.equal(first.pricePerKg, 15000);
 assert.equal(first.packageTotalPrice, 112500);
 assert.equal(first.packageUnit, 'Caja x 7.5 kg');
 for (const bad of [
-  csv.replace('12800.0', '-100'), csv.replace('12800.0', 'NaN'),
-  csv.replace('12800.0', '<script>'), csv.replace('12800.0', ''),
-  csv.replace('10.0;12800.0', '0;12800'),
+  csv.replace('1350.0', '-100'), csv.replace('1350.0', 'NaN'),
+  csv.replace('1350.0', '<script>'), csv.replace('1350.0', ''),
+  csv.replace('10.0;1350.0', '0;12800'),
   csv.replace('nuez-cuartos-blanca;', 'nuez-mariposa-blanca;'),
   csv.replace('nuez-cuartos-blanca;', 'desconocido;'),
   csv.split('\n').slice(0, -2).join('\n'),
-  csv.replace(';frasco;6.0;', ';frasco;6.5;'),
+  csv.replace(';frasco;1.0;', ';frasco;1.5;'),
   csv.replace(';kg;10.0;', ';litro;10.0;')
 ]) assert.throws(() => readPrices(bad, products));
 const commaCSV = csv.split(/\r?\n/).map(line => line.split(';').map(s => '"'+s.replaceAll('"','""')+'"').join(',')).join('\r\n');
-assert.equal(readPrices(commaCSV, products).length, 32);
+assert.equal(readPrices(commaCSV, products).length, 41);
 vm.runInContext(`
   renderProducts = () => {};
   updateCartUI = () => {};
@@ -47,14 +47,14 @@ vm.runInContext(`
   assert.equal(products[0].pricePerKg, 15000);
   assert.equal(vm.runInContext('state.cart[0].unitPrice', context), 112500);
   assert.equal(vm.runInContext('state.cart[0].qty', context), 2);
-  context.fetch = async () => ({ ok: true, text: async () => csv.replace('11800.0', '-1') });
+  context.fetch = async () => ({ ok: true, text: async () => csv.replace('1250.0', '-1') });
   await vm.runInContext('refreshPrices()', context);
   assert.equal(products[0].pricePerKg, 15000, 'La actualización fallida debe ser atómica');
   context.fetch = async () => { throw Error('Sin conexión'); };
   await vm.runInContext('refreshPrices()', context);
   assert.equal(products[0].pricePerKg, 15000);
   // Verifica el formato publicado por Sheets sin confundir 12,800.00 con 12.8.
-  const formatted = commaCSV.replace('"12800.0"', '"12,800.00"');
+  const formatted = commaCSV.replace('"1350.0"', '"12,800.00"');
   assert.equal(readPrices(formatted, products, { numberFormat: 'en-US' })[0].pricePerKg, 12800);
   for (const bad of ['12,80.00', '12.800,00', '1,2,800', '$12800', '-12800']) {
     assert.throws(() => readPrices(formatted.replace('12,800.00', bad), products, { numberFormat: 'en-US' }));
@@ -87,7 +87,7 @@ vm.runInContext(`
     await vm.runInContext('refreshPrices()', context);
     assert.equal(requestedUrl, context.window.PRICES_CONFIG.csvUrl);
     const live = readPrices(publishedCSV, products, context.window.PRICES_CONFIG);
-    assert.equal(live.length, 32);
+    assert.equal(live.length, 41);
     for (const update of live) {
       const product = products.find(p => p.id === update.id);
       assert.equal(product.pricePerKg, update.pricePerKg);
@@ -98,5 +98,5 @@ vm.runInContext(`
     assert.equal(vm.runInContext('state.cart[0].unitPrice', context), live[0].packageTotalPrice);
     console.log('OK: CSV publicado real, configuración online, catálogo y carrito.');
   }
-  console.log('OK: 32 productos, totales, CSV Excel/online, decimales, validación, carrito y fallos de red.');
+  console.log('OK: 41 productos, totales, CSV Excel/online, decimales, validación, carrito y fallos de red.');
 })().catch(error => { console.error(error); process.exitCode = 1; });

@@ -15,7 +15,7 @@
   <!-- Favicon -->
   <link rel="icon" type="image/png" href="assets/logo-lam.png">
 
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styles.css?v=20261104-catalogo-final">
 </head>
 <body>
 
@@ -125,7 +125,7 @@
       </div>
 
     </div>
-    <figure class="hero-visual"><img class="hero-photo" src="assets/almendras.jpg" alt="Almendras seleccionadas" fetchpriority="high"></figure>
+    <figure class="hero-visual"><img class="hero-photo" src="assets/productos/almendra-guara-6.webp" alt="Almendras seleccionadas" fetchpriority="high"></figure>
     </div>
   </section>
 
@@ -138,24 +138,28 @@
 
       <div class="categories-grid">
         <button type="button" class="category-card" data-category="Nueces" aria-pressed="false">
-          <div class="category-img-wrap"><img src="assets/nueces.jpg" alt="Nueces" loading="lazy"></div>
+          <div class="category-img-wrap"><img src="assets/productos/nuez-mariposa-blanca-partida-a-mano.webp" alt="Nueces" loading="lazy"></div>
           <h3>Nueces</h3>
         </button>
         <button type="button" class="category-card" data-category="Almendras" aria-pressed="false">
-          <div class="category-img-wrap"><img src="assets/almendras.jpg" alt="Almendras" loading="lazy"></div>
+          <div class="category-img-wrap"><img src="assets/productos/almendra-guara-6.webp" alt="Almendras" loading="lazy"></div>
           <h3>Almendras</h3>
         </button>
         <button type="button" class="category-card" data-category="Aceite y aceitunas" aria-pressed="false">
-          <div class="category-img-wrap"><img src="assets/aceite-oliva.jpg" alt="Aceite y aceitunas" loading="lazy"></div>
+          <div class="category-img-wrap"><img src="assets/productos/aceite-de-oliva-1l.webp" alt="Aceite y aceitunas" loading="lazy"></div>
           <h3>Aceite y aceitunas</h3>
         </button>
         <button type="button" class="category-card" data-category="Frutos secos varios" aria-pressed="false">
-          <div class="category-img-wrap"><img src="assets/castanas-caju.jpg" alt="Frutos secos varios" loading="lazy"></div>
+          <div class="category-img-wrap"><img src="assets/productos/castana-de-caju-vietnam.webp" alt="Frutos secos varios" loading="lazy"></div>
           <h3>Frutos secos varios</h3>
         </button>
         <button type="button" class="category-card" data-category="Deshidratados" aria-pressed="false">
-          <div class="category-img-wrap"><img src="assets/pasas-uva.jpg" alt="Deshidratados" loading="lazy"></div>
+          <div class="category-img-wrap"><img src="assets/productos/pasa-rubia-grande.webp" alt="Deshidratados" loading="lazy"></div>
           <h3>Deshidratados</h3>
+        </button>
+        <button type="button" class="category-card" data-category="Mixes" aria-pressed="false">
+          <div class="category-img-wrap"><img src="assets/productos/tropical-premium.webp" alt="Mixes" loading="lazy"></div>
+          <h3>Mixes</h3>
         </button>
       </div>
     </div>
@@ -194,11 +198,12 @@
         <button type="button" class="filter-tab" data-filter="Aceite y aceitunas" aria-pressed="false">Aceite y aceitunas</button>
         <button type="button" class="filter-tab" data-filter="Frutos secos varios" aria-pressed="false">Frutos secos varios</button>
         <button type="button" class="filter-tab" data-filter="Deshidratados" aria-pressed="false">Deshidratados</button>
+        <button type="button" class="filter-tab" data-filter="Mixes" aria-pressed="false">Mixes</button>
       </div>
 
       <!-- Alerta dinámica de modo mayorista -->
       <div class="mode-info-banner wholesale-active" id="modeInfoBanner">
-        <span id="modeInfoText">Precios por kg llevando caja cerrada. Seleccioná Mayorista o Minorista para ver sus precios.</span>
+        <span id="modeInfoText">Granel: caja de 10 kg. Mixes: bolsón de 5 kg. Cada ficha indica su precio por unidad y el total de la presentación.</span>
       </div>
 
       <div class="price-sync-bar">
@@ -448,8 +453,8 @@
   <div class="toast-container" id="toastContainer" role="status" aria-live="polite"></div>
 
   <!-- Scripts -->
-  <script src="prices-config.js?v=20261104-mixed-numbers"></script>
-  <script src="prices.js?v=20261104-mixed-numbers"></script>
-  <script src="app.js"></script>
+  <script src="prices-config.js?v=20261104-catalogo-final"></script>
+  <script src="prices.js?v=20261104-catalogo-final"></script>
+  <script src="app.js?v=20261104-catalogo-final"></script>
 </body>
 </html>

@@ -22,23 +22,22 @@ const APP_CONFIG = {
 };
 
 // =====================================================================
-// BASE DE DATOS OFICIAL DE PRODUCTOS (32 ARTÍCULOS REALES DEL FOLLETO)
-// Los precios corresponden al precio mayorista por kg llevando caja cerrada.
+// CATÁLOGO ACTUAL: PRODUCTOS CON FOTO FINAL Y PRECIO CONFIRMADO
+// pricePerKg es el equivalente por unidad; packageTotalPrice es el total confirmado de la presentación.
 // =====================================================================
 const PRODUCTS_DATA = [
-  // --- NUECES ---
   {
     id: 'nuez-mariposa-blanca',
     name: 'Nuez Mariposa Blanca (Partida a mano)',
     category: 'Nueces',
     badge: 'Selección Especial',
     description: 'Mitades mariposa blanca partidas a mano, calibre parejo y textura crocante de primera selección.',
-    image: 'assets/nueces.jpg',
-    pricePerKg: 12800,
+    image: 'assets/productos/nuez-mariposa-blanca-partida-a-mano.webp',
+    pricePerKg: 1350.0,
     unit: 'kg',
     packageKg: 10,
     packageUnit: 'Caja x 10 kg',
-    packageTotalPrice: 128000
+    packageTotalPrice: 13500
   },
   {
     id: 'nuez-cuartos-blanca',
@@ -46,12 +45,12 @@ const PRODUCTS_DATA = [
     category: 'Nueces',
     badge: 'Ideal Repostería',
     description: 'Cuartos de nuez blanca seleccionados, gran rendimiento para panificación, granola y consumo diario.',
-    image: 'assets/nueces.jpg',
-    pricePerKg: 11800,
+    image: 'assets/productos/nuez-cuarto-extra-light.webp',
+    pricePerKg: 1250.0,
     unit: 'kg',
     packageKg: 10,
     packageUnit: 'Caja x 10 kg',
-    packageTotalPrice: 118000
+    packageTotalPrice: 12500
   },
   {
     id: 'nuez-mariposa-ambar-light',
@@ -59,79 +58,77 @@ const PRODUCTS_DATA = [
     category: 'Nueces',
     badge: 'Excelente Precio',
     description: 'Nuez mariposa color ámbar claro, sabor intenso y gran valor nutricional a un precio muy conveniente.',
-    image: 'assets/nueces.jpg',
-    pricePerKg: 9900,
+    image: 'assets/productos/nuez-mariposa-ambar-light.webp',
+    pricePerKg: 990.0,
     unit: 'kg',
     packageKg: 10,
     packageUnit: 'Caja x 10 kg',
-    packageTotalPrice: 99000
+    packageTotalPrice: 9900
   },
   {
-    id: 'nuez-con-cascara',
-    name: 'Nuez con Cáscara',
+    id: 'nuez-mariposa-light',
+    name: 'Nuez Mariposa Light',
     category: 'Nueces',
-    badge: 'Cosecha Nueva',
-    description: 'Nueces enteras con cáscara fina de fácil partido, frescura y sabor natural de fincas mendocinas.',
-    image: 'assets/nueces.jpg',
-    pricePerKg: 4500,
+    badge: '',
+    description: 'Nuez Mariposa Light.',
+    image: 'assets/productos/nuez-mariposa-light.webp',
+    pricePerKg: 1270.0,
     unit: 'kg',
     packageKg: 10,
-    packageUnit: 'Bolsa x 10 kg',
-    packageTotalPrice: 45000
+    packageUnit: 'Caja x 10 kg',
+    packageTotalPrice: 12700
   },
-
-  // --- ALMENDRAS ---
   {
     id: 'almendra-marinada-3-4',
     name: 'Almendra Marinada N° 3/4',
     category: 'Almendras',
     badge: 'Gourmet',
-    description: 'Variedad marinada calibre N° 3/4, tostado y sazón especial que resalta su crocancia inigualable.',
-    image: 'assets/almendras.jpg',
-    pricePerKg: 19500,
+    description: 'Almendra marinada calibre N° 3/4.',
+    image: 'assets/productos/almendra-marinada-3.webp',
+    pricePerKg: 1950.0,
     unit: 'kg',
     packageKg: 10,
     packageUnit: 'Caja x 10 kg',
-    packageTotalPrice: 195000
+    packageTotalPrice: 19500
   },
   {
     id: 'almendra-marinada-5-6',
     name: 'Almendra Marinada N° 5/6',
     category: 'Almendras',
     badge: 'Calibre Grande',
-    description: 'Almendra marinada de grano grande seleccionado N° 5/6, porte imponente y consistencia carnosa.',
-    image: 'assets/almendras.jpg',
-    pricePerKg: 21000,
+    description: 'Almendra marinada calibre N° 5/6.',
+    image: 'assets/productos/almendra-marinada-6.webp',
+    pricePerKg: 2100.0,
     unit: 'kg',
     packageKg: 10,
     packageUnit: 'Caja x 10 kg',
-    packageTotalPrice: 210000
+    packageTotalPrice: 21000
   },
   {
     id: 'almendra-guara-3-4',
     name: 'Almendra Guara N° 3/4',
     category: 'Almendras',
     badge: 'Alta Calidad',
-    description: 'Almendra variedad Guara dulce natural, calibre parejo y suave textura ideal para picadas y confitería.',
-    image: 'assets/almendras.jpg',
-    pricePerKg: 19000,
+    description: 'Almendra variedad Guara calibre N° 3/4.',
+    image: 'assets/productos/almendra-guara-n3.webp',
+    pricePerKg: 1950.0,
     unit: 'kg',
     packageKg: 10,
     packageUnit: 'Caja x 10 kg',
-    packageTotalPrice: 190000
+    packageTotalPrice: 19500
   },
   {
     id: 'almendra-guara-6',
     name: 'Almendra Guara N° 6',
     category: 'Almendras',
     badge: 'Premium',
-    description: 'Almendra Guara calibre superior N° 6, grano seleccionado para alta exigencia gastronómica.',
-    image: 'assets/almendras.jpg',
-    pricePerKg: 20000,
+    description: 'Almendra variedad Guara calibre N° 6.',
+    image: 'assets/productos/almendra-guara-6.webp',
+    pricePerKg: 2100.0,
     unit: 'kg',
     packageKg: 10,
     packageUnit: 'Caja x 10 kg',
-    packageTotalPrice: 200000
+    packageTotalPrice: 21000
   },
   {
     id: 'almendra-partida',
@@ -139,239 +136,38 @@ const PRODUCTS_DATA = [
     category: 'Almendras',
     badge: 'Económica',
     description: 'Trozos de almendra natural, rinde al máximo en rellenos, galletitas, turrones y barras de cereal.',
-    image: 'assets/almendras.jpg',
-    pricePerKg: 15200,
+    image: 'assets/productos/almendra-partida.webp',
+    pricePerKg: 1520.0,
     unit: 'kg',
     packageKg: 10,
     packageUnit: 'Caja x 10 kg',
-    packageTotalPrice: 152000
+    packageTotalPrice: 15200
   },
   {
     id: 'harina-de-almendra',
     name: 'Harina de Almendra',
     category: 'Almendras',
-    badge: '100% Pura',
-    description: 'Molienda fina de almendras seleccionadas sin conservantes ni aditivos. Excelente para repostería keto y celíacos.',
-    image: 'assets/almendras.jpg',
-    pricePerKg: 3500,
-    unit: 'kg',
-    packageKg: 5,
-    packageUnit: 'Bolsa x 5 kg',
-    packageTotalPrice: 17500
-  },
-
-  // --- CASTAÑAS & PISTACHOS ---
-  {
-    id: 'castana-caju-vietnam',
-    name: 'Castaña Cajú Vietnam',
-    category: 'Frutos secos varios',
-    badge: 'Importación',
-    description: 'Castaña de cajú grado entero importada de Vietnam, tostada al punto justo con textura suave y cremosa.',
-    image: 'assets/castanas-caju.jpg',
-    pricePerKg: 13000,
+    badge: 'Con piel',
+    description: 'Harina de almendra con piel, presentación de 10 kg.',
+    image: 'assets/productos/harina-de-almendra-con-piel-70.webp',
+    pricePerKg: 290.0,
     unit: 'kg',
     packageKg: 10,
     packageUnit: 'Caja x 10 kg',
-    packageTotalPrice: 130000
+    packageTotalPrice: 2900
   },
-  {
-    id: 'pistacho-con-cascara',
-    name: 'Pistacho c/c (con cáscara)',
-    category: 'Frutos secos varios',
-    badge: 'Favorito',
-    description: 'Pistachos abiertos tostados con cáscara y sal fina, excelente calibre y sabor crujiente.',
-    image: 'assets/pistachos.jpg',
-    pricePerKg: 24600,
-    unit: 'kg',
-    packageKg: 10,
-    packageUnit: 'Caja x 10 kg',
-    packageTotalPrice: 246000
-  },
-  {
-    id: 'pistacho-pelado',
-    name: 'Pistacho Pelado',
-    category: 'Frutos secos varios',
-    badge: 'Súper Premium',
-    description: 'Pistacho 100% puro pelado sin cáscara, verde brillante, ideal para heladerías, bombonería y alta cocina.',
-    image: 'assets/pistachos.jpg',
-    pricePerKg: 44500,
-    unit: 'kg',
-    packageKg: 5,
-    packageUnit: 'Caja x 5 kg',
-    packageTotalPrice: 222500
-  },
-  {
-    id: 'mani-sin-sal',
-    name: 'Maní sin Sal (Tostado)',
-    category: 'Frutos secos varios',
-    badge: 'Económico',
-    description: 'Maní cordobés tostado natural sin agregado de sal ni aceites, repelado y de calibre parejo.',
-    image: 'assets/mani.jpg',
-    pricePerKg: 3200,
-    unit: 'kg',
-    packageKg: 10,
-    packageUnit: 'Bolsa x 10 kg',
-    packageTotalPrice: 32000
-  },
-
-  // --- FRUTAS DESECADAS ---
-  {
-    id: 'ciruela-sin-carozo',
-    name: 'Ciruela s/c (sin carozo)',
-    category: 'Deshidratados',
-    badge: 'Mendoza',
-    description: 'Ciruela D\'Agen mendocina tierna, carnosa y húmeda sin carozo. Fuente natural de fibra y antioxidantes.',
-    image: 'assets/ciruelas.jpg',
-    pricePerKg: 7200,
-    unit: 'kg',
-    packageKg: 10,
-    packageUnit: 'Caja x 10 kg',
-    packageTotalPrice: 72000
-  },
-  {
-    id: 'pasa-jumbo',
-    name: 'Pasa Jumbo de Uva',
-    category: 'Deshidratados',
-    badge: 'Extra Grande',
-    description: 'Pasas de uva morocha de gran calibre jumbo seleccionadas, carnosas, suaves y sin semillas.',
-    image: 'assets/pasas-uva.jpg',
-    pricePerKg: 5200,
-    unit: 'kg',
-    packageKg: 10,
-    packageUnit: 'Caja x 10 kg',
-    packageTotalPrice: 52000
-  },
-  {
-    id: 'pasa-rubia-grande',
-    name: 'Pasa Rubia Grande',
-    category: 'Deshidratados',
-    badge: 'Gourmet',
-    description: 'Pasa dorada sultanina de gran tamaño, dulzor delicado con sutil toque cítrico, limpia y sin semillas.',
-    image: 'assets/pasas-uva.jpg',
-    pricePerKg: 7700,
-    unit: 'kg',
-    packageKg: 10,
-    packageUnit: 'Caja x 10 kg',
-    packageTotalPrice: 77000
-  },
-  {
-    id: 'pasa-flame',
-    name: 'Pasa Flame Mendocina',
-    category: 'Deshidratados',
-    badge: 'Más Vendida',
-    description: 'Pasas de uva tinta Flame de fincas de Mendoza, textura tierna y dulzor equilibrado sin semillas.',
-    image: 'assets/pasas-uva.jpg',
-    pricePerKg: 3500,
-    unit: 'kg',
-    packageKg: 10,
-    packageUnit: 'Caja x 10 kg',
-    packageTotalPrice: 35000
-  },
-  {
-    id: 'banana-chips',
-    name: 'Banana Chips Crocantes',
-    category: 'Deshidratados',
-    badge: 'Snack Saludable',
-    description: 'Crocantes chips de banana deshidratada y dorada al punto justo, snack nutritivo de alta energía.',
-    image: 'assets/banana-chips.jpg',
-    pricePerKg: 10500,
-    unit: 'kg',
-    packageKg: 6.8,
-    packageUnit: 'Caja x 6.8 kg',
-    packageTotalPrice: 71400
-  },
-  {
-    id: 'higo-negro',
-    name: 'Higo Negro Seco',
-    category: 'Deshidratados',
-    badge: 'Tradicional',
-    description: 'Higos negros secados al sol en tierras cuyanas, piel delgada y corazón dulce con miel natural.',
-    image: 'assets/higos.jpg',
-    pricePerKg: 9500,
-    unit: 'kg',
-    packageKg: 5,
-    packageUnit: 'Caja x 5 kg',
-    packageTotalPrice: 47500
-  },
-  {
-    id: 'higo-blanco',
-    name: 'Higo Blanco Seco',
-    category: 'Deshidratados',
-    badge: 'Selección',
-    description: 'Higos blancos tiernos y carnosos deshidratados en su punto justo, fragantes y exquisitos.',
-    image: 'assets/higos.jpg',
-    pricePerKg: 8000,
-    unit: 'kg',
-    packageKg: 5,
-    packageUnit: 'Caja x 5 kg',
-    packageTotalPrice: 40000
-  },
-  {
-    id: 'medallon-durazno',
-    name: 'Medallón de Durazno',
-    category: 'Deshidratados',
-    badge: 'Cuyo Especial',
-    description: 'Medallones tiernos de durazno amarillo deshidratado, aroma frutal concentrado y textura suave.',
-    image: 'assets/duraznos-secos.jpg',
-    pricePerKg: 9800,
-    unit: 'kg',
-    packageKg: 5,
-    packageUnit: 'Caja x 5 kg',
-    packageTotalPrice: 49000
-  },
-  {
-    id: 'pelon-durazno',
-    name: 'Pelón de Durazno',
-    category: 'Deshidratados',
-    badge: 'Típico Cuyano',
-    description: 'Pelones artesanales desecados, tradicionales de la mesa mendocina para compotas y consumo natural.',
-    image: 'assets/duraznos-secos.jpg',
-    pricePerKg: 6200,
-    unit: 'kg',
-    packageKg: 5,
-    packageUnit: 'Caja x 5 kg',
-    packageTotalPrice: 31000
-  },
-  {
-    id: 'datil-argelia-sin-carozo',
-    name: 'Dátil Argelia sin Carozo',
-    category: 'Deshidratados',
-    badge: 'Deglet Nour',
-    description: 'Dátiles importados de Argelia sin carozo, textura melosa con notas a miel y caramelo natural.',
-    image: 'assets/datiles.jpg',
-    pricePerKg: 12700,
-    unit: 'kg',
-    packageKg: 5,
-    packageUnit: 'Caja x 5 kg',
-    packageTotalPrice: 63500
-  },
-  {
-    id: 'tomate-deshidratado-1ra',
-    name: 'Tomate Deshidratado 1ra',
-    category: 'Deshidratados',
-    badge: '1ra Calidad',
-    description: 'Tomates mendocinos secados al sol de primera calidad, sabor intenso y color vivo para ensaladas y pastas.',
-    image: 'assets/tomate-deshidratado.jpg',
-    pricePerKg: 10700,
-    unit: 'kg',
-    packageKg: 5,
-    packageUnit: 'Caja x 5 kg',
-    packageTotalPrice: 53500
-  },
-
-  // --- ACEITUNAS ---
   {
     id: 'aceituna-griega-1kg',
     name: 'Aceituna Griega Negra (1 kg)',
     category: 'Aceite y aceitunas',
     badge: 'Elaboración Propia',
     description: 'Aceituna negra estilo griego curada en sal seca y aceite, arrugada y con profundo sabor tradicional.',
-    image: 'assets/aceitunas.jpg',
+    image: 'assets/productos/aceituna-negra-griega.webp',
     pricePerKg: 9500,
     unit: 'kg',
-    packageKg: 5,
-    packageUnit: 'Balde x 5 kg',
-    packageTotalPrice: 47500
+    packageKg: 1,
+    packageUnit: 'Presentación x 1 kg',
+    packageTotalPrice: 9500
   },
   {
     id: 'aceituna-griega-medio-kg',
@@ -379,12 +175,12 @@ const PRODUCTS_DATA = [
     category: 'Aceite y aceitunas',
     badge: 'Presentación Frasco',
     description: 'Frasco sellado de 500g con aceitunas estilo griego listas para el consumo en picadas y aperitivos.',
-    image: 'assets/aceitunas.jpg',
+    image: 'assets/productos/aceituna-negra-griega.webp',
     pricePerKg: 6200,
     unit: 'frasco',
-    packageKg: 6,
-    packageUnit: 'Pack x 6 frascos',
-    packageTotalPrice: 37200
+    packageKg: 1,
+    packageUnit: 'Frasco x 1/2 kg',
+    packageTotalPrice: 6200
   },
   {
     id: 'aceituna-griega-5kg',
@@ -392,7 +188,7 @@ const PRODUCTS_DATA = [
     category: 'Aceite y aceitunas',
     badge: 'Balde Mayorista',
     description: 'Balde hermético de 5 kg con aceitunas griegas negras seleccionadas para fiambrerías y gastronomía.',
-    image: 'assets/aceitunas.jpg',
+    image: 'assets/productos/aceituna-negra-griega.webp',
     pricePerKg: 41500,
     unit: 'balde',
     packageKg: 1,
@@ -405,27 +201,77 @@ const PRODUCTS_DATA = [
     category: 'Aceite y aceitunas',
     badge: 'Sin Carozo',
     description: 'Aceitunas verdes descarozadas carnosas y suaves al granel, perfectas para pizzas, empanadas y picadas.',
-    image: 'assets/aceitunas.jpg',
-    pricePerKg: 5900,
+    image: 'assets/productos/aceituna-descarozada-verde.webp',
+    pricePerKg: 590.0,
     unit: 'kg',
-    packageKg: 5,
-    packageUnit: 'Balde x 5 kg',
-    packageTotalPrice: 29500
+    packageKg: 10,
+    packageUnit: 'Caja x 10 kg',
+    packageTotalPrice: 5900
   },
-
-  // --- ACEITE & DELICATESSEN ---
   {
     id: 'aceite-oliva-extra-virgen',
     name: 'Aceite Oliva Extra Virgen (1 Litro)',
     category: 'Aceite y aceitunas',
     badge: 'Primera Prensada',
     description: 'Aceite de oliva extra virgen de primera prensada en frío, baja acidez y frutado fresco mendocino.',
-    image: 'assets/aceite-oliva.jpg',
+    image: 'assets/productos/aceite-de-oliva-1l.webp',
     pricePerKg: 12800,
     unit: 'litro',
+    packageKg: 1,
+    packageUnit: 'Botella x 1 litro',
+    packageTotalPrice: 12800
+  },
+  {
+    id: 'aceite-oliva-extra-virgen-5l',
+    name: 'Aceite Oliva Extra Virgen (5 Litros)',
+    category: 'Aceite y aceitunas',
+    badge: '',
+    description: 'Aceite Oliva Extra Virgen (5 Litros).',
+    image: 'assets/productos/aceite-de-oliva-5l.webp',
+    pricePerKg: 12800.0,
+    unit: 'litro',
     packageKg: 5,
-    packageUnit: 'Bidón x 5 Litros',
+    packageUnit: 'Bidón x 5 litros',
     packageTotalPrice: 64000
+  },
+  {
+    id: 'castana-caju-vietnam',
+    name: 'Castaña Cajú Vietnam',
+    category: 'Frutos secos varios',
+    badge: 'Importación',
+    description: 'Castañas de cajú de Vietnam.',
+    image: 'assets/productos/castana-de-caju-vietnam.webp',
+    pricePerKg: 1280.0,
+    unit: 'kg',
+    packageKg: 10,
+    packageUnit: 'Caja x 10 kg',
+    packageTotalPrice: 12800
+  },
+  {
+    id: 'pistacho-con-cascara',
+    name: 'Pistacho c/c (con cáscara)',
+    category: 'Frutos secos varios',
+    badge: 'Favorito',
+    description: 'Pistachos con cáscara.',
+    image: 'assets/productos/pistacho-con-cascara.webp',
+    pricePerKg: 2680.0,
+    unit: 'kg',
+    packageKg: 10,
+    packageUnit: 'Caja x 10 kg',
+    packageTotalPrice: 26800
+  },
+  {
+    id: 'mani-sin-sal',
+    name: 'Maní sin Sal (Tostado)',
+    category: 'Frutos secos varios',
+    badge: 'Económico',
+    description: 'Maní cordobés tostado natural sin agregado de sal ni aceites, repelado y de calibre parejo.',
+    image: 'assets/productos/mani-sin-sal.webp',
+    pricePerKg: 320.0,
+    unit: 'kg',
+    packageKg: 10,
+    packageUnit: 'Caja x 10 kg',
+    packageTotalPrice: 3200
   },
   {
     id: 'miel-pura-campo-medio-kg',
@@ -433,25 +279,285 @@ const PRODUCTS_DATA = [
     category: 'Frutos secos varios',
     badge: '100% Pura',
     description: 'Miel cruda de flores de campo sin pasteurizar ni agregados, textura untuosa y aroma dulce natural.',
-    image: 'assets/miel.jpg',
+    image: 'assets/productos/miel-pura-500gr.webp',
     pricePerKg: 5000,
     unit: 'frasco',
-    packageKg: 12,
-    packageUnit: 'Caja x 12 frascos',
-    packageTotalPrice: 60000
+    packageKg: 1,
+    packageUnit: 'Frasco x 1/2 kg',
+    packageTotalPrice: 5000
   },
   {
     id: 'granola-artesanal',
     name: 'Granola Artesanal',
     category: 'Frutos secos varios',
     badge: 'Con Miel y Frutos',
-    description: 'Avena horneada crujiente con miel pura, semillas de girasol, pasas de uva y frutos secos troceados.',
-    image: 'assets/granola.jpg',
-    pricePerKg: 4800,
+    description: 'Granola clásica sin coco.',
+    image: 'assets/productos/granola-clasica.webp',
+    pricePerKg: 480.0,
+    unit: 'kg',
+    packageKg: 10,
+    packageUnit: 'Caja x 10 kg',
+    packageTotalPrice: 4800
+  },
+  {
+    id: 'ciruela-sin-carozo',
+    name: 'Ciruela s/c (sin carozo)',
+    category: 'Deshidratados',
+    badge: 'Mendoza',
+    description: 'Ciruela D\'Agen mendocina tierna, carnosa y húmeda sin carozo. Fuente natural de fibra y antioxidantes.',
+    image: 'assets/productos/ciruela-dagen-sin-carozo-grande.webp',
+    pricePerKg: 700.0,
+    unit: 'kg',
+    packageKg: 10,
+    packageUnit: 'Caja x 10 kg',
+    packageTotalPrice: 7000
+  },
+  {
+    id: 'pasa-jumbo',
+    name: 'Pasa Jumbo de Uva',
+    category: 'Deshidratados',
+    badge: 'Extra Grande',
+    description: 'Pasas de uva morocha de gran calibre jumbo seleccionadas, carnosas, suaves y sin semillas.',
+    image: 'assets/productos/pasa-morocha-doble-jumbo.webp',
+    pricePerKg: 520.0,
+    unit: 'kg',
+    packageKg: 10,
+    packageUnit: 'Caja x 10 kg',
+    packageTotalPrice: 5200
+  },
+  {
+    id: 'pasa-rubia-grande',
+    name: 'Pasa Rubia Grande',
+    category: 'Deshidratados',
+    badge: 'Gourmet',
+    description: 'Pasa dorada sultanina de gran tamaño, dulzor delicado con sutil toque cítrico, limpia y sin semillas.',
+    image: 'assets/productos/pasa-rubia-grande.webp',
+    pricePerKg: 770.0,
+    unit: 'kg',
+    packageKg: 10,
+    packageUnit: 'Caja x 10 kg',
+    packageTotalPrice: 7700
+  },
+  {
+    id: 'pasa-flame',
+    name: 'Pasa Flame Mendocina',
+    category: 'Deshidratados',
+    badge: 'Más Vendida',
+    description: 'Pasas de uva tinta Flame de fincas de Mendoza, textura tierna y dulzor equilibrado sin semillas.',
+    image: 'assets/productos/pasa-flame.webp',
+    pricePerKg: 350.0,
+    unit: 'kg',
+    packageKg: 10,
+    packageUnit: 'Caja x 10 kg',
+    packageTotalPrice: 3500
+  },
+  {
+    id: 'banana-chips',
+    name: 'Banana Chips Crocantes',
+    category: 'Deshidratados',
+    badge: 'Snack Saludable',
+    description: 'Crocantes chips de banana deshidratada y dorada al punto justo, snack nutritivo de alta energía.',
+    image: 'assets/productos/chips-banana.webp',
+    pricePerKg: 1030.0,
+    unit: 'kg',
+    packageKg: 10,
+    packageUnit: 'Caja x 10 kg',
+    packageTotalPrice: 10300
+  },
+  {
+    id: 'higo-negro',
+    name: 'Higo Negro Seco',
+    category: 'Deshidratados',
+    badge: 'Tradicional',
+    description: 'Higos negros secados al sol en tierras cuyanas, piel delgada y corazón dulce con miel natural.',
+    image: 'assets/productos/higo.webp',
+    pricePerKg: 850.0,
+    unit: 'kg',
+    packageKg: 10,
+    packageUnit: 'Caja x 10 kg',
+    packageTotalPrice: 8500
+  },
+  {
+    id: 'medallon-durazno',
+    name: 'Medallón de Durazno',
+    category: 'Deshidratados',
+    badge: 'Cuyo Especial',
+    description: 'Medallones tiernos de durazno amarillo deshidratado, aroma frutal concentrado y textura suave.',
+    image: 'assets/productos/medallon-de-durazno.webp',
+    pricePerKg: 940.0,
+    unit: 'kg',
+    packageKg: 10,
+    packageUnit: 'Caja x 10 kg',
+    packageTotalPrice: 9400
+  },
+  {
+    id: 'pelon-durazno',
+    name: 'Pelón de Durazno',
+    category: 'Deshidratados',
+    badge: 'Típico Cuyano',
+    description: 'Pelones artesanales desecados, tradicionales de la mesa mendocina para compotas y consumo natural.',
+    image: 'assets/productos/durazno-pelon.webp',
+    pricePerKg: 620.0,
+    unit: 'kg',
+    packageKg: 10,
+    packageUnit: 'Caja x 10 kg',
+    packageTotalPrice: 6200
+  },
+  {
+    id: 'datil-argelia-sin-carozo',
+    name: 'Dátil Argelia sin Carozo',
+    category: 'Deshidratados',
+    badge: 'Deglet Nour',
+    description: 'Dátiles importados de Argelia sin carozo, textura melosa con notas a miel y caramelo natural.',
+    image: 'assets/productos/datiles-de-algeria.webp',
+    pricePerKg: 1210.0,
+    unit: 'kg',
+    packageKg: 10,
+    packageUnit: 'Caja x 10 kg',
+    packageTotalPrice: 12100
+  },
+  {
+    id: 'tomate-deshidratado-1ra',
+    name: 'Tomate Deshidratado 1ra',
+    category: 'Deshidratados',
+    badge: '1ra Calidad',
+    description: 'Tomates mendocinos secados al sol de primera calidad, sabor intenso y color vivo para ensaladas y pastas.',
+    image: 'assets/productos/tomate-deshidratado.webp',
+    pricePerKg: 1070.0,
+    unit: 'kg',
+    packageKg: 10,
+    packageUnit: 'Caja x 10 kg',
+    packageTotalPrice: 10700
+  },
+  {
+    id: 'papaya',
+    name: 'Papaya Multicolor',
+    category: 'Deshidratados',
+    badge: '',
+    description: 'Papaya Multicolor.',
+    image: 'assets/productos/papaya-multicolor.webp',
+    pricePerKg: 680.0,
+    unit: 'kg',
+    packageKg: 10,
+    packageUnit: 'Caja x 10 kg',
+    packageTotalPrice: 6800
+  },
+  {
+    id: 'mix-tropical-comun',
+    name: 'Mix Tropical Común',
+    category: 'Mixes',
+    badge: '',
+    description: 'Mix Tropical Común.',
+    image: 'assets/productos/tropical-comun.webp',
+    pricePerKg: 6900.0,
     unit: 'kg',
     packageKg: 5,
-    packageUnit: 'Bolsa x 5 kg',
-    packageTotalPrice: 24000
+    packageUnit: 'Bolsón x 5 kg',
+    packageTotalPrice: 34500
+  },
+  {
+    id: 'mix-tropical-premium',
+    name: 'Mix Tropical Premium',
+    category: 'Mixes',
+    badge: '',
+    description: 'Mix Tropical Premium.',
+    image: 'assets/productos/tropical-premium.webp',
+    pricePerKg: 8300.0,
+    unit: 'kg',
+    packageKg: 5,
+    packageUnit: 'Bolsón x 5 kg',
+    packageTotalPrice: 41500
+  },
+  {
+    id: 'mix-tropical-mega-eco',
+    name: 'Mix Tropical MegaECO',
+    category: 'Mixes',
+    badge: '',
+    description: 'Mix Tropical MegaECO.',
+    image: 'assets/productos/mix-mega-eco.webp',
+    pricePerKg: 5400.0,
+    unit: 'kg',
+    packageKg: 5,
+    packageUnit: 'Bolsón x 5 kg',
+    packageTotalPrice: 27000
+  },
+  {
+    id: 'mix-tropical-sin-mani',
+    name: 'Mix Tropical sin Maní',
+    category: 'Mixes',
+    badge: '',
+    description: 'Mix Tropical sin Maní.',
+    image: 'assets/productos/tropical-sin-mani.webp',
+    pricePerKg: 9700.0,
+    unit: 'kg',
+    packageKg: 5,
+    packageUnit: 'Bolsón x 5 kg',
+    packageTotalPrice: 48500
+  },
+  {
+    id: 'mix-clasico-sin-mani',
+    name: 'Mix Clásico sin Maní',
+    category: 'Mixes',
+    badge: '',
+    description: 'Mix Clásico sin Maní.',
+    image: 'assets/productos/clasico-sin-mani.webp',
+    pricePerKg: 9700.0,
+    unit: 'kg',
+    packageKg: 5,
+    packageUnit: 'Bolsón x 5 kg',
+    packageTotalPrice: 48500
+  },
+  {
+    id: 'mix-clasico-con-mani',
+    name: 'Mix Clásico con Maní',
+    category: 'Mixes',
+    badge: '',
+    description: 'Mix Clásico con Maní.',
+    image: 'assets/productos/clasico-con-mani.webp',
+    pricePerKg: 8900.0,
+    unit: 'kg',
+    packageKg: 5,
+    packageUnit: 'Bolsón x 5 kg',
+    packageTotalPrice: 44500
+  },
+  {
+    id: 'mix-patagonia',
+    name: 'Mix Patagonia',
+    category: 'Mixes',
+    badge: '',
+    description: 'Mix Patagonia.',
+    image: 'assets/productos/mix-patagonia.webp',
+    pricePerKg: 8700.0,
+    unit: 'kg',
+    packageKg: 5,
+    packageUnit: 'Bolsón x 5 kg',
+    packageTotalPrice: 43500
+  },
+  {
+    id: 'mix-cervecero',
+    name: 'Mix Cervecero',
+    category: 'Mixes',
+    badge: '',
+    description: 'Mix Cervecero.',
+    image: 'assets/productos/mix-cervecero.webp',
+    pricePerKg: 5560.0,
+    unit: 'kg',
+    packageKg: 5,
+    packageUnit: 'Bolsón x 5 kg',
+    packageTotalPrice: 27800
+  },
+  {
+    id: 'mix-frutal',
+    name: 'Mix Frutal',
+    category: 'Mixes',
+    badge: '',
+    description: 'Mix Frutal.',
+    image: 'assets/productos/mix-frutal.webp',
+    pricePerKg: 8900.0,
+    unit: 'kg',
+    packageKg: 5,
+    packageUnit: 'Bolsón x 5 kg',
+    packageTotalPrice: 44500
   }
 ];
 
@@ -472,6 +578,7 @@ const state = {
 
 // Actualización atómica: una planilla inválida conserva los últimos precios válidos.
 let pricesLoading = false;
+let lastPriceSource = '';
 let lastPriceSync = null;
 function updatePriceSyncStatus(message, failed = false) {
   const status = document.getElementById('priceSyncStatus');
@@ -494,13 +601,27 @@ async function refreshPrices() {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), config.timeoutMs || 10000);
   try {
-    const response = await fetch(config.csvUrl || 'data/precios.csv', {
-      cache: 'no-store', signal: controller.signal, credentials: 'omit'
-    });
-    if (!response.ok) throw new Error(`Error HTTP ${response.status}`);
-    const updates = PriceSheet.readPrices(await response.text(), PRODUCTS_DATA, {
-      numberFormat: config.csvUrl ? config.numberFormat : undefined
-    });
+    const readSource = async (url, numberFormat) => {
+      const response = await fetch(url, {
+        cache: 'no-store', signal: controller.signal, credentials: 'omit'
+      });
+      if (!response.ok) throw new Error(`Error HTTP ${response.status}`);
+      return PriceSheet.readPrices(await response.text(), PRODUCTS_DATA, { numberFormat });
+    };
+    let updates;
+    let source = config.csvUrl ? 'online' : 'local';
+    try {
+      updates = await readSource(config.csvUrl || 'data/precios.csv', config.csvUrl ? config.numberFormat : undefined);
+    } catch (error) {
+      // La hoja anterior todavía puede tener productos retirados o no incluir las altas.
+      // Usar la lista de lanzamiento solo antes de recibir una actualización válida.
+      if (lastPriceSync || !config.csvUrl || !config.fallbackCsvUrl) throw error;
+      clearTimeout(timer);
+      const fallbackResponse = await fetch(config.fallbackCsvUrl, { cache: 'no-store', credentials: 'omit', signal: AbortSignal.timeout(config.timeoutMs || 10000) });
+      if (!fallbackResponse.ok) throw new Error(`Error HTTP ${fallbackResponse.status}`);
+      updates = PriceSheet.readPrices(await fallbackResponse.text(), PRODUCTS_DATA);
+      source = 'local';
+    }
     let changed = false;
     updates.forEach(update => {
       const product = PRODUCTS_DATA.find(p => p.id === update.id);
@@ -519,6 +640,7 @@ async function refreshPrices() {
       }
     }
     lastPriceSync = new Date();
+    lastPriceSource = source;
   } catch (error) {
     syncError = true;
     console.warn('No se pudo actualizar la planilla; se conservan los precios vigentes.', error);
@@ -526,9 +648,12 @@ async function refreshPrices() {
     clearTimeout(timer);
     pricesLoading = false;
     const time = lastPriceSync?.toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' });
-    updatePriceSyncStatus(syncError
+    const localMessage = `Lista de lanzamiento vigente · ${time}.`;
+    updatePriceSyncStatus(lastPriceSource === 'local' && config.csvUrl && config.fallbackCsvUrl
+      ? localMessage
+      : syncError
       ? (time ? `No pudimos actualizar. Última lectura: ${time}.` : 'No pudimos actualizar. Reintentá en unos instantes.')
-      : `Precios actualizados · ${time}`, syncError);
+      : `Precios actualizados · ${time}`, syncError && !(lastPriceSource === 'local' && config.csvUrl && config.fallbackCsvUrl));
   }
 }
 
@@ -660,7 +785,7 @@ function renderProducts() {
       if (product.packageKg > 1) {
         subPriceInfo = `
           <div class="sub-pack-row"><strong>${product.packageUnit}</strong></div>
-          <div class="sub-total-box">Total caja: <strong>${formatARS(product.packageTotalPrice)}</strong></div>
+          <div class="sub-total-box">Total ${product.category === 'Mixes' ? 'bolsón' : product.unit === 'litro' ? 'bidón' : 'caja'}: <strong>${formatARS(product.packageTotalPrice)}</strong></div>
           <div class="sub-minorista-hint"><a href="${wspLink}" target="_blank" rel="noopener noreferrer">Consultar minorista</a></div>
         `;
       } else {
@@ -685,7 +810,7 @@ function renderProducts() {
     return `
       <article class="product-card" data-product-id="${product.id}">
         <div class="product-img-box">
-          <img src="${product.image}" alt="${product.name}" loading="lazy">
+          <img src="${product.image}" alt="${product.name}" loading="lazy" decoding="async" width="1254" height="1254">
         </div>
 
         <div class="product-body">
@@ -984,7 +1109,7 @@ document.addEventListener('DOMContentLoaded', () => {
       btnMinorista?.classList.remove('active');
       modeBanner?.classList.add('wholesale-active');
       if (modeInfoText) {
-        modeInfoText.textContent = 'Precios mayoristas por kg o unidad llevando la presentación cerrada.';
+        modeInfoText.textContent = 'Granel: caja de 10 kg. Mixes: bolsón de 5 kg. Cada ficha indica el precio por unidad y el total de la presentación.';
       }
     } else {
       btnMinorista?.classList.add('active');

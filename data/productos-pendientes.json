@@ -1,0 +1,37 @@
+[
+  {
+    "producto": "Nuez Mariposa Extra Light (Partida a máquina)",
+    "foto": "assets/productos/nuez-mariposa-extra-light-partida-a-maquina.webp",
+    "motivo": "Falta precio confirmado para esta variante."
+  },
+  {
+    "producto": "Almendra Guara N° 5",
+    "foto": "assets/productos/almendra-guara-n5.webp",
+    "motivo": "Falta precio confirmado para calibre 5."
+  },
+  {
+    "producto": "Ciruela con Carozo",
+    "foto": "assets/productos/ciruela-con-carozo.webp",
+    "motivo": "La lista solo cotiza ciruela sin carozo."
+  },
+  {
+    "producto": "Miel Churqui x 1 kg",
+    "foto": "assets/productos/miel-churqui-1kg.webp",
+    "motivo": "La lista solo cotiza miel de campo x 1/2 kg."
+  },
+  {
+    "producto": "Granola con Coco",
+    "foto": "assets/productos/granola-con-coco.webp",
+    "motivo": "Falta confirmar precio de esta variante."
+  },
+  {
+    "producto": "Higo Blanco Seco",
+    "foto": "",
+    "motivo": "Fuera de la lista actual y sin foto final de esta variedad."
+  },
+  {
+    "producto": "Pistacho Pelado",
+    "foto": "",
+    "motivo": "Fuera de la lista actual y sin foto final de esta variedad."
+  }
+]

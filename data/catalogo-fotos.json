@@ -1,0 +1,362 @@
+[
+  {
+    "foto": "assets/productos/aceite-de-oliva-1l.webp",
+    "original_final": "aceite-de-oliva-1l.png",
+    "productos": [
+      "aceite-oliva-extra-virgen"
+    ],
+    "estado": "En catálogo"
+  },
+  {
+    "foto": "assets/productos/aceite-de-oliva-5l.webp",
+    "original_final": "aceite-de-oliva-5l.png",
+    "productos": [
+      "aceite-oliva-extra-virgen-5l"
+    ],
+    "estado": "En catálogo"
+  },
+  {
+    "foto": "assets/productos/aceituna-descarozada-verde.webp",
+    "original_final": "aceituna-descarozada-verde.png",
+    "productos": [
+      "aceituna-descarozada-granel"
+    ],
+    "estado": "En catálogo"
+  },
+  {
+    "foto": "assets/productos/aceituna-negra-griega.webp",
+    "original_final": "aceituna-negra-griega.png",
+    "productos": [
+      "aceituna-griega-1kg",
+      "aceituna-griega-medio-kg",
+      "aceituna-griega-5kg"
+    ],
+    "estado": "En catálogo"
+  },
+  {
+    "foto": "assets/productos/almendra-guara-4.webp",
+    "original_final": "almendra-guara-4.png",
+    "productos": [
+      "almendra-guara-3-4"
+    ],
+    "estado": "Alternativa del mismo calibre"
+  },
+  {
+    "foto": "assets/productos/almendra-guara-6.webp",
+    "original_final": "almendra-guara-6.png",
+    "productos": [
+      "almendra-guara-6"
+    ],
+    "estado": "En catálogo"
+  },
+  {
+    "foto": "assets/productos/almendra-guara-n3.webp",
+    "original_final": "almendra-guara-n3.png",
+    "productos": [
+      "almendra-guara-3-4"
+    ],
+    "estado": "En catálogo"
+  },
+  {
+    "foto": "assets/productos/almendra-guara-n5.webp",
+    "original_final": "almendra-guara-n5.png",
+    "productos": [],
+    "estado": "Pendiente de precio"
+  },
+  {
+    "foto": "assets/productos/almendra-marinada-3.webp",
+    "original_final": "almendra-marinada-3.png",
+    "productos": [
+      "almendra-marinada-3-4"
+    ],
+    "estado": "En catálogo"
+  },
+  {
+    "foto": "assets/productos/almendra-marinada-4.webp",
+    "original_final": "almendra-marinada-4.png",
+    "productos": [
+      "almendra-marinada-3-4"
+    ],
+    "estado": "Alternativa del mismo calibre"
+  },
+  {
+    "foto": "assets/productos/almendra-marinada-6.webp",
+    "original_final": "almendra-marinada-6.png",
+    "productos": [
+      "almendra-marinada-5-6"
+    ],
+    "estado": "En catálogo"
+  },
+  {
+    "foto": "assets/productos/almendra-partida.webp",
+    "original_final": "almendra-partida.png",
+    "productos": [
+      "almendra-partida"
+    ],
+    "estado": "En catálogo"
+  },
+  {
+    "foto": "assets/productos/castana-de-caju-vietnam.webp",
+    "original_final": "castana-de-caju-vietnam.png",
+    "productos": [
+      "castana-caju-vietnam"
+    ],
+    "estado": "En catálogo"
+  },
+  {
+    "foto": "assets/productos/chips-banana.webp",
+    "original_final": "chips-banana.png",
+    "productos": [
+      "banana-chips"
+    ],
+    "estado": "En catálogo"
+  },
+  {
+    "foto": "assets/productos/ciruela-con-carozo.webp",
+    "original_final": "ciruela-con-carozo.png",
+    "productos": [],
+    "estado": "Pendiente de precio"
+  },
+  {
+    "foto": "assets/productos/ciruela-dagen-sin-carozo-grande.webp",
+    "original_final": "ciruela-dagen-sin-carozo-grande.png",
+    "productos": [
+      "ciruela-sin-carozo"
+    ],
+    "estado": "En catálogo"
+  },
+  {
+    "foto": "assets/productos/clasico-con-mani.webp",
+    "original_final": "clasico-con-mani.png",
+    "productos": [
+      "mix-clasico-con-mani"
+    ],
+    "estado": "En catálogo"
+  },
+  {
+    "foto": "assets/productos/clasico-sin-mani.webp",
+    "original_final": "clasico-sin-mani.png",
+    "productos": [
+      "mix-clasico-sin-mani"
+    ],
+    "estado": "En catálogo"
+  },
+  {
+    "foto": "assets/productos/datiles-de-algeria.webp",
+    "original_final": "datiles-de-algeria.png",
+    "productos": [
+      "datil-argelia-sin-carozo"
+    ],
+    "estado": "En catálogo"
+  },
+  {
+    "foto": "assets/productos/durazno-pelon.webp",
+    "original_final": "durazno-pelon.png",
+    "productos": [
+      "pelon-durazno"
+    ],
+    "estado": "En catálogo"
+  },
+  {
+    "foto": "assets/productos/granola-clasica.webp",
+    "original_final": "granola-clasica.png",
+    "productos": [
+      "granola-artesanal"
+    ],
+    "estado": "En catálogo"
+  },
+  {
+    "foto": "assets/productos/granola-con-coco.webp",
+    "original_final": "granola-con-coco.png",
+    "productos": [],
+    "estado": "Pendiente de precio"
+  },
+  {
+    "foto": "assets/productos/harina-de-almendra-con-piel-70.webp",
+    "original_final": "harina-de-almendra-con-piel-70.png",
+    "productos": [
+      "harina-de-almendra"
+    ],
+    "estado": "En catálogo"
+  },
+  {
+    "foto": "assets/productos/higo.webp",
+    "original_final": "higo.png",
+    "productos": [
+      "higo-negro"
+    ],
+    "estado": "En catálogo"
+  },
+  {
+    "foto": "assets/productos/mani-sin-sal.webp",
+    "original_final": "mani-sin-sal.png",
+    "productos": [
+      "mani-sin-sal"
+    ],
+    "estado": "En catálogo"
+  },
+  {
+    "foto": "assets/productos/medallon-de-durazno.webp",
+    "original_final": "medallon-de-durazno.png",
+    "productos": [
+      "medallon-durazno"
+    ],
+    "estado": "En catálogo"
+  },
+  {
+    "foto": "assets/productos/miel-churqui-1kg.webp",
+    "original_final": "miel-churqui-1kg.png",
+    "productos": [],
+    "estado": "Pendiente de precio"
+  },
+  {
+    "foto": "assets/productos/miel-pura-500gr.webp",
+    "original_final": "miel-pura-500gr.png",
+    "productos": [
+      "miel-pura-campo-medio-kg"
+    ],
+    "estado": "En catálogo"
+  },
+  {
+    "foto": "assets/productos/mix-cervecero.webp",
+    "original_final": "mix-cervecero.png",
+    "productos": [
+      "mix-cervecero"
+    ],
+    "estado": "En catálogo"
+  },
+  {
+    "foto": "assets/productos/mix-frutal.webp",
+    "original_final": "mix-frutal.png",
+    "productos": [
+      "mix-frutal"
+    ],
+    "estado": "En catálogo"
+  },
+  {
+    "foto": "assets/productos/mix-mega-eco.webp",
+    "original_final": "mix-mega-eco.png",
+    "productos": [
+      "mix-tropical-mega-eco"
+    ],
+    "estado": "En catálogo"
+  },
+  {
+    "foto": "assets/productos/mix-patagonia.webp",
+    "original_final": "mix-patagonia.png",
+    "productos": [
+      "mix-patagonia"
+    ],
+    "estado": "En catálogo"
+  },
+  {
+    "foto": "assets/productos/nuez-cuarto-extra-light.webp",
+    "original_final": "nuez-cuarto-extra-light.png",
+    "productos": [
+      "nuez-cuartos-blanca"
+    ],
+    "estado": "En catálogo"
+  },
+  {
+    "foto": "assets/productos/nuez-mariposa-ambar-light.webp",
+    "original_final": "nuez-mariposa-ambar-light.png",
+    "productos": [
+      "nuez-mariposa-ambar-light"
+    ],
+    "estado": "En catálogo"
+  },
+  {
+    "foto": "assets/productos/nuez-mariposa-blanca-partida-a-mano.webp",
+    "original_final": "nuez-mariposa-blanca-partida-a-mano.png",
+    "productos": [
+      "nuez-mariposa-blanca"
+    ],
+    "estado": "En catálogo"
+  },
+  {
+    "foto": "assets/productos/nuez-mariposa-extra-light-partida-a-maquina.webp",
+    "original_final": "nuez-mariposa-extra-light-partida-a-maquina.png",
+    "productos": [],
+    "estado": "Pendiente de precio"
+  },
+  {
+    "foto": "assets/productos/nuez-mariposa-light.webp",
+    "original_final": "nuez-mariposa-light.png",
+    "productos": [
+      "nuez-mariposa-light"
+    ],
+    "estado": "En catálogo"
+  },
+  {
+    "foto": "assets/productos/papaya-multicolor.webp",
+    "original_final": "papaya-multicolor.png",
+    "productos": [
+      "papaya"
+    ],
+    "estado": "En catálogo"
+  },
+  {
+    "foto": "assets/productos/pasa-flame.webp",
+    "original_final": "pasa-flame.png",
+    "productos": [
+      "pasa-flame"
+    ],
+    "estado": "En catálogo"
+  },
+  {
+    "foto": "assets/productos/pasa-morocha-doble-jumbo.webp",
+    "original_final": "pasa-morocha-doble-jumbo.png",
+    "productos": [
+      "pasa-jumbo"
+    ],
+    "estado": "En catálogo"
+  },
+  {
+    "foto": "assets/productos/pasa-rubia-grande.webp",
+    "original_final": "pasa-rubia-grande.png",
+    "productos": [
+      "pasa-rubia-grande"
+    ],
+    "estado": "En catálogo"
+  },
+  {
+    "foto": "assets/productos/pistacho-con-cascara.webp",
+    "original_final": "pistacho-con-cascara.png",
+    "productos": [
+      "pistacho-con-cascara"
+    ],
+    "estado": "En catálogo"
+  },
+  {
+    "foto": "assets/productos/tomate-deshidratado.webp",
+    "original_final": "tomate-deshidratado.png",
+    "productos": [
+      "tomate-deshidratado-1ra"
+    ],
+    "estado": "En catálogo"
+  },
+  {
+    "foto": "assets/productos/tropical-comun.webp",
+    "original_final": "tropical-comun.png",
+    "productos": [
+      "mix-tropical-comun"
+    ],
+    "estado": "En catálogo"
+  },
+  {
+    "foto": "assets/productos/tropical-premium.webp",
+    "original_final": "tropical-premium.png",
+    "productos": [
+      "mix-tropical-premium"
+    ],
+    "estado": "En catálogo"
+  },
+  {
+    "foto": "assets/productos/tropical-sin-mani.webp",
+    "original_final": "tropical-sin-mani.png",
+    "productos": [
+      "mix-tropical-sin-mani"
+    ],
+    "estado": "En catálogo"
+  }
+]

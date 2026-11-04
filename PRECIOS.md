@@ -1,65 +1,55 @@
-# Precios mayoristas y minoristas
+# Catálogo de lanzamiento · Frutas LAM
 
-Las dos listas usan la exportación CSV directa de la hoja Precios indicada en `prices-config.js`: documento `1q7g0bp7SloTi9dzRyFVbf6n3usMoatDF0yrOQBfrzc8`, pestaña `507715810`, cuyo enlace de edición confirmó el usuario. Se comprobó su descarga sin sesión y el permiso de lectura desde GitHub Pages (CORS). El cliente edita cada cantidad y precio por separado en Google Sheets. La web consulta al cargar, cada 60 segundos mientras está visible y al volver a la pestaña; La exportación puede demorar en reflejar los cambios de Google. El botón Actualizar precios permite reintentar y el estado muestra la última lectura correcta o un error.
+41 productos activos, seis categorías y fotos finales propias en `assets/productos/`. Las fichas, el encabezado y las categorías usan las imágenes finales. Las imágenes originales y los archivos de trabajo quedan fuera del paquete para publicar.
 
-## Ampliar la planilla online existente
+## Importes confirmados
 
-El acceso disponible permite lectura, no edición desde esta sesión. El Excel descargado y Google Sheets son archivos distintos: los cambios del primero no modifican la hoja online. La web está preparada para las columnas nuevas; la planilla online debe ampliarse desde la cuenta de su propietario.
+El usuario confirmó que los importes enviados son el **total de la caja de 10 kg**, no el precio por kilo. Por ejemplo: nuez blanca, caja de 10 kg a $13.500; equivalente $1.350/kg. Se aplica a los productos a granel, incluida aceituna descarozada.
 
-Sin borrar ni reemplazar la hoja `Precios`, agregar al final:
+Los nueve mixes se venden por **bolsón de 5 kg**: Tropical Común $34.500; Tropical Premium $41.500; Tropical MegaECO $27.000; Tropical sin Maní $48.500; Clásico sin Maní $48.500; Clásico con Maní $44.500; Patagonia $43.500; Cervecero $27.800; Frutal $44.500.
 
-- G1: `cantidad_minorista`. Completar G2:G33 con 1 (o la cantidad de kg/litros/unidades por presentación minorista).
-- H1: `precio_minorista`. Completar H2:H33 con 0 inicialmente, según lo solicitado; luego cargar los precios reales por kg, litro, frasco o balde.
-- I1 (opcional): `total_minorista`. En I2, fórmula `=G2*H2`, extendida hasta I33. La web recalcula los totales y no depende de esta columna.
+Las presentaciones explícitas conservan su unidad: miel de campo de 500 g a $5.000/frasco; aceitunas griegas de 1 kg a $9.500, frasco de 500 g a $6.200 y balde de 5 kg a $41.500. Aceite de oliva a $12.800/litro; botella de 1 litro a $12.800 y bidón de 5 litros a $64.000, a la misma cotización por litro.
 
-No es necesario cambiar los encabezados mayoristas anteriores (`cantidad`, `precio_unitario`, `total_presentacion`), el enlace ni el identificador de pestaña. Mantener el acceso de lectura sin inicio de sesión a esa hoja. No publicar datos privados.
+Se conservan los identificadores de los productos existentes. Se agregaron nuez mariposa light, papaya, nueve mixes y la presentación de aceite de 5 litros. Se retiró nuez con cáscara por pedido del usuario. Higo blanco y pistacho pelado no están en la lista actual ni tienen foto final y quedan en Pendientes.
 
-`EXCEL EDITABLE/Frutas-LAM-Precios.xlsx` incluye las dos listas con encabezados explícitos (`cantidad_mayorista`, `precio_mayorista`, `total_mayorista` y sus equivalentes minoristas), fórmulas, validación y celdas editables amarillas. Se admiten tanto los encabezados anteriores como los nuevos. Subir este Excel como otro archivo no lo conecta automáticamente al enlace actual.
+## Excel
 
-## Cantidades y precios
+`EXCEL EDITABLE/Frutas-LAM-Precios.xlsx` contiene:
 
-- `id`, `producto`, `unidad`: referencias del catálogo, sin cambiar identificadores ni unidades ni borrar filas.
-- `cantidad_mayorista` (antes `cantidad`): kg, litros, frascos o baldes por presentación mayorista.
-- `precio_mayorista` (antes `precio_unitario`): precio por la unidad indicada, llevando la presentación mayorista.
-- `cantidad_minorista`: kg, litros, frascos o baldes por presentación minorista; por defecto, 1. Para vender medio kilo, usar 0,5.
-- `precio_minorista`: precio por kg, litro, frasco o balde, independiente del mayorista. Inicialmente $0 por pedido del usuario.
-- Ambos totales se calculan como cantidad × precio. Los controles del catálogo agregan presentaciones completas de la modalidad elegida.
+- **Precios**: los 41 productos activos con fórmulas, foto y presentación.
+- **Cómo usar**: instrucciones de edición, publicación y sincronización.
+- **Pendientes**: variantes sin precio o foto confirmados, separadas de los productos que se venden.
+- **Fotos**: las 46 fotos finales y su correspondencia, incluidas alternativas del mismo calibre.
 
-Ejemplo minorista: cantidad 0,5 y precio 20000 por kg → presentación de medio kilo a $10.000. Los frascos y baldes requieren cantidades enteras. El balde de aceitunas de 5 kg se cotiza por balde, no por kilo.
+Mayorista: editar D (`cantidad_mayorista`) y J (`precio_presentacion`, TOTAL de la caja/bolsón/frasco/bidón). E (`precio_mayorista`) calcula J/D; F (`total_mayorista`) calcula D×E. No reemplazar fórmulas por importes de caja en la columna por kilo.
 
-Cargar números sin símbolo $ ni separadores de miles. La exportación conectada puede mezclar formatos entre celdas: 12,800.00, 12.800,00 y 1500,00. `numberFormat: auto` reconoce los separadores por celda y utiliza el formato predominante de cada columna para los casos ambiguos. No se necesitan cambios de formato en Google Sheets. El CSV local admite coma o punto decimal sin separadores de miles.
+Minorista: editar G (`cantidad_minorista`) y H (`precio_minorista`, por unidad). I calcula el total. Se conservaron los valores minoristas del CSV anterior: inicialmente cero, como se había solicitado. Un minorista vacío significa precio pendiente; cero explícito se cotiza como cero. Cargar valores de venta si se desea habilitar pedidos minoristas con precio real.
 
-Un minorista explícito en cero se muestra como $0 y se incluye así en el pedido. Una celda minorista vacía muestra Precio pendiente e impide agregar/enviar ese producto hasta su carga. Mientras la planilla anterior no tenga las columnas minoristas, se usan los ceros iniciales solicitados.
+La miel Churqui de 1 kg, ciruela con carozo, almendra Guara N° 5, nuez extra light partida a máquina y granola con coco tienen foto pero no precio confirmado para esa variante. No se les inventó precio. Las fotos de almendra N° 3 y 4 son alternativas del mismo producto N° 3/4, no nuevos productos. `data/catalogo-fotos.json` y `data/productos-pendientes.json` registran estas relaciones.
 
-La planilla debe contener los 32 productos. Una fila inválida rechaza toda la actualización y conserva los últimos precios válidos de la sesión. Si la primera carga falla se mantienen los precios incluidos en app.js. No se insertan textos recibidos de la planilla en el HTML.
+## Google Sheets y respaldo local
 
-## Contactos y retiros
+Se conserva el enlace de la hoja Precios configurada en `prices-config.js`: documento `1q7g0bp7SloTi9dzRyFVbf6n3usMoatDF0yrOQBfrzc8`, pestaña `507715810`.
 
-- Mayorista: WhatsApp +54 9 263 476-1151. Retiro en Ingeniero Giagnoni, Junín: https://maps.app.goo.gl/3Xq155JCwf7fQ5Y49.
-- Minorista: WhatsApp +54 9 2634 33-9550. Retiro en 9 de Julio 1189, Mendoza Ciudad.
-- Instagram: https://www.instagram.com/lamfruts/.
+El Excel local y Google Sheets son archivos distintos. Esta entrega no modifica la hoja online. Para conectarla al catálogo nuevo, copiar las celdas de la pestaña **Precios** del Excel sobre la pestaña **Precios existente** del documento conectado, conservando sus IDs y acceso de lectura CSV sin sesión. No crear otro documento ni cambiar el identificador de pestaña.
 
-El carrito calcula ambas modalidades. Cuando contiene productos de las dos, ofrece botones separados que envían únicamente los artículos, totales y ubicación de esa modalidad a su contacto. El WhatsApp flotante sigue la modalidad del catálogo. Los cambios de la planilla actualizan también los importes del carrito y muestran un aviso.
+La web valida la lista completa antes de actualizar. Si la hoja online todavía tiene la lista anterior, usa `data/precios.csv` como respaldo inicial. Cuando la hoja tenga los 41 IDs válidos, retoma automáticamente la sincronización online. Consulta al cargar, cada 60 segundos mientras la página está visible y al volver a la pestaña. Una actualización inválida posterior conserva los últimos precios válidos y no vuelve a importes anteriores.
 
-## Publicación y verificación
+## Publicar
 
-Repositorio: alverto9266-sys/FRUTAS-LAM. Publicar los archivos del sitio; un push no confirma por sí solo un despliegue en el hosting.
+Extraer `Frutas-LAM-Web-lista-para-publicar.zip` y subir **su contenido** al hosting estático: `index.html` debe quedar en la raíz. Incluye únicamente HTML, CSS, JavaScript, CSV y los assets necesarios; no requiere instalar dependencias ni compilar. El Excel se entrega aparte y no necesita publicarse en el hosting.
 
-Pruebas:
+No se realizó push ni despliegue. El acceso externo a la exportación de Google no pudo verificarse en esta sesión; se verificó con pruebas la migración de lista antigua a CSV local y el paso posterior a una hoja online completa.
+
+## Verificación
 
 - `node scripts/test-prices.cjs`
 - `node scripts/test-retail.cjs`
 - `node scripts/test-categories.cjs`
-- `node scripts/test-prices.cjs /ruta/al/csv-descargado.csv` verifica también la planilla publicada real.
+- `node scripts/test-catalog-final.cjs`
 
-`python scripts/crear-planilla.py` regenera los archivos iniciales desde app.js; no ejecutarlo sobre una lista ya actualizada por el cliente. Sin `csvUrl`, se lee `data/precios.csv`.
+`python scripts/crear-planilla.py` regenera Excel/CSV desde los datos actuales de `app.js`, preservando cantidades/precios minoristas del CSV. No ejecutar sobre cambios mayoristas que solo existan en la hoja online: sincronizarlos primero con el catálogo local.
 
-## Filtros del catálogo
+`python scripts/preparar-publicacion.py` regenera el ZIP de la web con sus archivos y assets utilizados. También se verificó en Chromium la carga de las 41 fichas, imágenes sin errores, filtro de nueve mixes y total de Tropical Común de $34.500, a 500 y 1440 px de ancho.
 
-Cinco familias: Nueces; Almendras; Aceite y aceitunas; Frutos secos varios; Deshidratados. El aceite de oliva está junto a las cuatro presentaciones de aceitunas. Frutos secos varios incluye castañas, pistachos, maní, miel y granola. Se conservan los 32 productos.
-
-Las tarjetas superiores y los botones del catálogo usan el mismo filtro, indican la categoría activa y actualizan el título y cantidad de resultados. Funcionan con ambas listas de precios y la búsqueda. Todos permite volver al catálogo completo.
-
-## Corrección de formatos mixtos
-
-Se conservó una muestra real en `scripts/fixtures/mixed-price-formats.csv`: mayorista 12,800.00, cantidad minorista 1,00 y precio minorista 1500,00. Las pruebas verifican el catálogo a $1.500, dos presentaciones a $3.000 y el mismo importe en el mensaje de WhatsApp. Los totales recibidos de la planilla siguen siendo informativos: la página recalcula ambos.
+Se conservan los contactos y retiros: mayorista +54 9 263 476-1151 (Ingeniero Giagnoni, Junín), minorista +54 9 2634 33-9550 (9 de Julio 1189, Mendoza Ciudad), Instagram @lamfruts.
