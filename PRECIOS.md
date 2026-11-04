@@ -1,10 +1,10 @@
 # Precios mayoristas y minoristas
 
-Las dos listas usan el CSV publicado configurado en `prices-config.js`. El enlace existente se conserva. El cliente edita cada cantidad y precio por separado en Google Sheets. La web consulta al cargar, cada 60 segundos mientras está visible y al volver a la pestaña; Google puede demorar unos minutos en publicar los cambios.
+Las dos listas usan la exportación CSV directa de la hoja Precios indicada en `prices-config.js`: documento `1q7g0bp7SloTi9dzRyFVbf6n3usMoatDF0yrOQBfrzc8`, pestaña `507715810`, cuyo enlace de edición confirmó el usuario. Se comprobó su descarga sin sesión y el permiso de lectura desde GitHub Pages (CORS). El cliente edita cada cantidad y precio por separado en Google Sheets. La web consulta al cargar, cada 60 segundos mientras está visible y al volver a la pestaña; La exportación puede demorar en reflejar los cambios de Google. El botón Actualizar precios permite reintentar y el estado muestra la última lectura correcta o un error.
 
 ## Ampliar la planilla online existente
 
-El enlace publicado permite lectura, no edición. La web está preparada para las columnas nuevas; la planilla online debe ampliarse desde la cuenta de su propietario.
+El acceso disponible permite lectura, no edición desde esta sesión. El Excel descargado y Google Sheets son archivos distintos: los cambios del primero no modifican la hoja online. La web está preparada para las columnas nuevas; la planilla online debe ampliarse desde la cuenta de su propietario.
 
 Sin borrar ni reemplazar la hoja `Precios`, agregar al final:
 
@@ -12,7 +12,7 @@ Sin borrar ni reemplazar la hoja `Precios`, agregar al final:
 - H1: `precio_minorista`. Completar H2:H33 con 0 inicialmente, según lo solicitado; luego cargar los precios reales por kg, litro, frasco o balde.
 - I1 (opcional): `total_minorista`. En I2, fórmula `=G2*H2`, extendida hasta I33. La web recalcula los totales y no depende de esta columna.
 
-No es necesario cambiar los encabezados mayoristas anteriores (`cantidad`, `precio_unitario`, `total_presentacion`), el enlace ni el identificador de pestaña. Mantener activa la publicación automática de esa hoja. No publicar datos privados.
+No es necesario cambiar los encabezados mayoristas anteriores (`cantidad`, `precio_unitario`, `total_presentacion`), el enlace ni el identificador de pestaña. Mantener el acceso de lectura sin inicio de sesión a esa hoja. No publicar datos privados.
 
 `EXCEL EDITABLE/Frutas-LAM-Precios.xlsx` incluye las dos listas con encabezados explícitos (`cantidad_mayorista`, `precio_mayorista`, `total_mayorista` y sus equivalentes minoristas), fórmulas, validación y celdas editables amarillas. Se admiten tanto los encabezados anteriores como los nuevos. Subir este Excel como otro archivo no lo conecta automáticamente al enlace actual.
 
@@ -49,6 +49,13 @@ Pruebas:
 
 - `node scripts/test-prices.cjs`
 - `node scripts/test-retail.cjs`
+- `node scripts/test-categories.cjs`
 - `node scripts/test-prices.cjs /ruta/al/csv-descargado.csv` verifica también la planilla publicada real.
 
 `python scripts/crear-planilla.py` regenera los archivos iniciales desde app.js; no ejecutarlo sobre una lista ya actualizada por el cliente. Sin `csvUrl`, se lee `data/precios.csv`.
+
+## Filtros del catálogo
+
+Cinco familias: Nueces; Almendras; Aceite y aceitunas; Frutos secos varios; Deshidratados. El aceite de oliva está junto a las cuatro presentaciones de aceitunas. Frutos secos varios incluye castañas, pistachos, maní, miel y granola. Se conservan los 32 productos.
+
+Las tarjetas superiores y los botones del catálogo usan el mismo filtro, indican la categoría activa y actualizan el título y cantidad de resultados. Funcionan con ambas listas de precios y la búsqueda. Todos permite volver al catálogo completo.

@@ -2209,3 +2209,16 @@ section[id] { scroll-margin-top: 100px; }
 @media (max-width: 767px) {
   .shipping-simple-grid { grid-template-columns: 1fr; }
 }
+
+/* Cinco familias de productos y lectura de precios visible. */
+.categories-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+.category-card.active h3 { color: var(--color-accent); text-decoration: underline; text-underline-offset: 5px; }
+.catalog-result-count { font-size: 0.8rem; color: var(--color-text-muted); margin-top: 5px; }
+.price-sync-bar { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px 16px; margin-bottom: 18px; font-size: 0.75rem; color: var(--color-text-muted); }
+.price-sync-bar p { margin: 0; }
+.price-sync-bar button { padding: 6px 0; color: var(--color-accent); font: inherit; text-decoration: underline; text-underline-offset: 3px; }
+.price-sync-bar button:disabled { opacity: 0.6; cursor: wait; }
+.price-sync-bar .sync-error { color: #8b3b2d; }
+@media (min-width: 641px) and (max-width: 1023px) {
+  .categories-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}

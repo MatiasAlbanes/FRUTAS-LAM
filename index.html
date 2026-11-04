@@ -137,49 +137,26 @@
       </div>
 
       <div class="categories-grid">
-        
-        <button type="button" class="category-card" data-category="Nueces">
-          <div class="category-img-wrap">
-            <img src="assets/nueces.jpg" alt="Nueces" loading="lazy">
-          </div>
+        <button type="button" class="category-card" data-category="Nueces" aria-pressed="false">
+          <div class="category-img-wrap"><img src="assets/nueces.jpg" alt="Nueces" loading="lazy"></div>
           <h3>Nueces</h3>
         </button>
-
-        <button type="button" class="category-card" data-category="Almendras">
-          <div class="category-img-wrap">
-            <img src="assets/almendras.jpg" alt="Almendras" loading="lazy">
-          </div>
+        <button type="button" class="category-card" data-category="Almendras" aria-pressed="false">
+          <div class="category-img-wrap"><img src="assets/almendras.jpg" alt="Almendras" loading="lazy"></div>
           <h3>Almendras</h3>
         </button>
-
-        <button type="button" class="category-card" data-category="Castañas & Pistachos">
-          <div class="category-img-wrap">
-            <img src="assets/castanas-caju.jpg" alt="Castañas y pistachos" loading="lazy">
-          </div>
-          <h3>Castañas & Pistachos</h3>
+        <button type="button" class="category-card" data-category="Aceite y aceitunas" aria-pressed="false">
+          <div class="category-img-wrap"><img src="assets/aceite-oliva.jpg" alt="Aceite y aceitunas" loading="lazy"></div>
+          <h3>Aceite y aceitunas</h3>
         </button>
-
-        <button type="button" class="category-card" data-category="Frutas Desecadas">
-          <div class="category-img-wrap">
-            <img src="assets/pasas-uva.jpg" alt="Frutas desecadas y pasas" loading="lazy">
-          </div>
-          <h3>Frutas Desecadas</h3>
+        <button type="button" class="category-card" data-category="Frutos secos varios" aria-pressed="false">
+          <div class="category-img-wrap"><img src="assets/castanas-caju.jpg" alt="Frutos secos varios" loading="lazy"></div>
+          <h3>Frutos secos varios</h3>
         </button>
-
-        <button type="button" class="category-card" data-category="Aceitunas">
-          <div class="category-img-wrap">
-            <img src="assets/aceitunas.jpg" alt="Aceitunas griegas y descarozadas" loading="lazy">
-          </div>
-          <h3>Aceitunas</h3>
+        <button type="button" class="category-card" data-category="Deshidratados" aria-pressed="false">
+          <div class="category-img-wrap"><img src="assets/pasas-uva.jpg" alt="Deshidratados" loading="lazy"></div>
+          <h3>Deshidratados</h3>
         </button>
-
-        <button type="button" class="category-card" data-category="Aceite & Delicatessen">
-          <div class="category-img-wrap">
-            <img src="assets/aceite-oliva.jpg" alt="Aceite de oliva y delikatessen" loading="lazy">
-          </div>
-          <h3>Aceite & Delicatessen</h3>
-        </button>
-
       </div>
     </div>
   </section>
@@ -190,7 +167,8 @@
       
       <div class="catalog-top-bar">
         <div>
-          <h2 class="section-title">Catálogo</h2>
+          <h2 class="section-title" id="catalogCategoryTitle">Catálogo</h2>
+          <p class="catalog-result-count" id="catalogResultCount" aria-live="polite"></p>
         </div>
 
         <!-- Switch de Tarifa: Mayorista vs Minorista -->
@@ -209,19 +187,23 @@
       </div>
 
       <!-- Barra de Filtros por Categoría -->
-      <div class="catalog-filter-bar">
-        <button type="button" class="filter-tab active" data-filter="all">Todos</button>
-        <button type="button" class="filter-tab" data-filter="Nueces">Nueces</button>
-        <button type="button" class="filter-tab" data-filter="Almendras">Almendras</button>
-        <button type="button" class="filter-tab" data-filter="Castañas & Pistachos">Castañas & Pistachos</button>
-        <button type="button" class="filter-tab" data-filter="Frutas Desecadas">Frutas Desecadas</button>
-        <button type="button" class="filter-tab" data-filter="Aceitunas">Aceitunas</button>
-        <button type="button" class="filter-tab" data-filter="Aceite & Delicatessen">Aceite & Delicatessen</button>
+      <div class="catalog-filter-bar" role="group" aria-label="Filtrar por categoría">
+        <button type="button" class="filter-tab active" data-filter="all" aria-pressed="true">Todos</button>
+        <button type="button" class="filter-tab" data-filter="Nueces" aria-pressed="false">Nueces</button>
+        <button type="button" class="filter-tab" data-filter="Almendras" aria-pressed="false">Almendras</button>
+        <button type="button" class="filter-tab" data-filter="Aceite y aceitunas" aria-pressed="false">Aceite y aceitunas</button>
+        <button type="button" class="filter-tab" data-filter="Frutos secos varios" aria-pressed="false">Frutos secos varios</button>
+        <button type="button" class="filter-tab" data-filter="Deshidratados" aria-pressed="false">Deshidratados</button>
       </div>
 
       <!-- Alerta dinámica de modo mayorista -->
       <div class="mode-info-banner wholesale-active" id="modeInfoBanner">
         <span id="modeInfoText">Precios por kg llevando caja cerrada. Seleccioná Mayorista o Minorista para ver sus precios.</span>
+      </div>
+
+      <div class="price-sync-bar">
+        <p id="priceSyncStatus" role="status">Actualizando precios…</p>
+        <button type="button" id="refreshPricesBtn">Actualizar precios</button>
       </div>
 
       <!-- Grilla de Productos -->

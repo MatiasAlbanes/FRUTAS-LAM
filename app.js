@@ -164,7 +164,7 @@ const PRODUCTS_DATA = [
   {
     id: 'castana-caju-vietnam',
     name: 'Castaña Cajú Vietnam',
-    category: 'Castañas & Pistachos',
+    category: 'Frutos secos varios',
     badge: 'Importación',
     description: 'Castaña de cajú grado entero importada de Vietnam, tostada al punto justo con textura suave y cremosa.',
     image: 'assets/castanas-caju.jpg',
@@ -177,7 +177,7 @@ const PRODUCTS_DATA = [
   {
     id: 'pistacho-con-cascara',
     name: 'Pistacho c/c (con cáscara)',
-    category: 'Castañas & Pistachos',
+    category: 'Frutos secos varios',
     badge: 'Favorito',
     description: 'Pistachos abiertos tostados con cáscara y sal fina, excelente calibre y sabor crujiente.',
     image: 'assets/pistachos.jpg',
@@ -190,7 +190,7 @@ const PRODUCTS_DATA = [
   {
     id: 'pistacho-pelado',
     name: 'Pistacho Pelado',
-    category: 'Castañas & Pistachos',
+    category: 'Frutos secos varios',
     badge: 'Súper Premium',
     description: 'Pistacho 100% puro pelado sin cáscara, verde brillante, ideal para heladerías, bombonería y alta cocina.',
     image: 'assets/pistachos.jpg',
@@ -203,7 +203,7 @@ const PRODUCTS_DATA = [
   {
     id: 'mani-sin-sal',
     name: 'Maní sin Sal (Tostado)',
-    category: 'Castañas & Pistachos',
+    category: 'Frutos secos varios',
     badge: 'Económico',
     description: 'Maní cordobés tostado natural sin agregado de sal ni aceites, repelado y de calibre parejo.',
     image: 'assets/mani.jpg',
@@ -218,7 +218,7 @@ const PRODUCTS_DATA = [
   {
     id: 'ciruela-sin-carozo',
     name: 'Ciruela s/c (sin carozo)',
-    category: 'Frutas Desecadas',
+    category: 'Deshidratados',
     badge: 'Mendoza',
     description: 'Ciruela D\'Agen mendocina tierna, carnosa y húmeda sin carozo. Fuente natural de fibra y antioxidantes.',
     image: 'assets/ciruelas.jpg',
@@ -231,7 +231,7 @@ const PRODUCTS_DATA = [
   {
     id: 'pasa-jumbo',
     name: 'Pasa Jumbo de Uva',
-    category: 'Frutas Desecadas',
+    category: 'Deshidratados',
     badge: 'Extra Grande',
     description: 'Pasas de uva morocha de gran calibre jumbo seleccionadas, carnosas, suaves y sin semillas.',
     image: 'assets/pasas-uva.jpg',
@@ -244,7 +244,7 @@ const PRODUCTS_DATA = [
   {
     id: 'pasa-rubia-grande',
     name: 'Pasa Rubia Grande',
-    category: 'Frutas Desecadas',
+    category: 'Deshidratados',
     badge: 'Gourmet',
     description: 'Pasa dorada sultanina de gran tamaño, dulzor delicado con sutil toque cítrico, limpia y sin semillas.',
     image: 'assets/pasas-uva.jpg',
@@ -257,7 +257,7 @@ const PRODUCTS_DATA = [
   {
     id: 'pasa-flame',
     name: 'Pasa Flame Mendocina',
-    category: 'Frutas Desecadas',
+    category: 'Deshidratados',
     badge: 'Más Vendida',
     description: 'Pasas de uva tinta Flame de fincas de Mendoza, textura tierna y dulzor equilibrado sin semillas.',
     image: 'assets/pasas-uva.jpg',
@@ -270,7 +270,7 @@ const PRODUCTS_DATA = [
   {
     id: 'banana-chips',
     name: 'Banana Chips Crocantes',
-    category: 'Frutas Desecadas',
+    category: 'Deshidratados',
     badge: 'Snack Saludable',
     description: 'Crocantes chips de banana deshidratada y dorada al punto justo, snack nutritivo de alta energía.',
     image: 'assets/banana-chips.jpg',
@@ -283,7 +283,7 @@ const PRODUCTS_DATA = [
   {
     id: 'higo-negro',
     name: 'Higo Negro Seco',
-    category: 'Frutas Desecadas',
+    category: 'Deshidratados',
     badge: 'Tradicional',
     description: 'Higos negros secados al sol en tierras cuyanas, piel delgada y corazón dulce con miel natural.',
     image: 'assets/higos.jpg',
@@ -296,7 +296,7 @@ const PRODUCTS_DATA = [
   {
     id: 'higo-blanco',
     name: 'Higo Blanco Seco',
-    category: 'Frutas Desecadas',
+    category: 'Deshidratados',
     badge: 'Selección',
     description: 'Higos blancos tiernos y carnosos deshidratados en su punto justo, fragantes y exquisitos.',
     image: 'assets/higos.jpg',
@@ -309,7 +309,7 @@ const PRODUCTS_DATA = [
   {
     id: 'medallon-durazno',
     name: 'Medallón de Durazno',
-    category: 'Frutas Desecadas',
+    category: 'Deshidratados',
     badge: 'Cuyo Especial',
     description: 'Medallones tiernos de durazno amarillo deshidratado, aroma frutal concentrado y textura suave.',
     image: 'assets/duraznos-secos.jpg',
@@ -322,7 +322,7 @@ const PRODUCTS_DATA = [
   {
     id: 'pelon-durazno',
     name: 'Pelón de Durazno',
-    category: 'Frutas Desecadas',
+    category: 'Deshidratados',
     badge: 'Típico Cuyano',
     description: 'Pelones artesanales desecados, tradicionales de la mesa mendocina para compotas y consumo natural.',
     image: 'assets/duraznos-secos.jpg',
@@ -335,7 +335,7 @@ const PRODUCTS_DATA = [
   {
     id: 'datil-argelia-sin-carozo',
     name: 'Dátil Argelia sin Carozo',
-    category: 'Frutas Desecadas',
+    category: 'Deshidratados',
     badge: 'Deglet Nour',
     description: 'Dátiles importados de Argelia sin carozo, textura melosa con notas a miel y caramelo natural.',
     image: 'assets/datiles.jpg',
@@ -348,7 +348,7 @@ const PRODUCTS_DATA = [
   {
     id: 'tomate-deshidratado-1ra',
     name: 'Tomate Deshidratado 1ra',
-    category: 'Frutas Desecadas',
+    category: 'Deshidratados',
     badge: '1ra Calidad',
     description: 'Tomates mendocinos secados al sol de primera calidad, sabor intenso y color vivo para ensaladas y pastas.',
     image: 'assets/tomate-deshidratado.jpg',
@@ -363,7 +363,7 @@ const PRODUCTS_DATA = [
   {
     id: 'aceituna-griega-1kg',
     name: 'Aceituna Griega Negra (1 kg)',
-    category: 'Aceitunas',
+    category: 'Aceite y aceitunas',
     badge: 'Elaboración Propia',
     description: 'Aceituna negra estilo griego curada en sal seca y aceite, arrugada y con profundo sabor tradicional.',
     image: 'assets/aceitunas.jpg',
@@ -376,7 +376,7 @@ const PRODUCTS_DATA = [
   {
     id: 'aceituna-griega-medio-kg',
     name: 'Aceituna Griega (Frasco 1/2 kg)',
-    category: 'Aceitunas',
+    category: 'Aceite y aceitunas',
     badge: 'Presentación Frasco',
     description: 'Frasco sellado de 500g con aceitunas estilo griego listas para el consumo en picadas y aperitivos.',
     image: 'assets/aceitunas.jpg',
@@ -389,7 +389,7 @@ const PRODUCTS_DATA = [
   {
     id: 'aceituna-griega-5kg',
     name: 'Aceituna Griega Negra (Balde 5 kg)',
-    category: 'Aceitunas',
+    category: 'Aceite y aceitunas',
     badge: 'Balde Mayorista',
     description: 'Balde hermético de 5 kg con aceitunas griegas negras seleccionadas para fiambrerías y gastronomía.',
     image: 'assets/aceitunas.jpg',
@@ -402,7 +402,7 @@ const PRODUCTS_DATA = [
   {
     id: 'aceituna-descarozada-granel',
     name: 'Aceituna Verde Descarozada (Granel)',
-    category: 'Aceitunas',
+    category: 'Aceite y aceitunas',
     badge: 'Sin Carozo',
     description: 'Aceitunas verdes descarozadas carnosas y suaves al granel, perfectas para pizzas, empanadas y picadas.',
     image: 'assets/aceitunas.jpg',
@@ -417,7 +417,7 @@ const PRODUCTS_DATA = [
   {
     id: 'aceite-oliva-extra-virgen',
     name: 'Aceite Oliva Extra Virgen (1 Litro)',
-    category: 'Aceite & Delicatessen',
+    category: 'Aceite y aceitunas',
     badge: 'Primera Prensada',
     description: 'Aceite de oliva extra virgen de primera prensada en frío, baja acidez y frutado fresco mendocino.',
     image: 'assets/aceite-oliva.jpg',
@@ -430,7 +430,7 @@ const PRODUCTS_DATA = [
   {
     id: 'miel-pura-campo-medio-kg',
     name: 'Miel Pura de Campo x 1/2 kg',
-    category: 'Aceite & Delicatessen',
+    category: 'Frutos secos varios',
     badge: '100% Pura',
     description: 'Miel cruda de flores de campo sin pasteurizar ni agregados, textura untuosa y aroma dulce natural.',
     image: 'assets/miel.jpg',
@@ -443,7 +443,7 @@ const PRODUCTS_DATA = [
   {
     id: 'granola-artesanal',
     name: 'Granola Artesanal',
-    category: 'Aceite & Delicatessen',
+    category: 'Frutos secos varios',
     badge: 'Con Miel y Frutos',
     description: 'Avena horneada crujiente con miel pura, semillas de girasol, pasas de uva y frutos secos troceados.',
     image: 'assets/granola.jpg',
@@ -472,9 +472,24 @@ const state = {
 
 // Actualización atómica: una planilla inválida conserva los últimos precios válidos.
 let pricesLoading = false;
+let lastPriceSync = null;
+function updatePriceSyncStatus(message, failed = false) {
+  const status = document.getElementById('priceSyncStatus');
+  if (status) {
+    status.textContent = message;
+    status.classList.toggle('sync-error', failed);
+  }
+  const button = document.getElementById('refreshPricesBtn');
+  if (button) {
+    button.disabled = pricesLoading;
+    button.textContent = pricesLoading ? 'Actualizando…' : 'Actualizar precios';
+  }
+}
 async function refreshPrices() {
   if (pricesLoading) return;
   pricesLoading = true;
+  updatePriceSyncStatus('Actualizando precios…');
+  let syncError = false;
   const config = window.PRICES_CONFIG || {};
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), config.timeoutMs || 10000);
@@ -503,11 +518,17 @@ async function refreshPrices() {
         showToast('Actualizamos los precios de tu pedido con la lista vigente.');
       }
     }
+    lastPriceSync = new Date();
   } catch (error) {
+    syncError = true;
     console.warn('No se pudo actualizar la planilla; se conservan los precios vigentes.', error);
   } finally {
     clearTimeout(timer);
     pricesLoading = false;
+    const time = lastPriceSync?.toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' });
+    updatePriceSyncStatus(syncError
+      ? (time ? `No pudimos actualizar. Última lectura: ${time}.` : 'No pudimos actualizar. Reintentá en unos instantes.')
+      : `Precios actualizados · ${time}`, syncError);
   }
 }
 
@@ -576,6 +597,17 @@ function showToast(message) {
 // =====================================================================
 // RENDERIZADO DEL CATÁLOGO DE PRODUCTOS
 // =====================================================================
+function setCategory(category) {
+  const valid = category === 'all' || PRODUCTS_DATA.some(product => product.category === category);
+  state.activeCategory = valid ? category : 'all';
+  document.querySelectorAll('.filter-tab, .category-card').forEach(button => {
+    const active = (button.dataset.filter || button.dataset.category) === state.activeCategory;
+    button.classList.toggle('active', active);
+    button.setAttribute('aria-pressed', String(active));
+  });
+  renderProducts();
+}
+
 function renderProducts() {
   const grid = document.getElementById('productsGrid');
   const emptyState = document.getElementById('emptyState');
@@ -592,6 +624,11 @@ function renderProducts() {
 
     return matchCategory && matchSearch;
   });
+
+  const title = document.getElementById('catalogCategoryTitle');
+  if (title) title.textContent = state.activeCategory === 'all' ? 'Catálogo' : state.activeCategory;
+  const count = document.getElementById('catalogResultCount');
+  if (count) count.textContent = `${filtered.length} ${filtered.length === 1 ? 'producto' : 'productos'}`;
 
   if (filtered.length === 0) {
     grid.innerHTML = '';
@@ -915,6 +952,7 @@ function closeCart() {
 // =====================================================================
 document.addEventListener('DOMContentLoaded', () => {
 
+  document.getElementById('refreshPricesBtn')?.addEventListener('click', refreshPrices);
   refreshPrices();
   setInterval(() => {
     if (!document.hidden) refreshPrices();
@@ -982,30 +1020,16 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // 3. Filtros por Categoría
-  const filterTabs = document.querySelectorAll('.filter-tab');
-  filterTabs.forEach(tab => {
-    tab.addEventListener('click', () => {
-      filterTabs.forEach(t => t.classList.remove('active'));
-      tab.classList.add('active');
-      state.activeCategory = tab.dataset.filter;
-      renderProducts();
-    });
+  document.querySelectorAll('.filter-tab').forEach(tab => {
+    tab.addEventListener('click', () => setCategory(tab.dataset.filter));
   });
-
-  // Category Cards superiores
-  const categoryCards = document.querySelectorAll('.category-card');
-  categoryCards.forEach(card => {
+  document.querySelectorAll('.category-card').forEach(card => {
     card.addEventListener('click', () => {
-      const cat = card.dataset.category;
-      state.activeCategory = cat;
-      filterTabs.forEach(t => {
-        if (t.dataset.filter === cat) t.classList.add('active');
-        else t.classList.remove('active');
-      });
-      renderProducts();
+      setCategory(card.dataset.category);
       document.getElementById('catalogo')?.scrollIntoView({ behavior: 'smooth' });
     });
   });
+  setCategory(state.activeCategory);
 
   // 4. Buscador
   const searchInput = document.getElementById('productSearchInput');
@@ -1029,11 +1053,7 @@ document.addEventListener('DOMContentLoaded', () => {
     state.activeCategory = 'all';
     if (searchInput) searchInput.value = '';
     if (clearBtn) clearBtn.style.display = 'none';
-    filterTabs.forEach(t => {
-      if (t.dataset.filter === 'all') t.classList.add('active');
-      else t.classList.remove('active');
-    });
-    renderProducts();
+    setCategory('all');
   });
 
   // 5. Delegación de eventos para la grilla de productos (+ / - / Agregar)

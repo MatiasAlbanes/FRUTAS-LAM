@@ -5,7 +5,7 @@ const { readPrices } = require('../prices.js');
 const csv = fs.readFileSync('data/precios.csv', 'utf8');
 const context = vm.createContext({
   console: { warn() {} }, AbortController, setTimeout, clearTimeout,
-  document: { addEventListener() {} }, window: { PRICES_CONFIG: {} },
+  document: { addEventListener() {}, getElementById() { return null; } }, window: { PRICES_CONFIG: {} },
   PriceSheet: { readPrices }
 });
 vm.runInContext(fs.readFileSync('app.js', 'utf8'), context);
