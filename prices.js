@@ -27,7 +27,7 @@
     if (row.some(Boolean)) rows.push(row);
     return rows;
   }
-  function positiveNumber(value, numberFormat) {
+  function positiveNumber(value, numberFormat, allowZero = false) {
     let normalized;
     if (numberFormat === 'en-US') {
       // Google Sheets exporta los números con el formato visible de la hoja.
@@ -41,14 +41,19 @@
       normalized = value.replace(',', '.');
     }
     const number = Number(normalized);
-    if (!Number.isFinite(number) || number <= 0 || number > 1e9) throw new Error('Valor fuera de rango');
+    if (!Number.isFinite(number) || number < 0 || (!allowZero && number === 0) || number > 1e9) throw new Error('Valor fuera de rango');
     return number;
   }
   function readPrices(csv, products, options = {}) {
     const [headers, ...rows] = parseCSV(csv);
-    const required = ['id', 'producto', 'unidad', 'cantidad', 'precio_unitario'];
+    const quantityColumn = headers?.includes('cantidad_mayorista') ? 'cantidad_mayorista' : 'cantidad';
+    const priceColumn = headers?.includes('precio_mayorista') ? 'precio_mayorista' : 'precio_unitario';
+    const required = ['id', 'producto', 'unidad', quantityColumn, priceColumn];
     if (!headers || required.some(key => headers.filter(h => h === key).length !== 1)) {
       throw new Error('Faltan columnas o hay encabezados repetidos');
+    }
+    for (const key of ['precio_minorista', 'cantidad_minorista']) {
+      if (headers.filter(h => h === key).length > 1) throw new Error('Columna repetida: ' + key);
     }
     const catalog = new Map(products.map(p => [p.id, p]));
     const seen = new Set();
@@ -58,11 +63,23 @@
       if (!product || seen.has(id)) throw new Error('Producto desconocido o repetido: ' + id);
       seen.add(id);
       if (cell('unidad') !== product.unit) throw new Error('La unidad no coincide: ' + id);
-      const quantity = positiveNumber(cell('cantidad'), options.numberFormat);
-      const price = positiveNumber(cell('precio_unitario'), options.numberFormat);
+      const quantity = positiveNumber(cell(quantityColumn), options.numberFormat);
+      const price = positiveNumber(cell(priceColumn), options.numberFormat);
       if (['frasco', 'balde'].includes(product.unit) && !Number.isInteger(quantity)) {
         throw new Error('La cantidad de unidades debe ser entera');
       }
+      // Las columnas nuevas son opcionales durante la migración de la hoja publicada.
+      // Un minorista vacío no se cotiza ni se reemplaza por el precio mayorista.
+      const retailPrice = !headers.includes('precio_minorista') ? (product.retailPrice ?? 0)
+        : cell('precio_minorista') === '' ? null
+        : positiveNumber(cell('precio_minorista'), options.numberFormat, true);
+      const retailQuantity = cell('cantidad_minorista') === '' ? 1
+        : positiveNumber(cell('cantidad_minorista'), options.numberFormat);
+      if (['frasco', 'balde'].includes(product.unit) && !Number.isInteger(retailQuantity)) {
+        throw new Error('La cantidad minorista de unidades debe ser entera');
+      }
+      const retailTotal = retailPrice === null ? null : Math.round(retailPrice * retailQuantity * 100) / 100;
+      if (retailTotal > 1e12) throw new Error('Total minorista fuera de rango');
       const total = Math.round(price * quantity * 100) / 100;
       if (total > 1e12) throw new Error('Total fuera de rango');
       let label = product.packageUnit;
@@ -71,7 +88,8 @@
           ? `${quantity} baldes de 5 kg`
           : label.replace(/x [\d.,]+/, `x ${quantity}`);
       }
-      return { id, pricePerKg: price, packageKg: quantity, packageTotalPrice: total, packageUnit: label };
+      return { id, pricePerKg: price, packageKg: quantity, packageTotalPrice: total, packageUnit: label,
+        retailPrice, retailQuantity, retailTotal };
     });
     if (seen.size !== products.length) throw new Error('La planilla debe contener todos los productos');
     return result;

@@ -2,19 +2,23 @@
  * FRUTAS LAM - FRUTOS SECOS (Mendoza)
  * LÓGICA INTERACTIVA DEL CATÁLOGO Y COTIZADOR WHATSAPP
  * Precios de lista: Mayoristas por kilo (llevando caja cerrada).
- * Precios minoristas: A coordinar directamente por WhatsApp.
+ * Ambas listas se actualizan desde la planilla publicada.
  */
 
 // =====================================================================
 // CONFIGURACIÓN PRINCIPAL
 // =====================================================================
 const APP_CONFIG = {
-  whatsappNumber: '5492634761151',
+  whatsappNumber: '5492634761151', // Mayorista
+  retailWhatsappNumber: '5492634339550',
   businessName: 'Frutas LAM',
   tagline: 'Calidad y sabor en cada bocado',
   pickupAddress: '9 de Julio 1189, Mendoza Ciudad',
-  instagramUser: '@frutossecoslam',
-  instagramUrl: 'https://www.instagram.com/frutossecoslam/'
+  instagramUser: '@lamfruts',
+  instagramUrl: 'https://www.instagram.com/lamfruts/',
+  wholesalePickup: 'Ingeniero Giagnoni, Junín',
+  wholesaleMaps: 'https://maps.app.goo.gl/3Xq155JCwf7fQ5Y49',
+  retailPickup: '9 de Julio 1189, Mendoza Ciudad'
 };
 
 // =====================================================================
@@ -451,6 +455,11 @@ const PRODUCTS_DATA = [
   }
 ];
 
+// Valores iniciales pedidos: lista minorista en cero hasta su carga en la planilla.
+PRODUCTS_DATA.forEach(product => Object.assign(product, {
+  retailPrice: 0, retailQuantity: 1, retailTotal: 0
+}));
+
 // =====================================================================
 // ESTADO DE LA APLICACIÓN
 // =====================================================================
@@ -485,15 +494,12 @@ async function refreshPrices() {
     });
     if (changed) {
       state.cart.forEach(item => {
-        if (item.mode !== 'mayorista') return;
         const product = PRODUCTS_DATA.find(p => p.id === item.productId);
-        item.pricePerKg = product.pricePerKg;
-        item.unitPrice = product.packageTotalPrice;
-        item.packageDesc = product.packageUnit;
+        Object.assign(item, getProductPricing(product, item.mode));
       });
       renderProducts();
       updateCartUI();
-      if (state.cart.some(item => item.mode === 'mayorista')) {
+      if (state.cart.length) {
         showToast('Actualizamos los precios de tu pedido con la lista vigente.');
       }
     }
@@ -512,11 +518,42 @@ function normalizeSearch(value) {
   return value.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
 }
 
+function getProductPricing(product, mode) {
+  if (mode === 'mayorista') return {
+    pricePerKg: product.pricePerKg, unitPrice: product.packageTotalPrice,
+    packageDesc: product.packageUnit
+  };
+  const amount = product.retailQuantity || 1;
+  return {
+    pricePerKg: product.retailPrice ?? null, unitPrice: product.retailTotal ?? null,
+    packageDesc: `${amount} ${product.unit || 'kg'}`
+  };
+}
+
+function contactNumber(mode) {
+  return mode === 'minorista' ? APP_CONFIG.retailWhatsappNumber : APP_CONFIG.whatsappNumber;
+}
+
+function pickupFor(mode) {
+  return mode === 'minorista' ? APP_CONFIG.retailPickup : APP_CONFIG.wholesalePickup;
+}
+
+function syncModeContact() {
+  const link = document.querySelector('.floating-whatsapp-btn');
+  if (link) {
+    link.href = `https://wa.me/${contactNumber(state.pricingMode)}?text=${encodeURIComponent(`Hola Frutas LAM! Quisiera hacer una consulta ${state.pricingMode}.`)}`;
+    link.setAttribute('aria-label', `WhatsApp ${state.pricingMode}`);
+    const tooltip = link.querySelector('.floating-tooltip');
+    if (tooltip) tooltip.textContent = `Contacto ${state.pricingMode}`;
+  }
+}
+
 function formatARS(amount) {
   return new Intl.NumberFormat('es-AR', {
     style: 'currency',
     currency: 'ARS',
-    maximumFractionDigits: 0
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 2
   }).format(amount);
 }
 
@@ -581,7 +618,7 @@ function renderProducts() {
       `;
 
       const wspRetailQuery = encodeURIComponent(`Hola Frutas LAM! Quisiera consultar el precio minorista para: ${product.name}`);
-      const wspLink = `https://wa.me/${APP_CONFIG.whatsappNumber}?text=${wspRetailQuery}`;
+      const wspLink = `https://wa.me/${APP_CONFIG.retailWhatsappNumber}?text=${wspRetailQuery}`;
 
       if (product.packageKg > 1) {
         subPriceInfo = `
@@ -598,15 +635,14 @@ function renderProducts() {
       }
       btnAddText = 'Agregar';
     } else {
-      // MODO MINORISTA (A coordinar por WhatsApp con el vendedor)
-      mainPriceHtml = `
-        <span class="price-coordinar">A coordinar</span>
-        <span class="price-coordinar-unit">por WhatsApp</span>
-      `;
-      subPriceInfo = `
-        <div class="sub-pack-row">Venta fraccionada por kilo / unidad</div>
-      `;
-      btnAddText = 'Agregar';
+      const pricing = getProductPricing(product, 'minorista');
+      const available = pricing.unitPrice !== null;
+      mainPriceHtml = available
+        ? `<span class="primary-price">${formatARS(product.retailPrice)}</span><span class="price-unit">/ ${unitLabel}</span>`
+        : '<span class="price-pending">Precio pendiente</span>';
+      subPriceInfo = `<div class="sub-pack-row">Venta x <strong>${pricing.packageDesc}</strong></div>`;
+      if (available) subPriceInfo += `<div class="sub-total-box">Total: <strong>${formatARS(pricing.unitPrice)}</strong></div>`;
+      btnAddText = available ? 'Agregar' : 'Sin precio';
     }
 
     return `
@@ -634,7 +670,7 @@ function renderProducts() {
               <button type="button" class="qty-btn btn-plus" data-id="${product.id}" aria-label="Sumar 1">+</button>
             </div>
 
-            <button type="button" class="btn-add-cart" data-id="${product.id}" aria-label="${btnAddText} ${product.name}">
+            <button type="button" class="btn-add-cart" data-id="${product.id}" ${!isMayorista && product.retailTotal == null ? 'disabled' : ''} aria-label="${btnAddText} ${product.name}">
               <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
                 <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
                 <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
@@ -657,10 +693,11 @@ function addToCart(productId, quantity) {
 
   quantity = Math.max(1, Math.min(999, Math.trunc(Number(quantity)) || 1));
   const mode = state.pricingMode; // 'mayorista' | 'minorista'
-  const isMayorista = mode === 'mayorista';
-
-  const unitPrice = isMayorista ? product.packageTotalPrice : 0;
-  const packageDesc = isMayorista ? product.packageUnit : `1 ${product.unit || 'kg'} fraccionado`;
+  const pricing = getProductPricing(product, mode);
+  if (pricing.unitPrice === null) {
+    showToast('Este producto todavía no tiene precio minorista cargado.');
+    return;
+  }
 
   const cartItemId = `${productId}-${mode}`;
   const existing = state.cart.find(item => item.cartItemId === cartItemId);
@@ -673,9 +710,7 @@ function addToCart(productId, quantity) {
       productId: product.id,
       name: product.name,
       mode,
-      pricePerKg: product.pricePerKg,
-      unitPrice,
-      packageDesc,
+      ...pricing,
       qty: quantity,
       image: product.image,
       unit: product.unit || 'kg'
@@ -716,7 +751,6 @@ function updateCartUI() {
   const footer = document.getElementById('cartDrawerFooter');
   const totalPriceElem = document.getElementById('cartTotalPrice');
   const totalSummaryLabel = document.getElementById('cartSummaryLabel');
-  const btnSendWhatsApp = document.getElementById('btnSendWhatsAppOrder');
 
   const totalItemsCount = state.cart.reduce((acc, item) => acc + item.qty, 0);
   if (badge) badge.textContent = totalItemsCount;
@@ -731,167 +765,91 @@ function updateCartUI() {
   if (emptyState) emptyState.style.display = 'none';
   if (footer) footer.style.display = 'flex';
 
-  let totalEstimated = 0;
-  let hasMayoristaItems = false;
-  let hasMinoristaItems = false;
+  const totalEstimated = state.cart.reduce((sum, item) => sum + (item.unitPrice ?? 0) * item.qty, 0);
+  const pending = state.cart.some(item => item.unitPrice === null);
+  const hasMayorista = state.cart.some(item => item.mode === 'mayorista');
+  const hasMinorista = state.cart.some(item => item.mode === 'minorista');
 
-  if (itemsContainer) {
-    itemsContainer.innerHTML = state.cart.map(item => {
-      const isMay = item.mode === 'mayorista';
-
-      if (isMay) {
-        hasMayoristaItems = true;
-        const subtotal = item.unitPrice * item.qty;
-        totalEstimated += subtotal;
-
-        return `
-          <div class="cart-item-card">
-            <img src="${item.image}" alt="${item.name}" class="cart-item-img">
-
-            <div class="cart-item-details">
-              <div class="cart-item-name">${item.name}</div>
-              <div class="cart-item-pack">${item.packageDesc} · <span class="badge-mode-may">Mayorista</span></div>
-              <div class="cart-item-price">${formatARS(item.pricePerKg)} / ${item.unit} (${formatARS(item.unitPrice)} x bulto)</div>
-
-              <div class="cart-item-bottom">
-                <div class="cart-qty-control">
-                  <button type="button" class="btn-cart-qty" onclick="updateCartItemQty('${item.cartItemId}', -1)">-</button>
-                  <span class="cart-qty-value">${item.qty}</span>
-                  <button type="button" class="btn-cart-qty" onclick="updateCartItemQty('${item.cartItemId}', 1)">+</button>
-                </div>
-
-                <div class="cart-item-subtotal">
-                  Subtotal: <strong>${formatARS(subtotal)}</strong>
-                </div>
-
-                <button type="button" class="btn-cart-remove" onclick="removeCartItem('${item.cartItemId}')" title="Quitar producto">
-                  ✕
-                </button>
-              </div>
+  if (itemsContainer) itemsContainer.innerHTML = state.cart.map(item => {
+    const missing = item.unitPrice === null;
+    const subtotal = missing ? 'Precio pendiente' : formatARS(item.unitPrice * item.qty);
+    const modeLabel = item.mode === 'mayorista' ? 'Mayorista' : 'Minorista';
+    const unitInfo = missing ? 'Precio pendiente'
+      : `${formatARS(item.pricePerKg)} / ${item.unit}`;
+    return `
+      <div class="cart-item-card">
+        <img src="${item.image}" alt="${item.name}" class="cart-item-img">
+        <div class="cart-item-details">
+          <div class="cart-item-name">${item.name}</div>
+          <div class="cart-item-pack">${item.packageDesc} · <span class="badge-mode-${item.mode === 'mayorista' ? 'may' : 'min'}">${modeLabel}</span></div>
+          <div class="cart-item-price">${unitInfo}</div>
+          <div class="cart-item-bottom">
+            <div class="cart-qty-control">
+              <button type="button" class="btn-cart-qty" onclick="updateCartItemQty('${item.cartItemId}', -1)" aria-label="Restar una presentación">-</button>
+              <span class="cart-qty-value">${item.qty}</span>
+              <button type="button" class="btn-cart-qty" onclick="updateCartItemQty('${item.cartItemId}', 1)" aria-label="Sumar una presentación">+</button>
             </div>
+            <div class="cart-item-subtotal">Subtotal: <strong>${subtotal}</strong></div>
+            <button type="button" class="btn-cart-remove" onclick="removeCartItem('${item.cartItemId}')" title="Quitar producto">✕</button>
           </div>
-        `;
-      } else {
-        hasMinoristaItems = true;
+        </div>
+      </div>`;
+  }).join('');
 
-        return `
-          <div class="cart-item-card cart-item-minorista">
-            <img src="${item.image}" alt="${item.name}" class="cart-item-img">
-
-            <div class="cart-item-details">
-              <div class="cart-item-name">${item.name}</div>
-              <div class="cart-item-pack">${item.qty} ${item.unit} · <span class="badge-mode-min">Minorista</span></div>
-              <div class="cart-item-price cart-price-coordinar">Precio a coordinar por WhatsApp</div>
-
-              <div class="cart-item-bottom">
-                <div class="cart-qty-control">
-                  <button type="button" class="btn-cart-qty" onclick="updateCartItemQty('${item.cartItemId}', -1)">-</button>
-                  <span class="cart-qty-value">${item.qty}</span>
-                  <button type="button" class="btn-cart-qty" onclick="updateCartItemQty('${item.cartItemId}', 1)">+</button>
-                </div>
-
-                <div class="cart-item-subtotal cart-subtotal-coordinar">
-                  <span>A cotizar</span>
-                </div>
-
-                <button type="button" class="btn-cart-remove" onclick="removeCartItem('${item.cartItemId}')" title="Quitar producto">
-                  ✕
-                </button>
-              </div>
-            </div>
-          </div>
-        `;
-      }
-    }).join('');
-  }
-
-  if (totalPriceElem) {
-    if (hasMayoristaItems && !hasMinoristaItems) {
-      totalPriceElem.textContent = formatARS(totalEstimated);
-      if (totalSummaryLabel) totalSummaryLabel.textContent = 'Total estimado mayorista:';
-      if (btnSendWhatsApp) {
-        btnSendWhatsApp.innerHTML = `
-          <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-          Enviar pedido por WhatsApp
-        `;
-      }
-    } else if (hasMinoristaItems && !hasMayoristaItems) {
-      totalPriceElem.textContent = 'A coordinar por WhatsApp';
-      if (totalSummaryLabel) totalSummaryLabel.textContent = 'Precios minoristas:';
-      if (btnSendWhatsApp) {
-        btnSendWhatsApp.innerHTML = `
-          <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-          Consultar por WhatsApp
-        `;
-      }
-    } else {
-      totalPriceElem.textContent = `${formatARS(totalEstimated)} + minorista a coordinar`;
-      if (totalSummaryLabel) totalSummaryLabel.textContent = 'Total pedido:';
-      if (btnSendWhatsApp) {
-        btnSendWhatsApp.innerHTML = `
-          <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-          Enviar pedido por WhatsApp
-        `;
-      }
-    }
-  }
+  if (totalPriceElem) totalPriceElem.textContent = pending ? 'Hay productos sin precio' : formatARS(totalEstimated);
+  if (totalSummaryLabel) totalSummaryLabel.textContent = 'Total estimado:';
+  const retailButton = document.getElementById('btnSendRetailWhatsAppOrder');
+  const configureButton = (button, mode, visible) => {
+    if (!button) return;
+    button.hidden = !visible;
+    button.disabled = state.cart.some(item => item.mode === mode && item.unitPrice === null);
+    button.textContent = `Enviar pedido ${mode}`;
+  };
+  configureButton(document.getElementById('btnSendWhatsAppOrder'), 'mayorista', hasMayorista);
+  configureButton(retailButton, 'minorista', hasMinorista);
+  const pickupOption = document.querySelector('#cartDeliverySelect option[value="retiro"]');
+  if (pickupOption) pickupOption.textContent = hasMayorista && hasMinorista
+    ? 'Retiro en el punto de cada modalidad'
+    : `Retiro: ${pickupFor(hasMinorista ? 'minorista' : 'mayorista')}`;
+  const pickupNote = document.getElementById('cartPickupNote');
+  if (pickupNote) pickupNote.textContent = [
+    hasMayorista ? `Mayorista: ${pickupFor('mayorista')}.` : '',
+    hasMinorista ? `Minorista: ${pickupFor('minorista')}.` : ''
+  ].filter(Boolean).join(' ');
 }
 
-// =====================================================================
-// GENERADOR DE MENSAJE Y ENVÍO A WHATSAPP
-// =====================================================================
-function sendOrderToWhatsApp() {
-  if (state.cart.length === 0) {
-    alert('Tu pedido está vacío. Agregá productos antes de enviar.');
+// Cada modalidad se envía a su contacto, incluso si el carrito contiene ambas.
+function sendOrderToWhatsApp(mode = state.pricingMode) {
+  const items = state.cart.filter(item => item.mode === mode);
+  if (!items.length) {
+    showToast(`No hay productos ${mode === 'mayorista' ? 'mayoristas' : 'minoristas'} en tu pedido.`);
     return;
   }
-
-  const customerName = document.getElementById('cartCustomerName')?.value.trim() || 'Cliente Web';
-  const deliverySelect = document.getElementById('cartDeliverySelect')?.value || 'Retiro en Mendoza (9 de Julio 1189)';
-
-  let totalSum = 0;
-  let hasMayorista = false;
-  let hasMinorista = false;
-
-  const itemsText = state.cart.map(item => {
-    if (item.mode === 'mayorista') {
-      hasMayorista = true;
-      const sub = item.unitPrice * item.qty;
-      totalSum += sub;
-      return `• ${item.qty}x ${item.name} (${item.packageDesc} @ ${formatARS(item.pricePerKg)}/${item.unit}) -> ${formatARS(sub)}`;
-    } else {
-      hasMinorista = true;
-      return `• ${item.qty} ${item.unit} x ${item.name} [Minorista - Precio a coordinar]`;
-    }
-  }).join('\n');
-
-  let orderTypeTitle = 'CONSULTA / PEDIDO';
-  if (hasMayorista && !hasMinorista) orderTypeTitle = 'PEDIDO MAYORISTA (Caja cerrada)';
-  if (hasMinorista && !hasMayorista) orderTypeTitle = 'CONSULTA / PEDIDO MINORISTA';
-
-  let totalLine = `💰 *TOTAL ESTIMADO MAYORISTA:* ${formatARS(totalSum)}`;
-  if (!hasMayorista && hasMinorista) {
-    totalLine = `💬 *PRECIOS MINORISTAS:* A coordinar por WhatsApp según fraccionamiento y cantidad`;
-  } else if (hasMayorista && hasMinorista) {
-    totalLine = `💰 *TOTAL MAYORISTA:* ${formatARS(totalSum)} + *Artículos minoristas a cotizar*`;
+  if (items.some(item => item.unitPrice === null)) {
+    showToast('Hay productos sin precio. Actualizá tu pedido antes de enviarlo.');
+    return;
   }
+  const customerName = document.getElementById('cartCustomerName')?.value.trim() || 'Cliente Web';
+  const delivery = document.getElementById('cartDeliverySelect')?.value || 'retiro';
+  const pickup = pickupFor(mode);
+  const deliveryText = delivery === 'retiro'
+    ? `Retiro ${mode}: ${pickup}${mode === 'mayorista' ? '\n' + APP_CONFIG.wholesaleMaps : ''}`
+    : delivery;
+  const total = items.reduce((sum, item) => sum + item.unitPrice * item.qty, 0);
+  const itemsText = items.map(item =>
+    `• ${item.qty}x ${item.name} (${item.packageDesc} @ ${formatARS(item.pricePerKg)}/${item.unit}) → ${formatARS(item.unitPrice * item.qty)}`
+  ).join('\n');
+  const message = `Hola Frutas LAM! Quiero realizar un *PEDIDO ${mode.toUpperCase()}* desde la web:
 
-  const message =
-`👋 *HOLA FRUTAS LAM!*
-Quiero realizar el siguiente *${orderTypeTitle}* desde la web:
+*Nombre / Negocio:* ${customerName}
+*Forma de entrega:* ${deliveryText}
 
-👤 *Nombre / Negocio:* ${customerName}
-📍 *Forma de Entrega:* ${deliverySelect}
-
-📝 *DETALLE DE PRODUCTOS:*
 ${itemsText}
 
-${totalLine}
+*TOTAL ESTIMADO:* ${formatARS(total)}
 
-¿Tienen disponibilidad para coordinar la entrega o el despacho? ¡Muchas gracias!`;
-
-  const waUrl = `https://wa.me/${APP_CONFIG.whatsappNumber}?text=${encodeURIComponent(message)}`;
-  window.open(waUrl, '_blank', 'noopener,noreferrer');
+¿Tienen disponibilidad para coordinar la entrega?`;
+  window.open(`https://wa.me/${contactNumber(mode)}?text=${encodeURIComponent(message)}`, '_blank', 'noopener,noreferrer');
 }
 
 // =====================================================================
@@ -915,7 +873,7 @@ Te contacto desde el sitio web con la siguiente consulta:
 💬 *Mensaje:*
 ${text}`;
 
-  const waUrl = `https://wa.me/${APP_CONFIG.whatsappNumber}?text=${encodeURIComponent(msg)}`;
+  const waUrl = `https://wa.me/${contactNumber(type.toLowerCase().includes('minorista') ? 'minorista' : 'mayorista')}?text=${encodeURIComponent(msg)}`;
   window.open(waUrl, '_blank', 'noopener,noreferrer');
 }
 
@@ -988,17 +946,18 @@ document.addEventListener('DOMContentLoaded', () => {
       btnMinorista?.classList.remove('active');
       modeBanner?.classList.add('wholesale-active');
       if (modeInfoText) {
-        modeInfoText.textContent = 'Precios por kg llevando caja cerrada. Minorista: a coordinar por WhatsApp.';
+        modeInfoText.textContent = 'Precios mayoristas por kg o unidad llevando la presentación cerrada.';
       }
     } else {
       btnMinorista?.classList.add('active');
       btnMayorista?.classList.remove('active');
       modeBanner?.classList.remove('wholesale-active');
       if (modeInfoText) {
-        modeInfoText.textContent = 'Precios minoristas a coordinar por WhatsApp. Agregá productos a tu consulta.';
+        modeInfoText.textContent = 'Precios minoristas por kg o unidad. Elegí la presentación y armá tu pedido.';
       }
     }
     renderProducts();
+    syncModeContact();
   }
 
   btnMayorista?.addEventListener('click', () => setPricingMode('mayorista'));
@@ -1112,7 +1071,8 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('closeCartBtn')?.addEventListener('click', closeCart);
   document.getElementById('cartBackdrop')?.addEventListener('click', closeCart);
   document.getElementById('btnClearCart')?.addEventListener('click', clearCart);
-  document.getElementById('btnSendWhatsAppOrder')?.addEventListener('click', sendOrderToWhatsApp);
+  document.getElementById('btnSendWhatsAppOrder')?.addEventListener('click', () => sendOrderToWhatsApp('mayorista'));
+  document.getElementById('btnSendRetailWhatsAppOrder')?.addEventListener('click', () => sendOrderToWhatsApp('minorista'));
 
   // Cerrar con Escape
   document.addEventListener('keydown', (e) => {
