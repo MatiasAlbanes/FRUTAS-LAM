@@ -2056,7 +2056,7 @@ button {
 .category-img-wrap { width: 48px; height: 48px; aspect-ratio: 1; flex: 0 0 48px; border-radius: 50%; margin: 0; }
 .category-card h3 { font-size: 0.75rem; font-weight: 500; line-height: 1.4; padding: 0; }
 .category-card:hover .category-img-wrap img { transform: scale(1.08); }
-.catalog-section { background: var(--color-bg-body); padding-top: 48px; border-top: 1px solid var(--color-border); }
+.catalog-section { background: var(--color-bg-body); padding-top: 36px; border-top: none; }
 .catalog-top-bar { gap: 16px; margin-bottom: 20px; }
 .toggle-pills { border-radius: 999px; background: #eeede7; border: 0; padding: 3px; }
 .pill-btn { min-height: 38px; border-radius: 999px; font-size: 0.8rem; padding: 8px 16px; }
@@ -2223,4 +2223,65 @@ section[id] { scroll-margin-top: 100px; }
 .price-sync-bar .sync-error { color: #8b3b2d; }
 @media (min-width: 641px) and (max-width: 1023px) {
   .categories-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+
+/* Ampliación de fotos del catálogo */
+button.product-img-box {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  cursor: zoom-in;
+}
+.product-img-box:focus-visible {
+  outline: 3px solid currentColor;
+  outline-offset: 3px;
+}
+.product-photo-dialog {
+  position: fixed;
+  inset: 0;
+  margin: auto;
+  width: fit-content;
+  height: fit-content;
+  border: 0;
+  padding: 16px;
+  background: transparent;
+  max-width: 100vw;
+  max-height: 100vh;
+  max-height: 100dvh;
+  overflow: auto;
+}
+.product-photo-dialog::backdrop {
+  background: rgba(15, 20, 15, .55);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+}
+.product-photo-content {
+  position: relative;
+}
+.product-photo-content img {
+  display: block;
+  width: min(780px, calc(100vw - 32px), calc(100vh - 32px));
+  width: min(780px, calc(100vw - 32px), calc(100dvh - 32px));
+  height: auto;
+  max-height: calc(100vh - 32px);
+  max-height: calc(100dvh - 32px);
+  object-fit: contain;
+  border-radius: 18px;
+  box-shadow: 0 20px 80px rgba(0, 0, 0, .25);
+}
+.product-photo-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 44px;
+  height: 44px;
+  border: 0;
+  border-radius: 50%;
+  background: #fff;
+  color: #222;
+  font-size: 30px;
+  line-height: 1;
+  cursor: pointer;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, .15);
 }

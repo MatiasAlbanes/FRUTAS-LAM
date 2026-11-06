@@ -15,7 +15,7 @@
   <!-- Favicon -->
   <link rel="icon" type="image/png" href="assets/logo-lam.png">
 
-  <link rel="stylesheet" href="styles.css?v=20261104-sync-sheet42">
+  <link rel="stylesheet" href="styles.css?v=20261106-photo-centered">
 </head>
 <body>
 
@@ -24,7 +24,7 @@
     <div class="container header-container">
       
       <!-- Logo y Marca -->
-      <a href="#inicio" class="brand-link" aria-label="Frutas LAM Inicio">
+      <a href="#catalogo" class="brand-link" aria-label="Frutas LAM Inicio">
         <img src="assets/logo-lam.png" alt="Logo Frutas LAM" class="brand-logo" id="mainBrandLogo">
         <div class="brand-text">
           <span class="brand-title">FRUTAS <strong>LAM</strong></span>
@@ -45,7 +45,7 @@
 
       <!-- Navegación de escritorio -->
       <nav class="desktop-nav" aria-label="Navegación principal">
-        <a href="#inicio" class="nav-item active">Inicio</a>
+        <a href="#catalogo" class="nav-item active">Inicio</a>
         <a href="#catalogo" class="nav-item">Catálogo</a>
         <a href="#mayoristas" class="nav-item">Mayoristas</a>
         <a href="#envios" class="nav-item">Envíos</a>
@@ -85,7 +85,7 @@
 
     <!-- Menú Desplegable Mobile -->
     <div class="mobile-nav-panel" id="mobileNavPanel">
-      <a href="#inicio" class="mobile-nav-link">Inicio</a>
+      <a href="#catalogo" class="mobile-nav-link">Inicio</a>
       <a href="#catalogo" class="mobile-nav-link">Catálogo de Productos</a>
       <a href="#mayoristas" class="mobile-nav-link">Precios Mayoristas</a>
       <a href="#envios" class="mobile-nav-link">Envíos a todo el país</a>
@@ -97,73 +97,6 @@
       </div>
     </div>
   </header>
-
-  <!-- ==================== HERO SECTION (MINIMALISTA) ==================== -->
-  <section class="hero-section" id="inicio">
-    <div class="container hero-layout">
-    <div class="hero-content">
-      
-      <p class="hero-eyebrow">FRUTAS LAM · MENDOZA</p>
-      <h1 class="hero-title">
-        Frutos secos
-      </h1>
-
-      <p class="hero-description">
-        Venta mayorista y minorista. Mendoza.
-      </p>
-
-      <!-- Botones de Acción Principal -->
-      <div class="hero-cta-group">
-        <a href="#catalogo" class="btn btn-accent btn-lg">
-          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
-          Ver catálogo
-        </a>
-        <a href="https://wa.me/5492634761151?text=Hola%20Frutas%20LAM,%20quiero%20solicitar%20la%20lista%20de%20precios%20mayorista" target="_blank" rel="noopener noreferrer" class="btn btn-outline-light btn-lg">
-          <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-          Lista mayorista
-        </a>
-      </div>
-
-    </div>
-    <figure class="hero-visual"><img class="hero-photo" src="assets/almendras.jpg" alt="Almendras seleccionadas" fetchpriority="high"></figure>
-    </div>
-  </section>
-
-  <!-- ==================== CATEGORÍAS ==================== -->
-  <section class="section categories-section" id="categorias">
-    <div class="container">
-      <div class="section-header text-center">
-        <h2 class="section-title">Categorías</h2>
-      </div>
-
-      <div class="categories-grid">
-        <button type="button" class="category-card" data-category="Nueces" aria-pressed="false">
-          <div class="category-img-wrap"><img src="assets/productos/nuez-mariposa-blanca-partida-a-mano.webp" alt="Nueces" loading="lazy"></div>
-          <h3>Nueces</h3>
-        </button>
-        <button type="button" class="category-card" data-category="Almendras" aria-pressed="false">
-          <div class="category-img-wrap"><img src="assets/productos/almendra-guara-6.webp" alt="Almendras" loading="lazy"></div>
-          <h3>Almendras</h3>
-        </button>
-        <button type="button" class="category-card" data-category="Aceite y aceitunas" aria-pressed="false">
-          <div class="category-img-wrap"><img src="assets/productos/aceite-de-oliva-1l.webp" alt="Aceite y aceitunas" loading="lazy"></div>
-          <h3>Aceite y aceitunas</h3>
-        </button>
-        <button type="button" class="category-card" data-category="Frutos secos varios" aria-pressed="false">
-          <div class="category-img-wrap"><img src="assets/productos/castana-de-caju-vietnam.webp" alt="Frutos secos varios" loading="lazy"></div>
-          <h3>Frutos secos varios</h3>
-        </button>
-        <button type="button" class="category-card" data-category="Deshidratados" aria-pressed="false">
-          <div class="category-img-wrap"><img src="assets/productos/pasa-rubia-grande.webp" alt="Deshidratados" loading="lazy"></div>
-          <h3>Deshidratados</h3>
-        </button>
-        <button type="button" class="category-card" data-category="Mixes" aria-pressed="false">
-          <div class="category-img-wrap"><img src="assets/productos/tropical-premium.webp" alt="Mixes" loading="lazy"></div>
-          <h3>Mixes</h3>
-        </button>
-      </div>
-    </div>
-  </section>
 
   <!-- ==================== CATÁLOGO INTERACTIVO ==================== -->
   <section class="section catalog-section" id="catalogo">
@@ -233,13 +166,7 @@
       <div class="wholesale-simple-box">
         <div class="wholesale-simple-text">
           <h2>Venta mayorista</h2>
-          <p>Cajas cerradas de 5, 10 y 25 kg. Lista completa por WhatsApp.</p>
-        </div>
-        <div class="wholesale-simple-action">
-          <a href="https://wa.me/5492634761151?text=Hola%20Frutas%20LAM,%20quisiera%20recibir%20la%20lista%20de%20precios%20mayorista" target="_blank" rel="noopener noreferrer" class="btn btn-accent btn-lg">
-            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-            Pedir lista mayorista PDF
-          </a>
+          <p>Cajas cerradas de 5, 10 y 25 kg.</p>
         </div>
       </div>
     </div>
@@ -452,9 +379,16 @@
   <!-- Toast de Notificaciones -->
   <div class="toast-container" id="toastContainer" role="status" aria-live="polite"></div>
 
+  <dialog id="productPhotoDialog" class="product-photo-dialog" aria-label="Foto ampliada del producto">
+    <div class="product-photo-content">
+      <button type="button" id="closeProductPhoto" class="product-photo-close" aria-label="Cerrar foto" autofocus>×</button>
+      <img id="productPhotoImage" alt="" width="1254" height="1254">
+    </div>
+  </dialog>
+
   <!-- Scripts -->
   <script src="prices-config.js?v=20261104-sync-sheet42"></script>
   <script src="prices.js?v=20261104-sync-sheet42"></script>
-  <script src="app.js?v=20261104-sync-sheet42"></script>
+  <script src="app.js?v=20261106-almendras-centradas"></script>
 </body>
 </html>

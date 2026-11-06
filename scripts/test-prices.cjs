@@ -40,20 +40,20 @@ vm.runInContext(`
   renderProducts = () => {};
   updateCartUI = () => {};
   showToast = () => {};
-  state.cart.push({ productId: PRODUCTS_DATA[0].id, mode: 'mayorista', qty: 2 });
+  state.cart.push({ productId: PRODUCTS_DATA.find(p => p.id === 'nuez-mariposa-blanca').id, mode: 'mayorista', qty: 2 });
 `, context);
 (async () => {
   context.fetch = async () => ({ ok: true, text: async () => changed });
   await vm.runInContext('refreshPrices()', context);
-  assert.equal(products[0].pricePerKg, 15000);
+  assert.equal(products.find(p => p.id === 'nuez-mariposa-blanca').pricePerKg, 15000);
   assert.equal(vm.runInContext('state.cart[0].unitPrice', context), 112500);
   assert.equal(vm.runInContext('state.cart[0].qty', context), 2);
   context.fetch = async () => ({ ok: true, text: async () => csv.replace('1250.0', '-1') });
   await vm.runInContext('refreshPrices()', context);
-  assert.equal(products[0].pricePerKg, 15000, 'La actualización fallida debe ser atómica');
+  assert.equal(products.find(p => p.id === 'nuez-mariposa-blanca').pricePerKg, 15000, 'La actualización fallida debe ser atómica');
   context.fetch = async () => { throw Error('Sin conexión'); };
   await vm.runInContext('refreshPrices()', context);
-  assert.equal(products[0].pricePerKg, 15000);
+  assert.equal(products.find(p => p.id === 'nuez-mariposa-blanca').pricePerKg, 15000);
   // Verifica el formato publicado por Sheets sin confundir 12,800.00 con 12.8.
   const formatted = commaCSV.replace('"1350.0"', '"12,800.00"');
   assert.equal(readPrices(formatted, products, { numberFormat: 'en-US' })[0].pricePerKg, 12800);

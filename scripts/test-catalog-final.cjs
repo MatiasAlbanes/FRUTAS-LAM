@@ -28,7 +28,7 @@ for (const [mode, number] of [['mayorista', '5492634761151'], ['minorista', '549
   assert.equal(run('state.cart.length'), 0);
 }
 const html = fs.readFileSync('index.html', 'utf8');
-assert.match(html, /class="hero-photo" src="assets\/almendras.jpg"/);
+assert.doesNotMatch(html, /class="hero-photo"/);
 for (const number of ['5492634761151', '5492634339550']) {
   const links = [...html.matchAll(/<a\b([^>]*)>([\s\S]*?)<\/a>/g)]
     .filter(m => m[1].includes('wa.me/' + number) && /(?:Mayorista|Minorista):/.test(m[2]));
@@ -40,8 +40,9 @@ const updates = readPrices(csv, products);
 assert.equal(products.length, 41);
 assert.equal(new Set(products.map(p => p.id)).size, 41);
 for (const p of products) {
-  assert.match(p.image, /^assets\/productos\/.+\.webp$/);
-  assert.ok(fs.statSync(p.image).size > 0, p.id);
+  const imagePath = p.image.split('?')[0];
+  assert.match(imagePath, /^assets\/productos\/.+\.webp$/);
+  assert.ok(fs.statSync(imagePath).size > 0, p.id);
   assert.equal(p.packageTotalPrice, p.pricePerKg * p.packageKg, p.id);
   assert.equal(updates.find(row => row.id === p.id).packageTotalPrice, p.packageTotalPrice);
 }
@@ -91,16 +92,16 @@ for (const p of pending) assert.ok(!products.some(product => product.name === p.
   assert.equal(calls.length, 2);
   assert.equal(calls[1], 'data/precios.csv');
   assert.match(status.textContent, /Lista de lanzamiento vigente/);
-  assert.equal(products[0].packageTotalPrice, 13500);
+  assert.equal(products.find(product => product.id === 'nuez-mariposa-blanca').packageTotalPrice, 13500);
   // Al cargar el Excel nuevo en Sheets se retoma la actualización online automáticamente.
   context.fetch = async () => ({ ok: true, text: async () => csv.replaceAll('13500.0', '14000.0') });
   await run('refreshPrices()');
-  assert.equal(products[0].packageTotalPrice, 14000);
+  assert.equal(products.find(product => product.id === 'nuez-mariposa-blanca').packageTotalPrice, 14000);
   assert.match(status.textContent, /Precios actualizados/);
   // Una fila inválida posterior conserva el último precio online y nunca retrocede al respaldo.
   context.fetch = async () => ({ ok: true, text: async () => csv.replaceAll('13500.0', '-1') });
   await run('refreshPrices()');
-  assert.equal(products[0].packageTotalPrice, 14000);
+  assert.equal(products.find(product => product.id === 'nuez-mariposa-blanca').packageTotalPrice, 14000);
   assert.match(status.textContent, /No pudimos actualizar/);
   console.log('OK: fotos finales, 41 productos, 9 mixes, cajas de 10 kg, bolsones de 5 kg, pendientes y migración de Sheets.');
 })().catch(error => { console.error(error); process.exitCode = 1; });

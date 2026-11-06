@@ -16,7 +16,7 @@ function element() {
 for (const id of ['productsGrid', 'emptyState', 'catalogCategoryTitle', 'catalogResultCount', 'priceSyncStatus', 'refreshPricesBtn']) elements.set(id, element());
 const buttons = [...html.matchAll(/class="(filter-tab(?: active)?|category-card)" data-(filter|category)="([^"]+)"/g)]
   .map(match => ({ ...element(), dataset: { [match[2]]: match[3] } }));
-assert.equal(buttons.filter(b => b.dataset.category).length, 6);
+assert.equal(buttons.filter(b => b.dataset.category).length, 0);
 assert.equal(buttons.filter(b => b.dataset.filter).length, 7);
 const context = vm.createContext({
   console: { warn() {} }, AbortController, setTimeout, clearTimeout,
@@ -40,7 +40,7 @@ for (const name of names) {
   assert.deepEqual(renderedIds.sort(), Array.from(expected, p => p.id).sort());
   assert.equal(elements.get('catalogCategoryTitle').textContent, name);
   assert.match(elements.get('catalogResultCount').textContent, new RegExp('^'+expected.length+' productos$'));
-  assert.equal(buttons.filter(b => b['aria-pressed'] === 'true').length, 2);
+  assert.equal(buttons.filter(b => b['aria-pressed'] === 'true').length, 1);
   run("state.pricingMode = 'minorista'; renderProducts()");
   assert.equal([...elements.get('productsGrid').innerHTML.matchAll(/data-product-id=/g)].length, expected.length);
 }
