@@ -110,6 +110,11 @@ for (const mode of ['mayorista', 'minorista']) {
   assert.ok(!/app\.js|styles\.css|assets\/productos/.test(html), 'No duplica catálogo ni scripts');
   assert.ok(html.includes(`content="0;url=../?modo=${mode}"`) && html.includes(`location.replace('../?modo=${mode}'`));
   assert.ok(html.includes(`rel="canonical" href="https://frutaslam.com.ar/${mode}"`));
+  assert.ok(html.includes(`<meta property="og:title" content="Frutas LAM · Precios ${mode}s">`), 'Título de la vista previa propio de la modalidad');
+  assert.match(html, new RegExp(`<title>[^<]*Precios ${mode}s</title>`));
+  const og = k => html.match(new RegExp(`<meta property="${k}" content="([^"]*)"`))[1];
+  assert.equal(og('og:description'), html.match(/<meta name="description" content="([^"]*)"/)[1], 'Descripción de la vista previa = descripción de la página');
+  assert.ok(!html.includes(mode === 'mayorista' ? 'minoristas' : 'mayoristas'), 'No mezcla términos de la otra modalidad');
   assert.ok(html.includes('og:image" content="https://frutaslam.com.ar/assets/logo-lam.png"'), 'Imagen de vista previa con URL absoluta');
   const target = new URL(`../?modo=${mode}`, `https://frutaslam.com.ar/${mode}/`);
   assert.equal(target.pathname + target.search, `/?modo=${mode}`, 'La redirección apunta a la página principal, no a sí misma');
