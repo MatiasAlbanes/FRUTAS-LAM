@@ -4,7 +4,7 @@ import re
 from zipfile import ZipFile, ZIP_DEFLATED
 
 ROOT = Path(__file__).resolve().parent.parent
-files = {'index.html','styles.css','app.js','prices.js','prices-config.js','data/precios.csv'}
+files = {'index.html','styles.css','app.js','prices.js','prices-config.js','data/precios.csv','mayorista/index.html','minorista/index.html'}
 for file in ['index.html','styles.css','app.js']:
     text=(ROOT/file).read_text()
     files.update(re.findall(r'assets/[a-zA-Z0-9_./-]+\.(?:webp|png|jpg|jpeg|svg)',text))

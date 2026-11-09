@@ -596,6 +596,40 @@ const state = {
   cart: [] // { cartItemId, productId, name, mode, pricePerKg, unitPrice, packageDesc, qty, image, unit }
 };
 
+// =====================================================================
+// RUTAS /mayorista Y /minorista (GitHub Pages: sin reescrituras del servidor)
+// =====================================================================
+// /mayorista/ y /minorista/ son páginas mínimas que redirigen a la página principal con
+// ?modo=…; aquí se deja la URL limpia (sin barra final, para que las rutas relativas
+// de imágenes, estilos y data/precios.csv sigan resolviéndose desde la raíz).
+const PRICING_MODES = ['mayorista', 'minorista'];
+
+function modeFromLocation(loc = window.location) {
+  if (!loc) return null;
+  const fromQuery = new URLSearchParams(loc.search || '').get('modo');
+  if (PRICING_MODES.includes(fromQuery)) return fromQuery;
+  const lastSegment = (loc.pathname || '').replace(/\/+$/, '').split('/').pop();
+  return PRICING_MODES.includes(lastSegment) ? lastSegment : null;
+}
+
+function urlForMode(mode, loc = window.location) {
+  // El nombre de la modalidad se resuelve contra la carpeta actual, sin barra final.
+  const url = new URL(mode, loc.href);
+  const params = new URLSearchParams(loc.search || '');
+  params.delete('modo');
+  url.search = params.toString();
+  url.hash = loc.hash || '';
+  return url.pathname + url.search + url.hash;
+}
+
+function syncUrlWithMode(mode, method) {
+  const browserHistory = window.history;
+  if (!window.location || !browserHistory?.pushState) return;
+  const target = urlForMode(mode);
+  if (target === window.location.pathname + window.location.search + window.location.hash) return;
+  browserHistory[method === 'push' ? 'pushState' : 'replaceState']({ modo: mode }, '', target);
+}
+
 // Actualización atómica: una planilla inválida conserva los últimos precios válidos.
 let pricesLoading = false;
 let lastPriceSource = '';
@@ -1110,6 +1144,13 @@ function closeCart() {
 // =====================================================================
 document.addEventListener('DOMContentLoaded', () => {
 
+  // La página principal (/) conserva su comportamiento: mayorista por defecto y URL intacta.
+  const initialMode = modeFromLocation();
+  if (initialMode) {
+    state.pricingMode = initialMode;
+    syncUrlWithMode(initialMode, 'replace'); // deja /mayorista o /minorista sin ?modo=
+  }
+
   document.getElementById('refreshPricesBtn')?.addEventListener('click', refreshPrices);
   refreshPrices();
   setInterval(() => {
@@ -1129,7 +1170,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const modeBanner = document.getElementById('modeInfoBanner');
   const modeInfoText = document.getElementById('modeInfoText');
 
-  function setPricingMode(mode) {
+  function setPricingMode(mode, urlMethod) {
+    const changed = state.pricingMode !== mode;
     state.pricingMode = mode;
     ['btnModeMayorista', 'cartTypeMayorista', 'btnModeMinorista', 'cartTypeMinorista'].forEach(id => {
       const button = document.getElementById(id);
@@ -1154,12 +1196,19 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     renderProducts();
     syncModeContact();
+    if (urlMethod && changed) syncUrlWithMode(mode, urlMethod);
   }
 
-  btnMayorista?.addEventListener('click', () => setPricingMode('mayorista'));
-  btnMinorista?.addEventListener('click', () => setPricingMode('minorista'));
+  btnMayorista?.addEventListener('click', () => setPricingMode('mayorista', 'push'));
+  btnMinorista?.addEventListener('click', () => setPricingMode('minorista', 'push'));
 
   setPricingMode(state.pricingMode);
+
+  // Atrás/Adelante del navegador: la modalidad sigue a la URL (el carrito no se toca).
+  window.addEventListener?.('popstate', () => {
+    const mode = modeFromLocation() || 'mayorista';
+    if (mode !== state.pricingMode) setPricingMode(mode);
+  });
 
   // Switch dentro del Carrito
   const cartTypeMay = document.getElementById('cartTypeMayorista');
@@ -1168,13 +1217,13 @@ document.addEventListener('DOMContentLoaded', () => {
   cartTypeMay?.addEventListener('click', () => {
     cartTypeMay.classList.add('active');
     cartTypeMin?.classList.remove('active');
-    setPricingMode('mayorista');
+    setPricingMode('mayorista', 'push');
   });
 
   cartTypeMin?.addEventListener('click', () => {
     cartTypeMin.classList.add('active');
     cartTypeMay?.classList.remove('active');
-    setPricingMode('minorista');
+    setPricingMode('minorista', 'push');
   });
 
   // 3. Filtros por Categoría
