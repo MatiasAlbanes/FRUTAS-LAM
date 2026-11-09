@@ -32,7 +32,7 @@ const parsed = readPrices(tsv, products, { numberFormat: 'auto' });
 const honey = parsed.find(p => p.id === 'miel-churqui-1kg');
 assert.equal(honey.packageTotalPrice, null);
 assert.equal(honey.retailPrice, null);
-assert.equal(parsed[0].packageTotalPrice, 13500);
+assert.equal(parsed.find(p => p.id === 'nuez-mariposa-blanca').packageTotalPrice, 13500);
 // El total editable manda aun si el precio unitario calculado todavía no se actualizó.
 rows[0][column('precio_presentacion')] = '14000';
 rows[0][column('precio_mayorista')] = '1350';
@@ -49,8 +49,9 @@ assert.throws(() => readPrices([headers,...badRows].map(r => r.join('\t')).join(
 (async () => {
   context.fetch = async () => ({ok:true, text:async()=>serialize()});
   await run('refreshPrices()');
-  assert.equal(products[0].packageTotalPrice, 14000);
-  assert.equal(products[0].retailPrice, 1500);
+  const walnut = products.find(p => p.id === 'nuez-mariposa-blanca'); // el catálogo ya no empieza por la nuez
+  assert.equal(walnut.packageTotalPrice, 14000);
+  assert.equal(walnut.retailPrice, 1500);
   // Importe solo de prueba: no se escribe en ningún archivo de entrega ni hoja real.
   honeyRow[column('precio_presentacion')] = '9000';
   await run('refreshPrices()');

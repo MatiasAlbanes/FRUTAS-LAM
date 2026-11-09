@@ -27,6 +27,8 @@
     if (row.some(Boolean)) rows.push(row);
     return rows;
   }
+  // Google exporta las celdas con formato de moneda tal como se ven (p. ej. "$ 13,500.00").
+  const stripCurrency = value => value.replace(/^\$\s*/, '');
   const NUMBER_FORMATS = {
     'en-US': /^(?:\d+|\d{1,3}(?:,\d{3})+)(?:\.\d{1,4})?$/,
     'es-AR': /^(?:\d+|\d{1,3}(?:\.\d{3})+)(?:,\d{1,4})?$/
@@ -36,7 +38,7 @@
     // Los valores no ambiguos se interpretan individualmente, aunque se mezclen formatos.
     let english = 0, spanish = 0;
     for (const row of rows) {
-      const value = row[index] || '';
+      const value = stripCurrency(row[index] || '');
       const en = NUMBER_FORMATS['en-US'].test(value);
       const es = NUMBER_FORMATS['es-AR'].test(value);
       if (en && !es) english++;
@@ -45,6 +47,7 @@
     return spanish > english ? 'auto-es-AR' : 'auto-en-US';
   }
   function positiveNumber(value, numberFormat, allowZero = false) {
+    value = stripCurrency(value);
     let normalized;
     if (numberFormat?.startsWith('auto-')) {
       const en = NUMBER_FORMATS['en-US'].test(value);
@@ -104,9 +107,11 @@
       }
       // Las columnas nuevas son opcionales durante la migración de la hoja publicada.
       // Un minorista vacío no se cotiza ni se reemplaza por el precio mayorista.
-      const retailPrice = !headers.includes('precio_minorista') ? (product.retailPrice ?? 0)
+      // Un cero tampoco es un precio válido: se trata igual que una celda vacía («Consultar precio»).
+      const rawRetail = !headers.includes('precio_minorista') ? (product.retailPrice ?? null)
         : cell('precio_minorista') === '' ? null
         : positiveNumber(cell('precio_minorista'), formats.precio_minorista, true);
+      const retailPrice = rawRetail > 0 ? rawRetail : null;
       const retailQuantity = cell('cantidad_minorista') === '' ? 1
         : positiveNumber(cell('cantidad_minorista'), formats.cantidad_minorista);
       if (['frasco', 'balde'].includes(product.unit) && !Number.isInteger(retailQuantity)) {

@@ -581,9 +581,9 @@ const CONSULTATION_PRODUCTS = [{
   consultationOnly: true
 }];
 
-// Valores iniciales pedidos: lista minorista en cero hasta su carga en la planilla.
+// Valores iniciales: sin precio minorista hasta su carga en la planilla (nunca $0).
 PRODUCTS_DATA.forEach(product => Object.assign(product, {
-  retailPrice: 0, retailQuantity: 1, retailTotal: 0
+  retailPrice: null, retailQuantity: 1, retailTotal: null
 }));
 
 // =====================================================================
@@ -693,8 +693,10 @@ function getProductPricing(product, mode) {
     packageDesc: product.packageUnit
   };
   const amount = product.retailQuantity || 1;
+  // Un minorista vacío o en cero no es un precio válido: no se cotiza ni se vende.
+  const valid = product.retailTotal > 0 && product.retailPrice > 0;
   return {
-    pricePerKg: product.retailPrice ?? null, unitPrice: product.retailTotal ?? null,
+    pricePerKg: valid ? product.retailPrice : null, unitPrice: valid ? product.retailTotal : null,
     packageDesc: `${amount} ${product.unit || 'kg'}`
   };
 }
@@ -828,7 +830,7 @@ function renderProducts() {
       const available = pricing.unitPrice !== null;
       mainPriceHtml = available
         ? `<span class="primary-price">${formatARS(product.retailPrice)}</span><span class="price-unit">/ ${unitLabel}</span>`
-        : '<span class="price-pending">Precio pendiente</span>';
+        : '<span class="price-pending">Consultar precio</span>';
       subPriceInfo = `<div class="sub-pack-row">Venta x <strong>${pricing.packageDesc}</strong></div>`;
       if (available) subPriceInfo += `<div class="sub-total-box">Total: <strong>${formatARS(pricing.unitPrice)}</strong></div>`;
       btnAddText = available ? 'Agregar' : 'Sin precio';
@@ -862,7 +864,7 @@ function renderProducts() {
               <button type="button" class="qty-btn btn-plus" data-id="${product.id}" aria-label="Sumar 1">+</button>
             </div>
 
-            <button type="button" class="btn-add-cart" data-id="${product.id}" ${!isMayorista && product.retailTotal == null ? 'disabled' : ''} aria-label="${btnAddText} ${product.name}">
+            <button type="button" class="btn-add-cart" data-id="${product.id}" ${!isMayorista && getProductPricing(product, 'minorista').unitPrice === null ? 'disabled' : ''} aria-label="${btnAddText} ${product.name}">
               <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
                 <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
                 <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
@@ -887,7 +889,7 @@ function addToCart(productId, quantity) {
   quantity = Math.max(1, Math.min(999, Math.trunc(Number(quantity)) || 1));
   const mode = state.pricingMode; // 'mayorista' | 'minorista'
   const pricing = getProductPricing(product, mode);
-  if (pricing.unitPrice === null) {
+  if (!(pricing.unitPrice > 0)) {
     showToast('Este producto todavía no tiene precio cargado para esta modalidad.');
     return;
   }

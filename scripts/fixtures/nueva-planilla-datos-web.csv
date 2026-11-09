@@ -1,0 +1,42 @@
+id,producto,unidad,cantidad_mayorista,precio_presentacion,cantidad_minorista,precio_minorista,control_nombre
+nuez-mariposa-blanca,Nuez Mariposa Blanca (Partida a mano),kg,10,"$ 13,500.00",1,"$ 1,500.00",OK
+nuez-cuartos-blanca,Nuez Cuartos Blanca,kg,10,"$ 12,500.00",1,,OK
+nuez-mariposa-ambar-light,Nuez Mariposa Ámbar-Light,kg,10,"$ 9,900.00",1,,OK
+nuez-mariposa-light,Nuez Mariposa Light,kg,10,"$ 12,700.00",1,,OK
+almendra-marinada-3-4,Almendra Marinada N° 3/4,kg,10,"$ 19,500.00",1,,OK
+almendra-marinada-5-6,Almendra Marinada N° 5/6,kg,10,"$ 21,000.00",1,,OK
+almendra-guara-3-4,Almendra Guara N° 3/4,kg,10,"$ 19,500.00",1,,OK
+almendra-guara-6,Almendra Guara N° 6,kg,10,"$ 21,000.00",1,,OK
+almendra-partida,Almendra Partida,kg,10,"$ 15,200.00",1,,OK
+harina-de-almendra,Harina de Almendra,kg,10,"$ 2,900.00",1,,OK
+aceituna-griega-1kg,Aceituna Griega Negra (1 kg),kg,1,"$ 9,500.00",1,,OK
+aceituna-griega-medio-kg,Aceituna Griega (Frasco 1/2 kg),frasco,1,"$ 6,200.00",1,,OK
+aceituna-griega-5kg,Aceituna Griega Negra (Balde 5 kg),balde,1,"$ 41,500.00",1,,OK
+aceituna-descarozada-granel,Aceituna Verde Descarozada (Granel),kg,10,"$ 5,900.00",1,,OK
+aceite-oliva-extra-virgen,Aceite Oliva Extra Virgen (1 Litro),litro,1,"$ 12,800.00",1,,OK
+aceite-oliva-extra-virgen-5l,Aceite Oliva Extra Virgen (5 Litros),litro,5,"$ 64,000.00",1,,OK
+castana-caju-vietnam,Castaña Cajú Vietnam,kg,10,"$ 12,800.00",1,,OK
+pistacho-con-cascara,Pistacho c/c (con cáscara),kg,10,"$ 26,800.00",1,,OK
+mani-sin-sal,Maní sin Sal (Tostado),kg,10,"$ 3,200.00",1,,OK
+miel-pura-campo-medio-kg,Miel Pura de Campo x 1/2 kg,frasco,1,"$ 5,000.00",1,"$ 1,967.00",OK
+granola-artesanal,Granola Artesanal,kg,10,"$ 4,800.00",1,,OK
+ciruela-sin-carozo,Ciruela s/c (sin carozo),kg,10,"$ 7,000.00",1,,OK
+pasa-jumbo,Pasa Jumbo de Uva,kg,10,"$ 5,200.00",1,,OK
+pasa-rubia-grande,Pasa Rubia Grande,kg,10,"$ 7,700.00",1,,OK
+pasa-flame,Pasa Flame Mendocina,kg,10,"$ 3,500.00",1,,OK
+banana-chips,Banana Chips Crocantes,kg,10,"$ 10,300.00",1,,OK
+higo-negro,Higo Negro Seco,kg,10,"$ 8,500.00",1,,OK
+medallon-durazno,Medallón de Durazno,kg,10,"$ 9,400.00",1,,OK
+pelon-durazno,Pelón de Durazno,kg,10,"$ 6,200.00",1,,OK
+datil-argelia-sin-carozo,Dátil Argelia sin Carozo,kg,10,"$ 12,100.00",1,,OK
+tomate-deshidratado-1ra,Tomate Deshidratado 1ra,kg,10,"$ 10,700.00",1,,OK
+papaya,Papaya Multicolor,kg,10,"$ 6,800.00",1,,OK
+mix-tropical-comun,Mix Tropical Común,kg,5,"$ 34,500.00",1,,OK
+mix-tropical-premium,Mix Tropical Premium,kg,5,"$ 41,500.00",1,,OK
+mix-tropical-mega-eco,Mix Tropical MegaECO,kg,5,"$ 27,000.00",1,,OK
+mix-tropical-sin-mani,Mix Tropical sin Maní,kg,5,"$ 48,500.00",1,,OK
+mix-clasico-sin-mani,Mix Clásico sin Maní,kg,5,"$ 48,500.00",1,,OK
+mix-clasico-con-mani,Mix Clásico con Maní,kg,5,"$ 44,500.00",1,,OK
+mix-patagonia,Mix Patagonia,kg,5,"$ 43,500.00",1,,OK
+mix-cervecero,Mix Cervecero,kg,5,"$ 27,800.00",1,,OK
+mix-frutal,Mix Frutal,kg,5,"$ 44,500.00",1,,OK

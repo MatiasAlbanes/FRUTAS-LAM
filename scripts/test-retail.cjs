@@ -28,18 +28,18 @@ const products = run('PRODUCTS_DATA');
 const [headers, ...rows] = parseCSV(fs.readFileSync('data/precios.csv', 'utf8'));
 const field = key => headers.indexOf(key);
 const serialize = (h, r) => [h, ...r].map(row => row.join(';')).join('\n');
-// Fixture controlada para probar ceros; la lista real conserva los minoristas del cliente.
+// Fixture controlada para probar ceros: un cero no es un precio válido, equivale a «sin precio».
 for (const row of rows) { row[field('precio_minorista')] = '0'; row[field('total_minorista')] = '0'; }
 const original = serialize(headers, rows);
 assert.equal(rows.length, 41);
 for (const p of readPrices(original, products)) {
-  assert.equal(p.retailPrice, 0);
-  assert.equal(p.retailTotal, 0);
+  assert.equal(p.retailPrice, null);
+  assert.equal(p.retailTotal, null);
   assert.equal(p.retailQuantity, 1);
 }
 // Compatibilidad con la hoja mayorista publicada antes de la ampliación.
 const legacy = serialize(['id','producto','unidad','cantidad','precio_unitario','total_presentacion'], rows.map(r => r.slice(0,6)));
-assert.equal(readPrices(legacy, products)[0].retailPrice, 0);
+assert.equal(readPrices(legacy, products)[0].retailPrice, null);
 rows[0][field('cantidad_minorista')] = '0,5';
 rows[0][field('precio_minorista')] = '20000';
 const retailCSV = serialize(headers, rows);
@@ -101,14 +101,23 @@ assert.throws(() => readPrices(serialize(headers, fractionalJars), products));
   const before = opened.length;
   run("sendOrderToWhatsApp('minorista')");
   assert.equal(opened.length, before);
-  // El cero solicitado sí se muestra y se calcula como cero.
+  // Un cero tampoco es un precio: no se cotiza, no se puede enviar y se muestra «Consultar precio».
   context.fetch = async () => ({ ok: true, text: async () => original });
   await run('refreshPrices()');
-  assert.equal(run('state.cart[0].unitPrice'), 0);
-  assert.equal(elements.get('btnSendRetailWhatsAppOrder').disabled, false);
+  assert.equal(run('state.cart[0].unitPrice'), null);
+  assert.equal(elements.get('btnSendRetailWhatsAppOrder').disabled, true);
+  const beforeZero = opened.length;
+  run("sendOrderToWhatsApp('minorista')");
+  assert.equal(opened.length, beforeZero);
+  run("state.pricingMode = 'minorista'; renderProducts()");
+  assert.match(elements.get('productsGrid').innerHTML, /Consultar precio/);
+  assert.doesNotMatch(elements.get('productsGrid').innerHTML, /\$\s?0(?![\d.,])/);
+  const cartBeforeZero = run('state.cart.length');
+  run("addToCart('nuez-cuartos-blanca', 1)");
+  assert.equal(run('state.cart.length'), cartBeforeZero, 'No se puede agregar un minorista en cero');
   run("removeCartItem(state.cart[1].cartItemId)");
   assert.equal(elements.get('btnSendWhatsAppOrder').hidden, true);
-  assert.match(elements.get('cartTotalPrice').textContent, /0/);
+  assert.match(elements.get('cartTotalPrice').textContent, /sin precio/);
   // Regresión real: Google exporta mayoristas en inglés y minoristas con coma decimal.
   const mixedCSV = fs.readFileSync('scripts/fixtures/mixed-price-formats.csv', 'utf8');
   context.window.PRICES_CONFIG = { csvUrl: 'https://example.test/precios.csv', numberFormat: 'auto' };

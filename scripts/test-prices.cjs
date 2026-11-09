@@ -57,7 +57,7 @@ vm.runInContext(`
   // Verifica el formato publicado por Sheets sin confundir 12,800.00 con 12.8.
   const formatted = commaCSV.replace('"1350.0"', '"12,800.00"');
   assert.equal(readPrices(formatted, products, { numberFormat: 'en-US' })[0].pricePerKg, 12800);
-  for (const bad of ['12,80.00', '12.800,00', '1,2,800', '$12800', '-12800']) {
+  for (const bad of ['12,80.00', '12.800,00', '1,2,800', '-12800', '$ -12800']) {
     assert.throws(() => readPrices(formatted.replace('12,800.00', bad), products, { numberFormat: 'en-US' }));
   }
   const mixedFixture = fs.readFileSync('scripts/fixtures/mixed-price-formats.csv', 'utf8');
@@ -67,11 +67,14 @@ vm.runInContext(`
   assert.equal(mixed[0].retailPrice, 1500);
   assert.equal(mixed[0].retailQuantity, 1);
   assert.equal(mixed[0].retailTotal, 1500);
-  assert.equal(mixed[1].retailPrice, 0);
+  assert.equal(mixed[1].retailPrice, null, 'Un minorista en cero no es un precio válido');
+  assert.equal(mixed[1].retailTotal, null);
+  // Google exporta las celdas con formato de moneda con el símbolo $.
+  assert.equal(readPrices(formatted.replace('12,800.00', '$ 12,800.00'), products, { numberFormat: 'auto' })[0].pricePerKg, 12800);
   for (const [value, expected] of [['12.800,00', 12800], ['12,800.00', 12800], ['1500,50', 1500.5], ['1.234,56', 1234.56]]) {
     assert.equal(readPrices(mixedFixture.replace('1500,00', value), products, { numberFormat: 'auto' })[0].retailPrice, expected);
   }
-  for (const bad of ['-1500', '1,2,3', '12,80.00', '$1500', 'NaN']) {
+  for (const bad of ['-1500', '1,2,3', '12,80.00', '$ -1500', 'NaN']) {
     assert.throws(() => readPrices(mixedFixture.replace('1500,00', bad), products, { numberFormat: 'auto' }));
   }
   // Los separadores ambiguos siguen el formato de la columna, no el del resto de la hoja.
