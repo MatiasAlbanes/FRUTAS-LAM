@@ -726,12 +726,19 @@ function getProductPricing(product, mode) {
     pricePerKg: product.pricePerKg, unitPrice: product.packageTotalPrice,
     packageDesc: product.packageUnit
   };
-  const amount = product.retailQuantity || 1;
+  // Envase cerrado (bidón): se vende completo, así que el total es precio por unidad × contenido
+  // del envase (5 litros × $/litro). El resto se vende por la cantidad minorista de la planilla
+  // (1 kg, 1 frasco…). El total se calcula aquí una sola vez; el carrito solo lo multiplica por la cantidad.
+  const soldWhole = /^bid[oó]n/i.test(product.packageUnit || '');
+  const amount = soldWhole ? product.packageKg : (product.retailQuantity || 1);
   // Un minorista vacío o en cero no es un precio válido: no se cotiza ni se vende.
   const valid = product.retailTotal > 0 && product.retailPrice > 0;
+  const total = !valid ? null : soldWhole ? Math.round(product.retailPrice * amount * 100) / 100 : product.retailTotal;
+  const unit = product.unit || 'kg';
+  const unitLabel = amount !== 1 && ['litro', 'frasco', 'balde'].includes(unit) ? unit + 's' : unit;
   return {
-    pricePerKg: valid ? product.retailPrice : null, unitPrice: valid ? product.retailTotal : null,
-    packageDesc: `${amount} ${product.unit || 'kg'}`
+    pricePerKg: valid ? product.retailPrice : null, unitPrice: total,
+    packageDesc: `${amount} ${unitLabel}`
   };
 }
 
