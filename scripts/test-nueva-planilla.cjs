@@ -49,13 +49,20 @@ const withRetail = parsed.filter(p => p.retailPrice !== null).map(p => [p.id, p.
 assert.equal(JSON.stringify(withRetail), JSON.stringify([['nuez-mariposa-blanca', 1500], ['miel-pura-campo-medio-kg', 1967]]));
 assert.equal(parsed.filter(p => p.retailPrice === null && p.retailTotal === null).length, 39);
 
-// 3) Mayorista y minorista son independientes.
+// 3) El mayorista es el precio POR KG (por unidad): el total de la presentación = precio × cantidad.
+const byRow = id => parsed.find(p => p.id === id);
+assert.equal(byRow('nuez-mariposa-blanca').pricePerKg, 1350); assert.equal(byRow('nuez-mariposa-blanca').packageTotalPrice, 13500);
+assert.equal(byRow('mix-tropical-comun').pricePerKg, 6900); assert.equal(byRow('mix-tropical-comun').packageTotalPrice, 34500, 'Bolsón de 5 kg = 5 × precio por kg');
+assert.equal(byRow('aceite-oliva-extra-virgen-5l').pricePerKg, 12800); assert.equal(byRow('aceite-oliva-extra-virgen-5l').packageTotalPrice, 64000, 'Bidón de 5 litros = 5 × precio por litro');
+assert.equal(byRow('aceituna-griega-5kg').packageTotalPrice, 41500, 'Presentaciones de 1 unidad: precio = total');
+
+// Mayorista y minorista son independientes.
 const edit = (id, key, value, text = real) => {
   const [h, ...r] = parseCSV(text);
   r.find(x => x[0] === id)[h.indexOf(key)] = value;
   return [h, ...r].map(x => x.map(c => `"${c.replace(/"/g, '""')}"`).join(',')).join('\n');
 };
-let walnut = readPrices(edit('nuez-mariposa-blanca', 'precio_presentacion', '$ 15,000.00'), products, opts).find(p => p.id === 'nuez-mariposa-blanca');
+let walnut = readPrices(edit('nuez-mariposa-blanca', 'precio_presentacion', '$ 1,500.00'), products, opts).find(p => p.id === 'nuez-mariposa-blanca');
 assert.equal(walnut.packageTotalPrice, 15000); assert.equal(walnut.pricePerKg, 1500); assert.equal(walnut.retailPrice, 1500);
 walnut = readPrices(edit('nuez-mariposa-blanca', 'precio_minorista', '$ 1,800.00'), products, opts).find(p => p.id === 'nuez-mariposa-blanca');
 assert.equal(walnut.retailPrice, 1800); assert.equal(walnut.packageTotalPrice, 13500);
@@ -126,7 +133,7 @@ assert.throws(() => readPrices(edit('nuez-mariposa-blanca', 'id', 'nuez-inventad
   assert.ok(local.every(p => p.retailPrice === null || p.retailPrice > 0), 'El respaldo no tiene minoristas en $0');
   for (const p of local) assert.equal(p.packageTotalPrice, parsed.find(x => x.id === p.id).packageTotalPrice, `Respaldo ${p.id}`);
   // Con una lectura válida previa, una caída posterior conserva los últimos precios y no vuelve al respaldo.
-  context.fetch = async () => ({ ok: true, text: async () => edit('nuez-mariposa-blanca', 'precio_presentacion', '$ 15,000.00') });
+  context.fetch = async () => ({ ok: true, text: async () => edit('nuez-mariposa-blanca', 'precio_presentacion', '$ 1,500.00') });
   await run('refreshPrices()');
   assert.equal(byId('nuez-mariposa-blanca').packageTotalPrice, 15000);
   assert.equal(run('lastPriceSource'), 'online');

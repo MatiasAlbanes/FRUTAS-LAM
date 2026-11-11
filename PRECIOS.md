@@ -21,7 +21,7 @@ Se conservan los identificadores de los productos existentes. Se agregaron nuez 
 - **Pendientes**: variantes sin precio o foto confirmados, separadas de los productos que se venden.
 - **Fotos**: las 46 fotos finales y su correspondencia, incluidas alternativas del mismo calibre.
 
-Mayorista: editar D (`cantidad_mayorista`) y J (`precio_presentacion`, TOTAL de la caja/bolsón/frasco/bidón). E (`precio_mayorista`) calcula J/D; F (`total_mayorista`) calcula D×E. No reemplazar fórmulas por importes de caja en la columna por kilo.
+Mayorista: el cliente escribe el **precio por kg** (por unidad: kg, litro, frasco, balde) en la columna `precio_presentacion` de `DATOS WEB`. La web calcula el total de la caja o bolsón como precio × `cantidad_mayorista` (10 kg en granel, 5 kg en mixes, 5 litros en el bidón). Las presentaciones de una sola unidad no cambian. En las planillas anteriores esa columna era el total de la caja.
 
 Minorista: editar G (`cantidad_minorista`) y H (`precio_minorista`, por unidad). I calcula el total. Se conservaron los valores minoristas leídos de Google Sheets: nuez blanca $1.500 y miel de campo de 500 g $1.967; los demás continúan en cero. Un minorista vacío significa precio pendiente; cero explícito se cotiza como cero. Cargar valores de venta si se desea habilitar pedidos minoristas con precio real.
 

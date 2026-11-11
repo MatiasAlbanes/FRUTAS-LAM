@@ -74,7 +74,7 @@ assert.equal(run('state.activeCategory'), 'all');
   assert.equal(elements.get('priceSyncStatus').classList.contains('sync-error'), true);
   assert.equal(elements.get('refreshPricesBtn').disabled, false);
   assert.equal(products[0].pricePerKg, oldPrice);
-  context.fetch = async () => ({ ok: true, text: async () => csv.replaceAll('13500.0', '-1') });
+  context.fetch = async () => ({ ok: true, text: async () => csv.replaceAll('1350.0', '-1') });
   await run('refreshPrices()');
   assert.match(elements.get('priceSyncStatus').textContent, /No pudimos actualizar/);
   assert.equal(products[0].pricePerKg, oldPrice);

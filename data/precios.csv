@@ -1,42 +1,42 @@
 ﻿id;producto;unidad;cantidad_mayorista;precio_mayorista;total_mayorista;cantidad_minorista;precio_minorista;total_minorista;precio_presentacion;foto;presentacion
-nuez-mariposa-blanca;Nuez Mariposa Blanca (Partida a mano);kg;10.0;1350.0;13500.0;1.0;1500.0;1500.0;13500.0;assets/productos/nuez-mariposa-blanca-partida-a-mano.webp;Caja x 10 kg
-nuez-cuartos-blanca;Nuez Cuartos Blanca;kg;10.0;1250.0;12500.0;1.0;;;12500.0;assets/productos/nuez-cuarto-extra-light.webp;Caja x 10 kg
-nuez-mariposa-ambar-light;Nuez Mariposa Ámbar-Light;kg;10.0;990.0;9900.0;1.0;;;9900.0;assets/productos/nuez-mariposa-ambar-light.webp;Caja x 10 kg
-nuez-mariposa-light;Nuez Mariposa Light;kg;10.0;1270.0;12700.0;1.0;;;12700.0;assets/productos/nuez-mariposa-light.webp;Caja x 10 kg
-almendra-marinada-3-4;Almendra Marinada N° 3/4;kg;10.0;1950.0;19500.0;1.0;;;19500.0;assets/productos/almendra-marinada-3.webp;Caja x 10 kg
-almendra-marinada-5-6;Almendra Marinada N° 5/6;kg;10.0;2100.0;21000.0;1.0;;;21000.0;assets/productos/almendra-marinada-6.webp;Caja x 10 kg
-almendra-guara-3-4;Almendra Guara N° 3/4;kg;10.0;1950.0;19500.0;1.0;;;19500.0;assets/productos/almendra-guara-n3.webp;Caja x 10 kg
-almendra-guara-6;Almendra Guara N° 6;kg;10.0;2100.0;21000.0;1.0;;;21000.0;assets/productos/almendra-guara-6.webp;Caja x 10 kg
-almendra-partida;Almendra Partida;kg;10.0;1520.0;15200.0;1.0;;;15200.0;assets/productos/almendra-partida.webp;Caja x 10 kg
-harina-de-almendra;Harina de Almendra;kg;10.0;290.0;2900.0;1.0;;;2900.0;assets/productos/harina-de-almendra-con-piel-70.webp;Caja x 10 kg
+nuez-mariposa-blanca;Nuez Mariposa Blanca (Partida a mano);kg;10.0;1350.0;13500.0;1.0;1500.0;1500.0;1350.0;assets/productos/nuez-mariposa-blanca-partida-a-mano.webp;Caja x 10 kg
+nuez-cuartos-blanca;Nuez Cuartos Blanca;kg;10.0;1250.0;12500.0;1.0;;;1250.0;assets/productos/nuez-cuarto-extra-light.webp;Caja x 10 kg
+nuez-mariposa-ambar-light;Nuez Mariposa Ámbar-Light;kg;10.0;990.0;9900.0;1.0;;;990.0;assets/productos/nuez-mariposa-ambar-light.webp;Caja x 10 kg
+nuez-mariposa-light;Nuez Mariposa Light;kg;10.0;1270.0;12700.0;1.0;;;1270.0;assets/productos/nuez-mariposa-light.webp;Caja x 10 kg
+almendra-marinada-3-4;Almendra Marinada N° 3/4;kg;10.0;1950.0;19500.0;1.0;;;1950.0;assets/productos/almendra-marinada-3.webp;Caja x 10 kg
+almendra-marinada-5-6;Almendra Marinada N° 5/6;kg;10.0;2100.0;21000.0;1.0;;;2100.0;assets/productos/almendra-marinada-6.webp;Caja x 10 kg
+almendra-guara-3-4;Almendra Guara N° 3/4;kg;10.0;1950.0;19500.0;1.0;;;1950.0;assets/productos/almendra-guara-n3.webp;Caja x 10 kg
+almendra-guara-6;Almendra Guara N° 6;kg;10.0;2100.0;21000.0;1.0;;;2100.0;assets/productos/almendra-guara-6.webp;Caja x 10 kg
+almendra-partida;Almendra Partida;kg;10.0;1520.0;15200.0;1.0;;;1520.0;assets/productos/almendra-partida.webp;Caja x 10 kg
+harina-de-almendra;Harina de Almendra;kg;10.0;290.0;2900.0;1.0;;;290.0;assets/productos/harina-de-almendra-con-piel-70.webp;Caja x 10 kg
 aceituna-griega-1kg;Aceituna Griega Negra (1 kg);kg;1.0;9500.0;9500.0;1.0;;;9500.0;assets/productos/aceituna-negra-griega.webp;Presentación x 1 kg
 aceituna-griega-medio-kg;Aceituna Griega (Frasco 1/2 kg);frasco;1.0;6200.0;6200.0;1.0;;;6200.0;assets/productos/aceituna-negra-griega.webp;Frasco x 1/2 kg
 aceituna-griega-5kg;Aceituna Griega Negra (Balde 5 kg);balde;1.0;41500.0;41500.0;1.0;;;41500.0;assets/productos/aceituna-negra-griega.webp;Balde cerrado x 5 kg
-aceituna-descarozada-granel;Aceituna Verde Descarozada (Granel);kg;10.0;590.0;5900.0;1.0;;;5900.0;assets/productos/aceituna-descarozada-verde.webp;Caja x 10 kg
+aceituna-descarozada-granel;Aceituna Verde Descarozada (Granel);kg;10.0;590.0;5900.0;1.0;;;590.0;assets/productos/aceituna-descarozada-verde.webp;Caja x 10 kg
 aceite-oliva-extra-virgen;Aceite Oliva Extra Virgen (1 Litro);litro;1.0;12800.0;12800.0;1.0;;;12800.0;assets/productos/aceite-de-oliva-1l.webp;Botella x 1 litro
-aceite-oliva-extra-virgen-5l;Aceite Oliva Extra Virgen (5 Litros);litro;5.0;12800.0;64000.0;1.0;;;64000.0;assets/productos/aceite-de-oliva-5l.webp;Bidón x 5 litros
-castana-caju-vietnam;Castaña Cajú Vietnam;kg;10.0;1280.0;12800.0;1.0;;;12800.0;assets/productos/castana-de-caju-vietnam.webp;Caja x 10 kg
-pistacho-con-cascara;Pistacho c/c (con cáscara);kg;10.0;2680.0;26800.0;1.0;;;26800.0;assets/productos/pistacho-con-cascara.webp;Caja x 10 kg
-mani-sin-sal;Maní sin Sal (Tostado);kg;10.0;320.0;3200.0;1.0;;;3200.0;assets/productos/mani-sin-sal.webp;Caja x 10 kg
+aceite-oliva-extra-virgen-5l;Aceite Oliva Extra Virgen (5 Litros);litro;5.0;12800.0;64000.0;1.0;;;12800.0;assets/productos/aceite-de-oliva-5l.webp;Bidón x 5 litros
+castana-caju-vietnam;Castaña Cajú Vietnam;kg;10.0;1280.0;12800.0;1.0;;;1280.0;assets/productos/castana-de-caju-vietnam.webp;Caja x 10 kg
+pistacho-con-cascara;Pistacho c/c (con cáscara);kg;10.0;2680.0;26800.0;1.0;;;2680.0;assets/productos/pistacho-con-cascara.webp;Caja x 10 kg
+mani-sin-sal;Maní sin Sal (Tostado);kg;10.0;320.0;3200.0;1.0;;;320.0;assets/productos/mani-sin-sal.webp;Caja x 10 kg
 miel-pura-campo-medio-kg;Miel Pura de Campo x 1/2 kg;frasco;1.0;5000.0;5000.0;1.0;1967.0;1967.0;5000.0;assets/productos/miel-pura-500gr.webp;Frasco x 1/2 kg
-granola-artesanal;Granola Artesanal;kg;10.0;480.0;4800.0;1.0;;;4800.0;assets/productos/granola-clasica.webp;Caja x 10 kg
-ciruela-sin-carozo;Ciruela s/c (sin carozo);kg;10.0;700.0;7000.0;1.0;;;7000.0;assets/productos/ciruela-dagen-sin-carozo-grande.webp;Caja x 10 kg
-pasa-jumbo;Pasa Jumbo de Uva;kg;10.0;520.0;5200.0;1.0;;;5200.0;assets/productos/pasa-morocha-doble-jumbo.webp;Caja x 10 kg
-pasa-rubia-grande;Pasa Rubia Grande;kg;10.0;770.0;7700.0;1.0;;;7700.0;assets/productos/pasa-rubia-grande.webp;Caja x 10 kg
-pasa-flame;Pasa Flame Mendocina;kg;10.0;350.0;3500.0;1.0;;;3500.0;assets/productos/pasa-flame.webp;Caja x 10 kg
-banana-chips;Banana Chips Crocantes;kg;10.0;1030.0;10300.0;1.0;;;10300.0;assets/productos/chips-banana.webp;Caja x 10 kg
-higo-negro;Higo Negro Seco;kg;10.0;850.0;8500.0;1.0;;;8500.0;assets/productos/higo.webp;Caja x 10 kg
-medallon-durazno;Medallón de Durazno;kg;10.0;940.0;9400.0;1.0;;;9400.0;assets/productos/medallon-de-durazno.webp;Caja x 10 kg
-pelon-durazno;Pelón de Durazno;kg;10.0;620.0;6200.0;1.0;;;6200.0;assets/productos/durazno-pelon.webp;Caja x 10 kg
-datil-argelia-sin-carozo;Dátil Argelia sin Carozo;kg;10.0;1210.0;12100.0;1.0;;;12100.0;assets/productos/datiles-de-algeria.webp;Caja x 10 kg
-tomate-deshidratado-1ra;Tomate Deshidratado 1ra;kg;10.0;1070.0;10700.0;1.0;;;10700.0;assets/productos/tomate-deshidratado.webp;Caja x 10 kg
-papaya;Papaya Multicolor;kg;10.0;680.0;6800.0;1.0;;;6800.0;assets/productos/papaya-multicolor.webp;Caja x 10 kg
-mix-tropical-comun;Mix Tropical Común;kg;5.0;6900.0;34500.0;1.0;;;34500.0;assets/productos/tropical-comun.webp;Bolsón x 5 kg
-mix-tropical-premium;Mix Tropical Premium;kg;5.0;8300.0;41500.0;1.0;;;41500.0;assets/productos/tropical-premium.webp;Bolsón x 5 kg
-mix-tropical-mega-eco;Mix Tropical MegaECO;kg;5.0;5400.0;27000.0;1.0;;;27000.0;assets/productos/mix-mega-eco.webp;Bolsón x 5 kg
-mix-tropical-sin-mani;Mix Tropical sin Maní;kg;5.0;9700.0;48500.0;1.0;;;48500.0;assets/productos/tropical-sin-mani.webp;Bolsón x 5 kg
-mix-clasico-sin-mani;Mix Clásico sin Maní;kg;5.0;9700.0;48500.0;1.0;;;48500.0;assets/productos/clasico-sin-mani.webp;Bolsón x 5 kg
-mix-clasico-con-mani;Mix Clásico con Maní;kg;5.0;8900.0;44500.0;1.0;;;44500.0;assets/productos/clasico-con-mani.webp;Bolsón x 5 kg
-mix-patagonia;Mix Patagonia;kg;5.0;8700.0;43500.0;1.0;;;43500.0;assets/productos/mix-patagonia.webp;Bolsón x 5 kg
-mix-cervecero;Mix Cervecero;kg;5.0;5560.0;27800.0;1.0;;;27800.0;assets/productos/mix-cervecero.webp;Bolsón x 5 kg
-mix-frutal;Mix Frutal;kg;5.0;8900.0;44500.0;1.0;;;44500.0;assets/productos/mix-frutal.webp;Bolsón x 5 kg
+granola-artesanal;Granola Artesanal;kg;10.0;480.0;4800.0;1.0;;;480.0;assets/productos/granola-clasica.webp;Caja x 10 kg
+ciruela-sin-carozo;Ciruela s/c (sin carozo);kg;10.0;700.0;7000.0;1.0;;;700.0;assets/productos/ciruela-dagen-sin-carozo-grande.webp;Caja x 10 kg
+pasa-jumbo;Pasa Jumbo de Uva;kg;10.0;520.0;5200.0;1.0;;;520.0;assets/productos/pasa-morocha-doble-jumbo.webp;Caja x 10 kg
+pasa-rubia-grande;Pasa Rubia Grande;kg;10.0;770.0;7700.0;1.0;;;770.0;assets/productos/pasa-rubia-grande.webp;Caja x 10 kg
+pasa-flame;Pasa Flame Mendocina;kg;10.0;350.0;3500.0;1.0;;;350.0;assets/productos/pasa-flame.webp;Caja x 10 kg
+banana-chips;Banana Chips Crocantes;kg;10.0;1030.0;10300.0;1.0;;;1030.0;assets/productos/chips-banana.webp;Caja x 10 kg
+higo-negro;Higo Negro Seco;kg;10.0;850.0;8500.0;1.0;;;850.0;assets/productos/higo.webp;Caja x 10 kg
+medallon-durazno;Medallón de Durazno;kg;10.0;940.0;9400.0;1.0;;;940.0;assets/productos/medallon-de-durazno.webp;Caja x 10 kg
+pelon-durazno;Pelón de Durazno;kg;10.0;620.0;6200.0;1.0;;;620.0;assets/productos/durazno-pelon.webp;Caja x 10 kg
+datil-argelia-sin-carozo;Dátil Argelia sin Carozo;kg;10.0;1210.0;12100.0;1.0;;;1210.0;assets/productos/datiles-de-algeria.webp;Caja x 10 kg
+tomate-deshidratado-1ra;Tomate Deshidratado 1ra;kg;10.0;1070.0;10700.0;1.0;;;1070.0;assets/productos/tomate-deshidratado.webp;Caja x 10 kg
+papaya;Papaya Multicolor;kg;10.0;680.0;6800.0;1.0;;;680.0;assets/productos/papaya-multicolor.webp;Caja x 10 kg
+mix-tropical-comun;Mix Tropical Común;kg;5.0;6900.0;34500.0;1.0;;;6900.0;assets/productos/tropical-comun.webp;Bolsón x 5 kg
+mix-tropical-premium;Mix Tropical Premium;kg;5.0;8300.0;41500.0;1.0;;;8300.0;assets/productos/tropical-premium.webp;Bolsón x 5 kg
+mix-tropical-mega-eco;Mix Tropical MegaECO;kg;5.0;5400.0;27000.0;1.0;;;5400.0;assets/productos/mix-mega-eco.webp;Bolsón x 5 kg
+mix-tropical-sin-mani;Mix Tropical sin Maní;kg;5.0;9700.0;48500.0;1.0;;;9700.0;assets/productos/tropical-sin-mani.webp;Bolsón x 5 kg
+mix-clasico-sin-mani;Mix Clásico sin Maní;kg;5.0;9700.0;48500.0;1.0;;;9700.0;assets/productos/clasico-sin-mani.webp;Bolsón x 5 kg
+mix-clasico-con-mani;Mix Clásico con Maní;kg;5.0;8900.0;44500.0;1.0;;;8900.0;assets/productos/clasico-con-mani.webp;Bolsón x 5 kg
+mix-patagonia;Mix Patagonia;kg;5.0;8700.0;43500.0;1.0;;;8700.0;assets/productos/mix-patagonia.webp;Bolsón x 5 kg
+mix-cervecero;Mix Cervecero;kg;5.0;5560.0;27800.0;1.0;;;5560.0;assets/productos/mix-cervecero.webp;Bolsón x 5 kg
+mix-frutal;Mix Frutal;kg;5.0;8900.0;44500.0;1.0;;;8900.0;assets/productos/mix-frutal.webp;Bolsón x 5 kg

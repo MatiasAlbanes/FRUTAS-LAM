@@ -33,9 +33,8 @@ const honey = parsed.find(p => p.id === 'miel-churqui-1kg');
 assert.equal(honey.packageTotalPrice, null);
 assert.equal(honey.retailPrice, null);
 assert.equal(parsed.find(p => p.id === 'nuez-mariposa-blanca').packageTotalPrice, 13500);
-// El total editable manda aun si el precio unitario calculado todavía no se actualizó.
-rows[0][column('precio_presentacion')] = '14000';
-rows[0][column('precio_mayorista')] = '1350';
+// El cliente escribe el precio por kg (columna precio_presentacion); el total de la caja = precio × cantidad.
+rows[0][column('precio_presentacion')] = '1400';
 const honeyRow = rows.find(r => r[0] === 'miel-churqui-1kg');
 const serialize = () => [headers, ...rows].map(r => r.join('\t')).join('\n');
 const modified = readPrices(serialize(), products, { numberFormat: 'auto' });

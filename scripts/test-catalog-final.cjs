@@ -94,12 +94,12 @@ for (const p of pending) assert.ok(!products.some(product => product.name === p.
   assert.match(status.textContent, /Lista de lanzamiento vigente/);
   assert.equal(products.find(product => product.id === 'nuez-mariposa-blanca').packageTotalPrice, 13500);
   // Al cargar el Excel nuevo en Sheets se retoma la actualización online automáticamente.
-  context.fetch = async () => ({ ok: true, text: async () => csv.replaceAll('13500.0', '14000.0') });
+  context.fetch = async () => ({ ok: true, text: async () => csv.replaceAll('1350.0', '1400.0') });
   await run('refreshPrices()');
   assert.equal(products.find(product => product.id === 'nuez-mariposa-blanca').packageTotalPrice, 14000);
   assert.match(status.textContent, /Precios actualizados/);
   // Una fila inválida posterior conserva el último precio online y nunca retrocede al respaldo.
-  context.fetch = async () => ({ ok: true, text: async () => csv.replaceAll('13500.0', '-1') });
+  context.fetch = async () => ({ ok: true, text: async () => csv.replaceAll('1350.0', '-1') });
   await run('refreshPrices()');
   assert.equal(products.find(product => product.id === 'nuez-mariposa-blanca').packageTotalPrice, 14000);
   assert.match(status.textContent, /No pudimos actualizar/);

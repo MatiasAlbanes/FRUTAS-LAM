@@ -72,9 +72,13 @@
   function readPrices(csv, products, options = {}) {
     const [headers, ...rows] = parseCSV(csv);
     const quantityColumn = headers?.includes('cantidad_mayorista') ? 'cantidad_mayorista' : 'cantidad';
-    const priceColumn = headers?.includes('precio_mayorista') ? 'precio_mayorista' : 'precio_unitario';
-    const hasPresentationPrice = headers?.includes('precio_presentacion');
-    const required = ['id', 'producto', 'unidad', quantityColumn, hasPresentationPrice ? 'precio_presentacion' : priceColumn];
+    // Precio mayorista POR UNIDAD (por kg, litro, frasco…): es lo que escribe el cliente en la planilla.
+    // El total de la presentación (caja, bolsón, bidón) se calcula como precio × cantidad.
+    // La columna de la planilla se sigue llamando precio_presentacion; también se aceptan
+    // precio_mayorista y precio_unitario (listas anteriores).
+    const priceColumn = headers?.includes('precio_presentacion') ? 'precio_presentacion'
+      : headers?.includes('precio_mayorista') ? 'precio_mayorista' : 'precio_unitario';
+    const required = ['id', 'producto', 'unidad', quantityColumn, priceColumn];
     if (!headers || required.some(key => headers.filter(h => h === key).length !== 1)) {
       throw new Error('Faltan columnas o hay encabezados repetidos');
     }
@@ -98,10 +102,9 @@
       seen.add(id);
       if (cell('unidad') !== product.unit) throw new Error('La unidad no coincide: ' + id);
       const quantity = positiveNumber(cell(quantityColumn), formats[quantityColumn]);
-      const rawPrice = cell(hasPresentationPrice ? 'precio_presentacion' : priceColumn);
+      const rawPrice = cell(priceColumn);
       const pending = product.optionalPriceRow && rawPrice === '';
-      const amount = pending ? null : positiveNumber(rawPrice, formats[hasPresentationPrice ? 'precio_presentacion' : priceColumn]);
-      const price = amount === null ? null : hasPresentationPrice ? amount / quantity : amount;
+      const price = pending ? null : positiveNumber(rawPrice, formats[priceColumn]);
       if (['frasco', 'balde'].includes(product.unit) && !Number.isInteger(quantity)) {
         throw new Error('La cantidad de unidades debe ser entera');
       }
@@ -119,7 +122,7 @@
       }
       const retailTotal = retailPrice === null ? null : Math.round(retailPrice * retailQuantity * 100) / 100;
       if (retailTotal > 1e12) throw new Error('Total minorista fuera de rango');
-      const total = amount === null ? null : Math.round((hasPresentationPrice ? amount : price * quantity) * 100) / 100;
+      const total = price === null ? null : Math.round(price * quantity * 100) / 100;
       if (total > 1e12) throw new Error('Total fuera de rango');
       let label = product.packageUnit;
       if (quantity !== product.packageKg) {
