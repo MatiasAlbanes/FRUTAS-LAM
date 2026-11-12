@@ -231,9 +231,10 @@ const PRODUCTS_DATA = [
     image: 'assets/productos/granola-clasica.webp',
     pricePerKg: 480.0,
     unit: 'kg',
-    packageKg: 10,
-    packageUnit: 'Caja x 10 kg',
-    packageTotalPrice: 4800
+    packageKg: 20,
+    packageUnit: 'Bolsón x 20 kg',
+    packageTotalPrice: 9600,
+    wholesalePackageLabel: 'bolsón'
   },
   {
     id: 'castana-caju-vietnam',
@@ -855,7 +856,7 @@ function renderProducts() {
       if (product.packageKg > 1) {
         subPriceInfo = `
           <div class="sub-pack-row"><strong>${product.packageUnit}</strong></div>
-          <div class="sub-total-box">Total ${product.category === 'Mixes' ? 'bolsón' : product.unit === 'litro' ? 'bidón' : 'caja'}: <strong>${formatARS(product.packageTotalPrice)}</strong></div>
+          <div class="sub-total-box">Total ${product.wholesalePackageLabel || (product.category === 'Mixes' ? 'bolsón' : product.unit === 'litro' ? 'bidón' : 'caja')}: <strong>${formatARS(product.packageTotalPrice)}</strong></div>
           <div class="sub-minorista-hint"><a href="${wspLink}" target="_blank" rel="noopener noreferrer">Consultar minorista</a></div>
         `;
       } else {

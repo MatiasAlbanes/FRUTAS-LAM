@@ -69,6 +69,11 @@
     if (!Number.isFinite(number) || number < 0 || (!allowZero && number === 0) || number > 1e9) throw new Error('Valor fuera de rango');
     return number;
   }
+  // Excepción comercial puntual: la Granola se carga en la planilla por kg, pero se vende
+  // exclusivamente en bolsón de 20 kg. Solo afecta a este ID; el resto sigue la regla general.
+  const WHOLESALE_PRESENTATION_OVERRIDES = Object.freeze({
+    'granola-artesanal': { quantity: 20, label: 'Bolsón x 20 kg' }
+  });
   function readPrices(csv, products, options = {}) {
     const [headers, ...rows] = parseCSV(csv);
     const quantityColumn = headers?.includes('cantidad_mayorista') ? 'cantidad_mayorista' : 'cantidad';
@@ -101,7 +106,9 @@
       if (seen.has(id)) throw new Error('Producto repetido: ' + id);
       seen.add(id);
       if (cell('unidad') !== product.unit) throw new Error('La unidad no coincide: ' + id);
-      const quantity = positiveNumber(cell(quantityColumn), formats[quantityColumn]);
+      const presentationOverride = WHOLESALE_PRESENTATION_OVERRIDES[id];
+      const sheetQuantity = positiveNumber(cell(quantityColumn), formats[quantityColumn]);
+      const quantity = presentationOverride?.quantity ?? sheetQuantity;
       const rawPrice = cell(priceColumn);
       const pending = product.optionalPriceRow && rawPrice === '';
       const price = pending ? null : positiveNumber(rawPrice, formats[priceColumn]);
@@ -124,8 +131,8 @@
       if (retailTotal > 1e12) throw new Error('Total minorista fuera de rango');
       const total = price === null ? null : Math.round(price * quantity * 100) / 100;
       if (total > 1e12) throw new Error('Total fuera de rango');
-      let label = product.packageUnit;
-      if (quantity !== product.packageKg) {
+      let label = presentationOverride?.label || product.packageUnit;
+      if (!presentationOverride && quantity !== product.packageKg) {
         label = product.unit === 'balde'
           ? `${quantity} baldes de 5 kg`
           : label.replace(/x [\d.,]+/, `x ${quantity}`);
