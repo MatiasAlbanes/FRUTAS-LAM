@@ -25,7 +25,7 @@ vm.runInContext(fs.readFileSync('app.js', 'utf8'), context);
 vm.runInContext('showToast = () => {}', context);
 const run = code => vm.runInContext(code, context);
 const products = run('PRODUCTS_DATA');
-const [headers, ...rows] = parseCSV(fs.readFileSync('data/precios.csv', 'utf8'));
+const [headers, ...rows] = parseCSV(fs.readFileSync('scripts/fixtures/respaldo-referencia.csv', 'utf8'));
 const field = key => headers.indexOf(key);
 const serialize = (h, r) => [h, ...r].map(row => row.join(';')).join('\n');
 // Fixture controlada para probar ceros: un cero no es un precio válido, equivale a «sin precio».
@@ -39,13 +39,14 @@ for (const p of readPrices(original, products)) {
 }
 // Compatibilidad con la hoja mayorista publicada antes de la ampliación.
 const legacy = serialize(['id','producto','unidad','cantidad','precio_unitario','total_presentacion'], rows.map(r => r.slice(0,6)));
-assert.equal(readPrices(legacy, products)[0].retailPrice, null);
+// Sin columnas minoristas se conserva el minorista que ya tiene la ficha (respaldo vigente).
+assert.equal(readPrices(legacy, products)[0].retailPrice, products.find(p => p.id === rows[0][0]).retailPrice);
 rows[0][field('cantidad_minorista')] = '0,5';
 rows[0][field('precio_minorista')] = '20000';
 const retailCSV = serialize(headers, rows);
 const parsed = readPrices(retailCSV, products);
 assert.equal(parsed[0].retailTotal, 10000);
-assert.equal(parsed[0].packageTotalPrice, 13500, 'Minorista no debe modificar la lista mayorista');
+assert.equal(parsed[0].packageTotalPrice, 131500, 'Minorista no debe modificar la lista mayorista');
 for (const bad of ['-1', 'NaN', '<img>', '1,2,3']) {
   assert.throws(() => readPrices(retailCSV.replace(';20000;', ';'+bad+';'), products));
 }
@@ -75,14 +76,14 @@ assert.throws(() => readPrices(serialize(headers, fractionalJars), products));
   run("state.pricingMode = 'mayorista'; addToCart(PRODUCTS_DATA.find(p => p.id === 'nuez-cuartos-blanca').id, 1); syncModeContact()");
   assert.equal(elements.get('btnSendWhatsAppOrder').hidden, false);
   assert.equal(elements.get('btnSendRetailWhatsAppOrder').hidden, false);
-  assert.match(elements.get('cartTotalPrice').textContent, /32\.500/);
+  assert.match(elements.get('cartTotalPrice').textContent, /141\.000/);
   assert.match(floating.href, /5492634761151/);
   run("sendOrderToWhatsApp('mayorista')");
   assert.equal(opened.at(-1).pathname, '/5492634761151');
   const wholesaleText = opened.at(-1).searchParams.get('text');
   assert.match(wholesaleText, /Nuez Cuartos Blanca/);
   assert.doesNotMatch(wholesaleText, /Partida a mano/);
-  assert.match(wholesaleText, /12\.500/);
+  assert.match(wholesaleText, /121\.000/);
   assert.match(wholesaleText, /Ingeniero Giagnoni, Junín/);
   assert.match(wholesaleText, /3Xq155JCwf7fQ5Y49/);
   run("sendOrderToWhatsApp('minorista')");
@@ -93,7 +94,7 @@ assert.throws(() => readPrices(serialize(headers, fractionalJars), products));
   await run('refreshPrices()');
   assert.equal(run('state.cart[0].qty'), 2);
   assert.equal(run('state.cart[0].unitPrice'), 11000);
-  assert.match(elements.get('cartTotalPrice').textContent, /34\.500/);
+  assert.match(elements.get('cartTotalPrice').textContent, /143\.000/);
   // Celda vacía no equivale a precio cero: impide enviar un subtotal incompleto.
   context.fetch = async () => ({ ok: true, text: async () => retailCSV.replace(';20000;', ';;') });
   await run('refreshPrices()');

@@ -35,7 +35,7 @@ for (const number of ['5492634761151', '5492634339550']) {
   assert.equal(links.length, 2);
   for (const link of links) assert.match(link[2], /<svg/);
 }
-const csv = fs.readFileSync('data/precios.csv', 'utf8');
+const csv = fs.readFileSync('scripts/fixtures/respaldo-referencia.csv', 'utf8');
 const updates = readPrices(csv, products);
 assert.equal(products.length, 41);
 assert.equal(new Set(products.map(p => p.id)).size, 41);
@@ -50,13 +50,13 @@ for (const id of ['nuez-con-cascara', 'pistacho-pelado', 'higo-blanco']) {
   assert.ok(!products.some(p => p.id === id));
 }
 const expected = {
-  'nuez-mariposa-blanca': [10, 1350, 13500],
-  'nuez-mariposa-light': [10, 1270, 12700],
-  'nuez-cuartos-blanca': [10, 1250, 12500],
-  'papaya': [10, 680, 6800],
-  'harina-de-almendra': [10, 290, 2900],
+  'nuez-mariposa-blanca': [10, 13150, 131500],
+  'nuez-mariposa-light': [10, 12200, 122000],
+  'nuez-cuartos-blanca': [10, 12100, 121000],
+  'papaya': [10, 6800, 68000],
+  'harina-de-almendra': [10, 2700, 27000],
   'mix-tropical-comun': [5, 6900, 34500],
-  'mix-tropical-premium': [5, 8300, 41500],
+  'mix-tropical-premium': [5, 8200, 41000],
   'mix-tropical-mega-eco': [5, 5400, 27000],
   'mix-tropical-sin-mani': [5, 9700, 48500],
   'mix-clasico-sin-mani': [5, 9700, 48500],
@@ -92,16 +92,16 @@ for (const p of pending) assert.ok(!products.some(product => product.name === p.
   assert.equal(calls.length, 2);
   assert.equal(calls[1], 'data/precios.csv');
   assert.match(status.textContent, /Lista de lanzamiento vigente/);
-  assert.equal(products.find(product => product.id === 'nuez-mariposa-blanca').packageTotalPrice, 13500);
+  assert.equal(products.find(product => product.id === 'nuez-mariposa-blanca').packageTotalPrice, 131500);
   // Al cargar el Excel nuevo en Sheets se retoma la actualización online automáticamente.
-  context.fetch = async () => ({ ok: true, text: async () => csv.replaceAll('1350.0', '1400.0') });
+  context.fetch = async () => ({ ok: true, text: async () => csv.replaceAll('13150.0', '14000.0') });
   await run('refreshPrices()');
-  assert.equal(products.find(product => product.id === 'nuez-mariposa-blanca').packageTotalPrice, 14000);
+  assert.equal(products.find(product => product.id === 'nuez-mariposa-blanca').packageTotalPrice, 140000);
   assert.match(status.textContent, /Precios actualizados/);
   // Una fila inválida posterior conserva el último precio online y nunca retrocede al respaldo.
-  context.fetch = async () => ({ ok: true, text: async () => csv.replaceAll('1350.0', '-1') });
+  context.fetch = async () => ({ ok: true, text: async () => csv.replaceAll('13150.0', '-1') });
   await run('refreshPrices()');
-  assert.equal(products.find(product => product.id === 'nuez-mariposa-blanca').packageTotalPrice, 14000);
+  assert.equal(products.find(product => product.id === 'nuez-mariposa-blanca').packageTotalPrice, 140000);
   assert.match(status.textContent, /No pudimos actualizar/);
   console.log('OK: fotos finales, 41 productos, 9 mixes, cajas de 10 kg, bolsones de 5 kg, pendientes y migración de Sheets.');
 })().catch(error => { console.error(error); process.exitCode = 1; });

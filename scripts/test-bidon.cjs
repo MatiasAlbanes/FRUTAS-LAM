@@ -39,7 +39,7 @@ const card = id => elements.get('productsGrid').innerHTML.match(new RegExp(`<art
   assert.match(card('aceite-oliva-extra-virgen'), /Total: <strong>\$\s?12\.800</);
   assert.match(card('aceite-oliva-extra-virgen'), /Venta x <strong>1 litro</);
   assert.match(card('mix-frutal'), /Total: <strong>\$\s?9\.300</);          // mix: se vende por kg
-  assert.match(card('nuez-mariposa-blanca'), /Total: <strong>\$\s?1\.500</);  // granel: 1 kg
+  assert.match(card('nuez-mariposa-blanca'), /Total: <strong>\$\s?13\.600</); // granel: 1 kg
   assert.match(card('miel-pura-campo-medio-kg'), /Total: <strong>\$\s?5\.150</);
   assert.match(card('miel-pura-campo-medio-kg'), /Venta x <strong>1 frasco</);
   // Carrito: 2 bidones = 2 × 61.500, una sola multiplicación.

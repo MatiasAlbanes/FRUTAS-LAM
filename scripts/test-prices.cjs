@@ -3,7 +3,7 @@ const fs = require('node:fs');
 const vm = require('node:vm');
 const { readPrices, parseCSV } = require('../prices.js');
 // Validar también compatibilidad con las nueve columnas anteriores.
-const csv = parseCSV(fs.readFileSync('data/precios.csv', 'utf8')).map(row => row.slice(0, 9).join(';')).join('\n');
+const csv = parseCSV(fs.readFileSync('scripts/fixtures/respaldo-referencia.csv', 'utf8')).map(row => row.slice(0, 9).join(';')).join('\n');
 const context = vm.createContext({
   console: { warn() {} }, AbortController, setTimeout, clearTimeout,
   document: { addEventListener() {}, getElementById() { return null; } }, window: { PRICES_CONFIG: {} },
@@ -19,15 +19,15 @@ for (const p of products) {
   assert.equal(row.packageTotalPrice, p.packageTotalPrice);
   assert.equal(row.packageUnit, p.packageUnit);
 }
-const changed = csv.replace('10.0;1350.0', '7,5;15000');
+const changed = csv.replace('10.0;13150.0', '7,5;15000');
 const first = readPrices(changed, products)[0];
 assert.equal(first.pricePerKg, 15000);
 assert.equal(first.packageTotalPrice, 112500);
 assert.equal(first.packageUnit, 'Caja x 7.5 kg');
 for (const bad of [
-  csv.replace('1350.0', '-100'), csv.replace('1350.0', 'NaN'),
-  csv.replace('1350.0', '<script>'), csv.replace('1350.0', ''),
-  csv.replace('10.0;1350.0', '0;12800'),
+  csv.replace('13150.0', '-100'), csv.replace('13150.0', 'NaN'),
+  csv.replace('13150.0', '<script>'), csv.replace('13150.0', ''),
+  csv.replace('10.0;13150.0', '0;12800'),
   csv.replace('nuez-cuartos-blanca;', 'nuez-mariposa-blanca;'),
   csv.replace('nuez-cuartos-blanca;', 'desconocido;'),
   csv.split('\n').slice(0, -2).join('\n'),
@@ -48,14 +48,14 @@ vm.runInContext(`
   assert.equal(products.find(p => p.id === 'nuez-mariposa-blanca').pricePerKg, 15000);
   assert.equal(vm.runInContext('state.cart[0].unitPrice', context), 112500);
   assert.equal(vm.runInContext('state.cart[0].qty', context), 2);
-  context.fetch = async () => ({ ok: true, text: async () => csv.replace('1250.0', '-1') });
+  context.fetch = async () => ({ ok: true, text: async () => csv.replace('12100.0', '-1') });
   await vm.runInContext('refreshPrices()', context);
   assert.equal(products.find(p => p.id === 'nuez-mariposa-blanca').pricePerKg, 15000, 'La actualización fallida debe ser atómica');
   context.fetch = async () => { throw Error('Sin conexión'); };
   await vm.runInContext('refreshPrices()', context);
   assert.equal(products.find(p => p.id === 'nuez-mariposa-blanca').pricePerKg, 15000);
   // Verifica el formato publicado por Sheets sin confundir 12,800.00 con 12.8.
-  const formatted = commaCSV.replace('"1350.0"', '"12,800.00"');
+  const formatted = commaCSV.replace('"13150.0"', '"12,800.00"');
   assert.equal(readPrices(formatted, products, { numberFormat: 'en-US' })[0].pricePerKg, 12800);
   for (const bad of ['12,80.00', '12.800,00', '1,2,800', '-12800', '$ -12800']) {
     assert.throws(() => readPrices(formatted.replace('12,800.00', bad), products, { numberFormat: 'en-US' }));

@@ -1,0 +1,46 @@
+# Copia la planilla de precios de Google Sheets al respaldo data/precios.csv.
+# La web ya lee la planilla en vivo (al abrir y cada 60 s); este respaldo solo se usa si Google no
+# responde, y así queda siempre igual a lo último que cargó el cliente, sin que nadie haga nada.
+name: Actualizar respaldo de precios
+
+on:
+  schedule:
+    - cron: '*/15 * * * *'   # cada 15 minutos (GitHub puede demorarlo unos minutos)
+  workflow_dispatch: {}      # botón «Run workflow» para forzarlo a mano
+
+permissions:
+  contents: write
+  pages: write
+
+concurrency:
+  group: actualizar-precios
+  cancel-in-progress: false
+
+jobs:
+  respaldo:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Leer la planilla y regenerar data/precios.csv
+        run: node scripts/actualizar-respaldo.cjs
+
+      - name: Publicar el respaldo si cambió
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if git diff --quiet -- data/precios.csv; then
+            echo "Sin cambios de precios."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898233+github-actions[bot]@users.noreply.github.com"
+          git commit -m "Actualiza el respaldo de precios desde Google Sheets" -- data/precios.csv
+          git push
+          # Los push hechos con el token de Actions pueden no disparar GitHub Pages: se pide la publicación.
+          gh api -X POST "repos/${GITHUB_REPOSITORY}/pages/builds" >/dev/null || echo "Aviso: no se pudo pedir la publicación de Pages."

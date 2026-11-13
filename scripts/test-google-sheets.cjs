@@ -18,12 +18,11 @@ assert.throws(() => readPrices(old, products, { numberFormat: 'auto' }), e => e.
 const oldRows = parseCSV(old).slice(1);
 const oldProducts = oldRows.map(r => ({id:r[0], unit:r[2], packageKg:Number(r[3]), packageUnit:'Presentación'}));
 const oldPrices = readPrices(old, oldProducts, { numberFormat: 'auto' });
-const initial = readPrices(fs.readFileSync('data/precios.csv', 'utf8'), products);
-for (const id of ['nuez-mariposa-blanca','miel-pura-campo-medio-kg']) {
-  assert.equal(initial.find(p => p.id === id).retailPrice, oldPrices.find(p => p.id === id).retailPrice);
-}
-assert.equal(initial.find(p => p.id === 'nuez-mariposa-blanca').retailPrice, 1500);
-assert.equal(initial.find(p => p.id === 'miel-pura-campo-medio-kg').retailPrice, 1967);
+const initial = readPrices(fs.readFileSync('scripts/fixtures/respaldo-referencia.csv', 'utf8'), products);
+// La hoja vieja se sigue pudiendo leer, pero el respaldo local ya refleja la planilla vigente.
+assert.equal(oldPrices.find(p => p.id === 'nuez-mariposa-blanca').retailPrice, 1500);
+assert.equal(initial.find(p => p.id === 'nuez-mariposa-blanca').retailPrice, 13600);
+assert.equal(initial.find(p => p.id === 'miel-pura-campo-medio-kg').retailPrice, 5150);
 const tsv = fs.readFileSync('EXCEL EDITABLE/Precios-para-Google-Sheets.tsv', 'utf8');
 const [headers, ...rows] = parseCSV(tsv);
 const column = key => headers.indexOf(key);

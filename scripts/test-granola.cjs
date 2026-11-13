@@ -7,7 +7,7 @@ const root = path.join(__dirname, '..');
 const PriceSheet = require(path.join(root, 'prices.js'));
 const src = fs.readFileSync(path.join(root, 'app.js'), 'utf8');
 const products = vm.runInNewContext(src.match(/const PRODUCTS_DATA = (\[[\s\S]*?\n\]);/)[1]);
-const csv = fs.readFileSync(path.join(root, 'data/precios.csv'), 'utf8');
+const csv = fs.readFileSync(path.join(root, 'scripts/fixtures/respaldo-referencia.csv'), 'utf8');
 const rows = csv.trim().split(/\r?\n/).map(l => l.split(';'));
 const head = rows[0];
 const col = n => head.indexOf(n);

@@ -35,7 +35,9 @@ assert.equal(rows.length, 41);
 assert.equal(new Set(rows.map(r => r[0])).size, 41, 'IDs sin duplicados');
 const catalog = products.filter(p => !p.consultationOnly);
 assert.deepEqual(rows.map(r => r[0]).sort(), Array.from(catalog, p => p.id).sort(), 'Los 41 IDs coinciden con app.js');
-assert.ok(rows.every(r => r[headers.indexOf('control_nombre')] === 'OK'));
+// control_nombre avisa si el cliente retocó un nombre en EDITAR PRECIOS («Granola », «chips banana»…);
+// la web usa el id, así que un REVISAR no cambia qué precio recibe cada producto.
+assert.ok(rows.every(r => ['OK', 'REVISAR'].includes(r[headers.indexOf('control_nombre')])));
 const parsed = readPrices(real, products, opts);
 assert.equal(parsed.length, 41);
 assert.equal(parsed.some(p => p.id === 'miel-churqui-1kg'), false, 'La miel Churqui no está en la planilla');
@@ -45,15 +47,17 @@ for (const p of parsed) {
   assert.equal(p.packageKg, product.packageKg, `Cantidad ${p.id}`);
   assert.equal(p.retailQuantity, 1);
 }
+const byRetail = id => parsed.find(p => p.id === id).retailPrice;
 const withRetail = parsed.filter(p => p.retailPrice !== null).map(p => [p.id, p.retailPrice]);
-assert.equal(JSON.stringify(withRetail), JSON.stringify([['nuez-mariposa-blanca', 1500], ['miel-pura-campo-medio-kg', 1967]]));
-assert.equal(parsed.filter(p => p.retailPrice === null && p.retailTotal === null).length, 39);
+assert.equal(withRetail.length, 41, 'La planilla vigente tiene minorista en los 41 productos');
+assert.equal(byRetail('nuez-mariposa-blanca'), 13600);
+assert.equal(byRetail('miel-pura-campo-medio-kg'), 5150);
 
 // 3) El mayorista es el precio POR KG (por unidad): el total de la presentación = precio × cantidad.
 const byRow = id => parsed.find(p => p.id === id);
-assert.equal(byRow('nuez-mariposa-blanca').pricePerKg, 1350); assert.equal(byRow('nuez-mariposa-blanca').packageTotalPrice, 13500);
+assert.equal(byRow('nuez-mariposa-blanca').pricePerKg, 13150); assert.equal(byRow('nuez-mariposa-blanca').packageTotalPrice, 131500, 'Caja de 10 kg = 10 × precio por kg');
 assert.equal(byRow('mix-tropical-comun').pricePerKg, 6900); assert.equal(byRow('mix-tropical-comun').packageTotalPrice, 34500, 'Bolsón de 5 kg = 5 × precio por kg');
-assert.equal(byRow('aceite-oliva-extra-virgen-5l').pricePerKg, 12800); assert.equal(byRow('aceite-oliva-extra-virgen-5l').packageTotalPrice, 64000, 'Bidón de 5 litros = 5 × precio por litro');
+assert.equal(byRow('aceite-oliva-extra-virgen-5l').pricePerKg, 11400); assert.equal(byRow('aceite-oliva-extra-virgen-5l').packageTotalPrice, 57000, 'Bidón de 5 litros = 5 × precio por litro');
 assert.equal(byRow('aceituna-griega-5kg').packageTotalPrice, 41500, 'Presentaciones de 1 unidad: precio = total');
 
 // Mayorista y minorista son independientes.
@@ -63,14 +67,14 @@ const edit = (id, key, value, text = real) => {
   return [h, ...r].map(x => x.map(c => `"${c.replace(/"/g, '""')}"`).join(',')).join('\n');
 };
 let walnut = readPrices(edit('nuez-mariposa-blanca', 'precio_presentacion', '$ 1,500.00'), products, opts).find(p => p.id === 'nuez-mariposa-blanca');
-assert.equal(walnut.packageTotalPrice, 15000); assert.equal(walnut.pricePerKg, 1500); assert.equal(walnut.retailPrice, 1500);
+assert.equal(walnut.packageTotalPrice, 15000); assert.equal(walnut.pricePerKg, 1500); assert.equal(walnut.retailPrice, 13600);
 walnut = readPrices(edit('nuez-mariposa-blanca', 'precio_minorista', '$ 1,800.00'), products, opts).find(p => p.id === 'nuez-mariposa-blanca');
-assert.equal(walnut.retailPrice, 1800); assert.equal(walnut.packageTotalPrice, 13500);
+assert.equal(walnut.retailPrice, 1800); assert.equal(walnut.packageTotalPrice, 131500);
 for (const empty of ['', '0', '$ 0.00']) {
   walnut = readPrices(edit('nuez-mariposa-blanca', 'precio_minorista', empty), products, opts).find(p => p.id === 'nuez-mariposa-blanca');
   assert.equal(walnut.retailPrice, null, `minorista «${empty}» = sin precio`);
   assert.equal(walnut.retailTotal, null);
-  assert.equal(walnut.packageTotalPrice, 13500, 'El mayorista no se toca');
+  assert.equal(walnut.packageTotalPrice, 131500, 'El mayorista no se toca');
 }
 // Una fila inválida rechaza la lista completa (se conservan los últimos precios válidos).
 assert.throws(() => readPrices(edit('nuez-mariposa-blanca', 'precio_presentacion', ''), products, opts));
@@ -80,11 +84,13 @@ assert.throws(() => readPrices(edit('nuez-mariposa-blanca', 'id', 'nuez-inventad
 (async () => {
   // 4) Respaldo y actualización: la planilla online manda; si cae al inicio, se usa data/precios.csv.
   const requested = [];
-  context.fetch = async url => { requested.push(url); return { ok: true, text: async () => real }; };
+  // Nuez cuartos con el minorista vacío para comprobar «Consultar precio».
+  const noRetail = edit('nuez-cuartos-blanca', 'precio_minorista', '');
+  context.fetch = async url => { requested.push(url); return { ok: true, text: async () => noRetail }; };
   await run('refreshPrices()');
   assert.equal(requested[0], config.csvUrl);
   const byId = id => run(`PRODUCTS_DATA.find(p => p.id === '${id}')`);
-  assert.equal(byId('nuez-mariposa-blanca').retailTotal, 1500);
+  assert.equal(byId('nuez-mariposa-blanca').retailTotal, 13600);
   assert.equal(byId('nuez-cuartos-blanca').retailPrice, null);
 
   // 5) Minorista vacío: «Consultar precio», botón deshabilitado y sin compra posible.
@@ -97,10 +103,10 @@ assert.throws(() => readPrices(edit('nuez-mariposa-blanca', 'id', 'nuez-inventad
   run("addToCart('nuez-cuartos-blanca', 1)");
   assert.equal(run('state.cart.length'), 0, 'No se compra un producto minorista sin precio');
   run("addToCart('nuez-mariposa-blanca', 2)");
-  assert.equal(run('state.cart[0].unitPrice'), 1500);
+  assert.equal(run('state.cart[0].unitPrice'), 13600);
   // El mayorista de ese mismo producto sigue disponible y es independiente.
   run("state.pricingMode = 'mayorista'; addToCart('nuez-cuartos-blanca', 1)");
-  assert.equal(run("state.cart.find(i => i.productId === 'nuez-cuartos-blanca').unitPrice"), 12500);
+  assert.equal(run("state.cart.find(i => i.productId === 'nuez-cuartos-blanca').unitPrice"), 121000);
 
   // Un cero que llegara por cualquier vía tampoco se puede comprar.
   run("const z = PRODUCTS_DATA.find(p => p.id === 'nuez-cuartos-blanca'); z.retailPrice = 0; z.retailTotal = 0; state.pricingMode = 'minorista'");
@@ -127,11 +133,11 @@ assert.throws(() => readPrices(edit('nuez-mariposa-blanca', 'id', 'nuez-inventad
   await run('refreshPrices()');
   assert.deepEqual(urls, [config.csvUrl, 'data/precios.csv']);
   assert.equal(run('lastPriceSource'), 'local');
+  // data/precios.csv lo reescribe la tarea automática con la planilla vigente: se valida su forma, no sus importes.
   const local = readPrices(fs.readFileSync('data/precios.csv', 'utf8'), products);
   assert.equal(local.length, 41);
-  assert.equal(local.filter(p => p.retailPrice !== null).length, 2);
+  assert.ok(local.every(p => p.pricePerKg > 0 && p.packageTotalPrice > 0), 'El respaldo tiene mayorista en todos los productos');
   assert.ok(local.every(p => p.retailPrice === null || p.retailPrice > 0), 'El respaldo no tiene minoristas en $0');
-  for (const p of local) assert.equal(p.packageTotalPrice, parsed.find(x => x.id === p.id).packageTotalPrice, `Respaldo ${p.id}`);
   // Con una lectura válida previa, una caída posterior conserva los últimos precios y no vuelve al respaldo.
   context.fetch = async () => ({ ok: true, text: async () => edit('nuez-mariposa-blanca', 'precio_presentacion', '$ 1,500.00') });
   await run('refreshPrices()');
