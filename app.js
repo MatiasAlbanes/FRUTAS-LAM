@@ -566,6 +566,24 @@ const PRODUCTS_DATA = [
 
 // Visible para consultar, separado de los artículos cotizados hasta confirmar su precio.
 const CONSULTATION_PRODUCTS = [{
+  // Mix Europeo: se ve como «Consultar precio» hasta que el cliente cargue su precio en la planilla
+  // (EDITAR PRECIOS → DATOS WEB). Al cargarlo pasa a venderse como cualquier otro mix, sin tocar el código.
+  id: 'mix-europeo',
+  name: 'Mix Europeo',
+  category: 'Mixes',
+  description: 'Mix Europeo.',
+  image: 'assets/productos/mix-europeo.webp',
+  unit: 'kg',
+  packageKg: 5,
+  packageUnit: 'Bolsón x 5 kg',
+  pricePerKg: null,
+  packageTotalPrice: null,
+  retailPrice: null,
+  retailQuantity: 1,
+  retailTotal: null,
+  optionalPriceRow: true,
+  consultationOnly: true
+}, {
   id: 'miel-churqui-1kg',
   name: 'Miel Churqui x 1 kg',
   category: 'Frutos secos varios',

@@ -236,6 +236,14 @@
     "estado": "En catálogo"
   },
   {
+    "foto": "assets/productos/mix-europeo.webp",
+    "original_final": "Mix-Europeo.png",
+    "productos": [
+      "mix-europeo"
+    ],
+    "estado": "Visible para consultar precio hasta que se cargue en la planilla"
+  },
+  {
     "foto": "assets/productos/mix-mega-eco.webp",
     "original_final": "mix-mega-eco.png",
     "productos": [

@@ -110,7 +110,9 @@
       const sheetQuantity = positiveNumber(cell(quantityColumn), formats[quantityColumn]);
       const quantity = presentationOverride?.quantity ?? sheetQuantity;
       const rawPrice = cell(priceColumn);
-      const pending = product.optionalPriceRow && rawPrice === '';
+      // Un producto de precio opcional queda «a consultar» si su celda está vacía o en $ 0 (una fórmula
+      // que apunta a una celda sin cargar puede exportarse como «$ 0.00»); no debe invalidar toda la hoja.
+      const pending = product.optionalPriceRow && (rawPrice === '' || /^\$?\s*0+(?:[.,]0+)?$/.test(rawPrice));
       const price = pending ? null : positiveNumber(rawPrice, formats[priceColumn]);
       if (['frasco', 'balde'].includes(product.unit) && !Number.isInteger(quantity)) {
         throw new Error('La cantidad de unidades debe ser entera');

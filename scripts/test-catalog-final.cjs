@@ -71,7 +71,7 @@ for (const [id, values] of Object.entries(expected)) {
 }
 assert.equal(products.filter(p => p.category === 'Mixes').length, 9);
 const register = JSON.parse(fs.readFileSync('data/catalogo-fotos.json'));
-assert.equal(register.length, 46);
+assert.equal(register.length, 47);
 for (const p of register) {
   assert.ok(fs.existsSync(p.foto));
   for (const id of p.productos) assert.ok(allProducts.some(product => product.id === id));

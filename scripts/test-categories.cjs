@@ -44,7 +44,7 @@ for (const name of names) {
   run("state.pricingMode = 'minorista'; renderProducts()");
   assert.equal([...elements.get('productsGrid').innerHTML.matchAll(/data-product-id=/g)].length, expected.length);
 }
-assert.equal(total, 42);
+assert.equal(total, 43);
 run("setCategory('Nueces'); state.searchQuery = 'cuartos'; renderProducts()");
 assert.match(elements.get('productsGrid').innerHTML, /nuez-cuartos-blanca/);
 assert.equal([...elements.get('productsGrid').innerHTML.matchAll(/data-product-id=/g)].length, 1);
@@ -52,7 +52,7 @@ run("state.searchQuery = 'aceituna'; renderProducts()");
 assert.equal(elements.get('productsGrid').innerHTML, '');
 assert.equal(elements.get('emptyState').style.display, 'block');
 run("state.searchQuery = ''; setCategory('all')");
-assert.equal([...elements.get('productsGrid').innerHTML.matchAll(/data-product-id=/g)].length, 42);
+assert.equal([...elements.get('productsGrid').innerHTML.matchAll(/data-product-id=/g)].length, 43);
 assert.equal(buttons.filter(b => b['aria-pressed'] === 'true').length, 1);
 run("setCategory('inexistente')");
 assert.equal(run('state.activeCategory'), 'all');
@@ -78,5 +78,5 @@ assert.equal(run('state.activeCategory'), 'all');
   await run('refreshPrices()');
   assert.match(elements.get('priceSyncStatus').textContent, /No pudimos actualizar/);
   assert.equal(products[0].pricePerKg, oldPrice);
-  console.log('OK: seis categorías, 42 productos, filtros en ambas listas, búsqueda, accesibilidad y estado real de actualización.');
+  console.log('OK: seis categorías, 43 productos, filtros en ambas listas, búsqueda, accesibilidad y estado real de actualización.');
 })().catch(error => { console.error(error); process.exitCode = 1; });

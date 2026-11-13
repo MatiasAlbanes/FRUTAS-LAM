@@ -41,6 +41,12 @@ Si Google no responde al abrir la página, se usa `data/precios.csv`. Ese respal
 
 La planilla carga el mayorista **por unidad** (kg, litro, frasco, balde): la web calcula el total de la caja o bolsón (precio × cantidad). La guía «LEER PRIMERO» y la columna D de EDITAR PRECIOS dicen lo contrario («precio de la caja x 10 kg») y conviene corregirlas para que el cliente no cargue el total.
 
+## Mix Europeo (13 de noviembre de 2026)
+
+Mix Europeo (`mix-europeo`, bolsón de 5 kg, categoría Mixes, foto `assets/productos/mix-europeo.webp`) está en `CONSULTATION_PRODUCTS` de `app.js` con precio opcional: se muestra como «Consultar precio» (con enlace a WhatsApp) hasta que el cliente cargue su precio en la planilla. Al cargarlo pasa solo a venderse como los demás mixes (mayorista por kg × 5, minorista por kg), sin tocar el código.
+
+Para conectarlo, la pestaña **DATOS WEB** necesita una fila más con el mismo formato que Mix Frutal: `id` = `mix-europeo`, unidad `kg`, `cantidad_mayorista` 5, `cantidad_minorista` 1, y los precios apuntando a la fila de Mix Europeo en EDITAR PRECIOS. Mientras esa fila no exista, o tenga el precio vacío o en $ 0, el producto queda a consultar y el resto de la hoja se sigue leyendo normalmente. `node scripts/test-mix-europeo.cjs` verifica ese ciclo.
+
 ## Publicar
 
 Extraer `Frutas-LAM-Web-lista-para-publicar.zip` y subir **su contenido** al hosting estático: `index.html` debe quedar en la raíz. Incluye únicamente HTML, CSS, JavaScript, CSV y los assets necesarios; no requiere instalar dependencias ni compilar. El Excel se entrega aparte y no necesita publicarse en el hosting.
