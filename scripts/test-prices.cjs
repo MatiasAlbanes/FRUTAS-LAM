@@ -10,7 +10,8 @@ const context = vm.createContext({
   PriceSheet: { readPrices }
 });
 vm.runInContext(fs.readFileSync('app.js', 'utf8'), context);
-const products = vm.runInContext('PRODUCTS_DATA', context);
+// Los 41 productos con precio en la planilla (Mix Europeo es de precio opcional: ver test-mix-europeo.cjs).
+const products = vm.runInContext('PRODUCTS_DATA', context).filter(p => !p.optionalPriceRow);
 assert.equal(products.length, 41);
 const parsed = readPrices(csv, products);
 assert.equal(parsed.length, 41);

@@ -117,5 +117,39 @@ assert.throws(() => readPrices([h, ...r].map(x => x.join(',')).join('\n'), produ
   assert.equal([...elements.get('productsGrid').innerHTML.matchAll(/data-product-id="(mix-[^"]+)"/g)].length, 10);
   run("state.searchQuery = 'europeo'; setCategory('all')");
   assert.equal([...elements.get('productsGrid').innerHTML.matchAll(/data-product-id=/g)].length, 1);
+  // 8) «Qué contiene»: los 10 mixes lo muestran en un desplegable; el resto de los productos no.
+  const mixes = products.filter(p => p.category === 'Mixes');
+  assert.equal(mixes.length, 10);
+  run("state.searchQuery = ''; state.pricingMode = 'mayorista'; setCategory('all')");
+  const html = elements.get('productsGrid').innerHTML;
+  const detailsOf = id => card(id).match(/<details class="product-contains"[^>]*>[\s\S]*?<\/details>/)?.[0];
+  for (const mix of mixes) {
+    assert.ok(mix.contains && !/opcional/i.test(mix.contains), `${mix.id} tiene su lista de ingredientes`);
+    assert.match(detailsOf(mix.id), new RegExp('<summary>Qué contiene</summary>\\s*<p>' + mix.contains + '</p>'));
+  }
+  assert.equal([...html.matchAll(/<details class="product-contains"/g)].length, 10, 'Solo los mixes llevan desplegable');
+  assert.doesNotMatch(card('papaya'), /product-contains/);
+  assert.match(detailsOf('mix-europeo'), /avellana/);
+  assert.match(detailsOf('mix-cervecero'), /Maíz frito, maní saborizado, semilla de zapallo, maní salado/);
+  assert.doesNotMatch(detailsOf('mix-frutal'), /almendra/);
+  // También en «Consultar precio» y en minorista; y el buscador encuentra por ingrediente.
+  assert.match(detailsOf('mix-europeo'), /Qué contiene/);
+  run("state.pricingMode = 'minorista'; renderProducts()");
+  assert.equal([...elements.get('productsGrid').innerHTML.matchAll(/<details class="product-contains"/g)].length, 10);
+  run("state.pricingMode = 'mayorista'");
+  // Una ficha abierta sigue abierta cuando la grilla se vuelve a dibujar (por ejemplo, al actualizar precios).
+  assert.doesNotMatch(card('mix-europeo'), /product-contains"[^>]*\sopen/);
+  run("openContains.add('mix-europeo'); renderProducts()");
+  assert.match(card('mix-europeo'), /product-contains"[^>]*\sopen/);
+  assert.doesNotMatch(card('mix-frutal'), /product-contains"[^>]*\sopen/);
+  // Mix Europeo queda en el grupo de mixes de arriba, antes del primer producto que no es mix tras ellos.
+  const order = [...elements.get('productsGrid').innerHTML.matchAll(/data-product-id="([^"]+)"/g)].map(m => m[1]);
+  assert.ok(order.indexOf('mix-europeo') < order.indexOf('medallon-durazno'), 'Mix Europeo está arriba con los demás mixes');
+  assert.ok(order.indexOf('mix-europeo') < order.indexOf('mix-cervecero'));
+  run("openContains.clear(); state.searchQuery = 'avellana'; setCategory('all')");
+  assert.deepEqual([...elements.get('productsGrid').innerHTML.matchAll(/data-product-id="([^"]+)"/g)].map(m => m[1]), ['mix-europeo'], 'Buscar «avellana» encuentra solo el Europeo');
+  run("state.searchQuery = 'kiwi'; renderProducts()");
+  assert.deepEqual([...elements.get('productsGrid').innerHTML.matchAll(/data-product-id="([^"]+)"/g)].map(m => m[1]), ['mix-frutal']);
+  run("state.searchQuery = ''; renderProducts()");
   console.log('OK: Mix Europeo — sin fila o sin precio = «Consultar precio»; con precio = bolsón de 5 kg (mayorista × 5) y minorista, como los demás mixes.');
 })().catch(error => { console.error(error); process.exitCode = 1; });

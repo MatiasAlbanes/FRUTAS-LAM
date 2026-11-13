@@ -34,6 +34,7 @@ const PRODUCTS_DATA = [
     category: 'Mixes',
     badge: '',
     description: 'Mix Tropical Premium.',
+    contains: 'Nuez extra light, almendra, castaña cajú, chip banana, maní, pasas negras, pasas rubias, papaya en cubo, fruta glaseada',
     image: 'assets/productos/tropical-premium.webp',
     pricePerKg: 8200,
     unit: 'kg',
@@ -60,12 +61,33 @@ const PRODUCTS_DATA = [
     category: 'Mixes',
     badge: '',
     description: 'Mix Frutal.',
+    contains: 'Nuez extra light, ananá, kiwi, cereza, fruta glaseada, pomelo en cubo, durazno medallón, papaya en cubo, chip banana, pasas rubias y negras',
     image: 'assets/productos/mix-frutal.webp',
     pricePerKg: 8900,
     unit: 'kg',
     packageKg: 5,
     packageUnit: 'Bolsón x 5 kg',
     packageTotalPrice: 44500
+  },
+  {
+    // Mix Europeo: se ve como «Consultar precio» hasta que el cliente cargue su precio en la planilla
+    // (EDITAR PRECIOS → DATOS WEB). Al cargarlo pasa a venderse como cualquier otro mix, sin tocar el código.
+    id: 'mix-europeo',
+    name: 'Mix Europeo',
+    category: 'Mixes',
+    description: 'Mix Europeo.',
+    contains: 'Nuez extra light, almendra, castaña cajú, avellana, pasas rubias y negras',
+    image: 'assets/productos/mix-europeo.webp',
+    unit: 'kg',
+    packageKg: 5,
+    packageUnit: 'Bolsón x 5 kg',
+    pricePerKg: null,
+    packageTotalPrice: null,
+    retailPrice: null,
+    retailQuantity: 1,
+    retailTotal: null,
+    optionalPriceRow: true,
+    consultationOnly: true
   },
   {
     id: 'pistacho-con-cascara',
@@ -86,6 +108,7 @@ const PRODUCTS_DATA = [
     category: 'Mixes',
     badge: '',
     description: 'Mix Tropical sin Maní.',
+    contains: 'Nuez extra light, almendra, castaña cajú, chip banana, papaya en cubo, pasas rubias y negras',
     image: 'assets/productos/tropical-sin-mani.webp',
     pricePerKg: 9700,
     unit: 'kg',
@@ -99,6 +122,7 @@ const PRODUCTS_DATA = [
     category: 'Mixes',
     badge: '',
     description: 'Mix Patagonia.',
+    contains: 'Nuez extra light, almendra, castaña cajú, coco en escamas, maní, pasas negras, pasas rubias, cereza glaseada',
     image: 'assets/productos/mix-patagonia.webp',
     pricePerKg: 8700,
     unit: 'kg',
@@ -112,6 +136,7 @@ const PRODUCTS_DATA = [
     category: 'Mixes',
     badge: '',
     description: 'Mix Tropical Común.',
+    contains: 'Nuez extra light, almendra, chip banana, maní, pasas negras, papaya en cubo',
     image: 'assets/productos/tropical-comun.webp',
     pricePerKg: 6900,
     unit: 'kg',
@@ -125,6 +150,7 @@ const PRODUCTS_DATA = [
     category: 'Mixes',
     badge: '',
     description: 'Mix Clásico sin Maní.',
+    contains: 'Nuez extra light, almendra, castaña cajú, pasas rubias y negras',
     image: 'assets/productos/clasico-sin-mani.webp',
     pricePerKg: 9700,
     unit: 'kg',
@@ -138,6 +164,7 @@ const PRODUCTS_DATA = [
     category: 'Mixes',
     badge: '',
     description: 'Mix Clásico con Maní.',
+    contains: 'Nuez extra light, almendra, castaña cajú, chip banana, maní, pasas rubias y negras',
     image: 'assets/productos/clasico-con-mani.webp',
     pricePerKg: 8900,
     unit: 'kg',
@@ -151,6 +178,7 @@ const PRODUCTS_DATA = [
     category: 'Mixes',
     badge: '',
     description: 'Mix Tropical MegaECO.',
+    contains: 'Nuez ámbar, almendra, chip banana, maní, pasas negras, papaya en cubo',
     image: 'assets/productos/mix-mega-eco.webp',
     pricePerKg: 5400,
     unit: 'kg',
@@ -164,6 +192,7 @@ const PRODUCTS_DATA = [
     category: 'Mixes',
     badge: '',
     description: 'Mix Cervecero.',
+    contains: 'Maíz frito, maní saborizado, semilla de zapallo, maní salado',
     image: 'assets/productos/mix-cervecero.webp',
     pricePerKg: 5560,
     unit: 'kg',
@@ -566,24 +595,6 @@ const PRODUCTS_DATA = [
 
 // Visible para consultar, separado de los artículos cotizados hasta confirmar su precio.
 const CONSULTATION_PRODUCTS = [{
-  // Mix Europeo: se ve como «Consultar precio» hasta que el cliente cargue su precio en la planilla
-  // (EDITAR PRECIOS → DATOS WEB). Al cargarlo pasa a venderse como cualquier otro mix, sin tocar el código.
-  id: 'mix-europeo',
-  name: 'Mix Europeo',
-  category: 'Mixes',
-  description: 'Mix Europeo.',
-  image: 'assets/productos/mix-europeo.webp',
-  unit: 'kg',
-  packageKg: 5,
-  packageUnit: 'Bolsón x 5 kg',
-  pricePerKg: null,
-  packageTotalPrice: null,
-  retailPrice: null,
-  retailQuantity: 1,
-  retailTotal: null,
-  optionalPriceRow: true,
-  consultationOnly: true
-}, {
   id: 'miel-churqui-1kg',
   name: 'Miel Churqui x 1 kg',
   category: 'Frutos secos varios',
@@ -857,6 +868,9 @@ function showToast(message) {
 // =====================================================================
 // RENDERIZADO DEL CATÁLOGO DE PRODUCTOS
 // =====================================================================
+// Fichas con el desplegable «Qué contiene» abierto: se conservan cuando la grilla se vuelve a dibujar.
+const openContains = new Set();
+
 function setCategory(category) {
   const valid = category === 'all' || PRODUCTS_DATA.some(product => product.category === category);
   state.activeCategory = valid ? category : 'all';
@@ -880,7 +894,8 @@ function renderProducts() {
     const matchSearch = !q ||
       normalizeSearch(product.name).includes(q) ||
       normalizeSearch(product.category).includes(q) ||
-      normalizeSearch(product.description).includes(q);
+      normalizeSearch(product.description).includes(q) ||
+      normalizeSearch(product.contains || '').includes(q);
 
     return matchCategory && matchSearch;
   });
@@ -967,6 +982,12 @@ function renderProducts() {
               ${subPriceInfo}
             </div>
           </div>
+
+          ${product.contains ? `
+          <details class="product-contains" data-contains-id="${product.id}"${openContains.has(product.id) ? ' open' : ''}>
+            <summary>Qué contiene</summary>
+            <p>${product.contains}</p>
+          </details>` : ''}
 
           <div class="product-actions-row">
             ${consultationOnly ? `
@@ -1363,6 +1384,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // 5. Delegación de eventos para la grilla de productos (+ / - / Agregar)
   const productsGrid = document.getElementById('productsGrid');
+  // «toggle» no burbujea: se escucha en captura para recordar qué fichas están abiertas.
+  productsGrid?.addEventListener('toggle', (e) => {
+    const id = e.target.dataset?.containsId;
+    if (id) e.target.open ? openContains.add(id) : openContains.delete(id);
+  }, true);
   productsGrid?.addEventListener('click', (e) => {
     const photoButton = e.target.closest('[data-zoom-id]');
     if (photoButton && photoDialog && !photoDialog.open) {

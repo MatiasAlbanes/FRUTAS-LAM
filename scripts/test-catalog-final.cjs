@@ -11,9 +11,11 @@ const context = vm.createContext({
 });
 vm.runInContext(fs.readFileSync('app.js', 'utf8'), context);
 const run = code => vm.runInContext(code, context);
-const products = run('PRODUCTS_DATA');
+const everyProduct = run('PRODUCTS_DATA');
+// Los 41 productos con precio obligatorio en la planilla (Mix Europeo es de precio opcional).
+const products = everyProduct.filter(p => !p.optionalPriceRow);
 const consultationProducts = run('CONSULTATION_PRODUCTS');
-const allProducts = [...products, ...consultationProducts];
+const allProducts = [...everyProduct, ...consultationProducts];
 const honey = consultationProducts.find(p => p.id === 'miel-churqui-1kg');
 assert.ok(honey?.consultationOnly);
 assert.equal(honey.image, 'assets/productos/miel-churqui-1kg.webp');
